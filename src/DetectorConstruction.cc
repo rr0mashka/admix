@@ -50,18 +50,29 @@
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
+  G4bool checkOverlaps = true;
+  // %%%%% materials %%%%%%
   // Get nist material manager
   G4NistManager* nist = G4NistManager::Instance();
   //
-  G4bool checkOverlaps = true;
-  const G4String sp_mat_name = "G4_WATER";
-  G4Material* sp_mat = nist->FindOrBuildMaterial(sp_mat_name);
-  //
-  // World
-  //
-  G4double world_sizeXY = 20*cm;
-  G4double world_sizeZ  = 20*cm;
+  const G4String water_mat_name = "G4_WATER";
+  G4Material* water_mat = nist->FindOrBuildMaterial(water_mat_name);
   G4Material* world_mat = nist->FindOrBuildMaterial("G4_AIR");
+  G4Material* copperM0 = nist->FindOrBuildMaterial("G4_Cu");
+  G4Material* LiMat = nist->FindOrBuildMaterial("G4_Li");
+
+
+// %%%%% scales  %%%%%%
+
+  const G4double world_sizeXY = 20*cm;
+  const G4double world_sizeZ  = 20*cm;
+
+
+  const G4double M0discwidth = 10*mm;
+  const G4double M0discradius = 143.*0.5*mm;
+
+// world %%%%
+
 
   auto solidWorld = new G4Box("World",                           // its name
     0.5 * world_sizeXY, 0.5 * world_sizeXY, 0.5 * world_sizeZ);  // its size
@@ -69,7 +80,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   auto logicWorld = new G4LogicalVolume(solidWorld,  // its solid
     world_mat,                                       // its material
     "World");                                        // its name
-
 
   auto physWorld = new G4PVPlacement(nullptr,  // no rotation
     G4ThreeVector(),                           // at (0,0,0)
@@ -79,15 +89,17 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     false,                                     // no boolean operation
     0,                                         // copy number
     checkOverlaps);                            // overlaps checking
+// %%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
     //
     // AMG6
     //
   G4double pi = CLHEP::pi;
-  // auto solidAMG6pre1 = new G4Tubs("AGM6Solid_1",0,170*mm,8.5*mm,0, 2*pi);
+  /* // auto solidAMG6pre1 = new G4Tubs("AGM6Solid_1",0,170*mm,8.5*mm,0, 2*pi);
 
-  auto spiraltest = new ArchimedSpiral("testspiral",20,0*cm,10*cm,4*pi,
-  0,0.1*cm,0,2*pi);
+  //auto spiraltest = new ArchimedSpiral("testspiral",20,0*cm,10*cm,4*pi,
+  //0,0.1*cm,0,2*pi);
 
   G4MultiUnion* sp = spiraltest->GetSpiral();
   G4LogicalVolume *lsp =  new G4LogicalVolume(sp,  // its solid
@@ -101,7 +113,87 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
           logicWorld,                     //its mother  volume
           false,                        //no boolean operation
           0,                            //copy number
-          checkOverlaps);                        //overlaps checking
+          checkOverlaps);                      //overlaps checking
+
+*/
+
+  G4Tubs *solidM0disk = new G4Tubs("SolM0disc", 0, M0discradius,M0discwidth,0,2*pi);
+  G4LogicalVolume *M0discLog = new G4LogicalVolume(solidM0disk,  // its solid
+      copperM0,// its material
+      "logicM0disc");
+
+
+  G4VPhysicalVolume *phydisk = new G4PVPlacement(0,                    //no rotation
+       G4ThreeVector(0, 0, 0),
+       M0discLog,                //its logical volume
+       "M0discPhys",                     //its name
+       logicWorld,                     //its mother  volume
+       false,                        //no boolean operation
+       0,                            //copy number
+       checkOverlaps);                      //overlaps checking
+
+// spirals
+
+    auto spiral1 = new ArchimedSpiral("firstspiral",30,6.5*mm,52*cm, 4.5*pi,
+    0,3*mm,pi/2,pi);
+
+    G4MultiUnion* sp1 = spiral1->GetSpiral();
+    G4LogicalVolume *lsp1 =  new G4LogicalVolume(sp1,  // its solid
+      water_mat,                                       // its material
+      "Spiral1");
+
+    G4RotationMatrix* rm1 = new G4RotationMatrix();
+    rm1->rotateY(90.*deg);
+
+    G4VPhysicalVolume *physp1 = new G4PVPlacement(rm1,                    //no rotation
+           G4ThreeVector(0, 0, 40*mm),
+           lsp1,                //its logical volume
+           "M0discPhys",                     //its name
+           logicWorld,                     //its mother  volume
+           false,                        //no boolean operation
+           0,                            //copy number
+           false);                      //overlaps checking
+
+    G4RotationMatrix* rm2 = new G4RotationMatrix();
+    rm2->rotateY(90.*deg);
+    rm2->rotateX(90.*deg);
+
+   G4VPhysicalVolume *physp2 = new G4PVPlacement(rm2,                    //no rotation
+          G4ThreeVector(0, 0, 40*mm),
+          lsp1,                //its logical volume
+          "M0discPhys",                     //its name
+          logicWorld,                     //its mother  volume
+          false,                        //no boolean operation
+          0,                            //copy number
+          false);
+
+   G4RotationMatrix* rm3 = new G4RotationMatrix();
+   rm3->rotateY(90.*deg);
+   rm3->rotateX(180.*deg);
+
+   G4VPhysicalVolume *physp3 = new G4PVPlacement(rm3,                    //no rotation
+          G4ThreeVector(0, 0, 40*mm),
+          lsp1,                //its logical volume
+          "M0discPhys",                     //its name
+          logicWorld,                     //its mother  volume
+          false,                        //no boolean operation
+          0,                            //copy number
+          false);
+
+//
+
+    G4RotationMatrix* rm4 = new G4RotationMatrix();
+    rm4->rotateY(90.*deg);
+    rm4->rotateX(270.*deg);
+
+    G4VPhysicalVolume *physp4 = new G4PVPlacement(rm4,                    //no rotation
+           G4ThreeVector(0, 0, 40*mm),
+           lsp1,                //its logical volume
+           "M0discPhys",                     //its name
+           logicWorld,                     //its mother  volume
+           false,                        //no boolean operation
+           0,                            //copy number
+           false);
 
 
   //
