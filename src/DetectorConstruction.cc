@@ -42,6 +42,7 @@
 #include "G4Tubs.hh"
 #include "G4CutTubs.hh"
 #include "Geometry/ArchimedSpiral.hh"
+#include "Geometry/BackPlate.hh"
 
 // GDML
 #include "G4GDMLParser.hh"
@@ -96,26 +97,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     // AMG6
     //
   G4double pi = CLHEP::pi;
-  /* // auto solidAMG6pre1 = new G4Tubs("AGM6Solid_1",0,170*mm,8.5*mm,0, 2*pi);
 
-  //auto spiraltest = new ArchimedSpiral("testspiral",20,0*cm,10*cm,4*pi,
-  //0,0.1*cm,0,2*pi);
-
-  G4MultiUnion* sp = spiraltest->GetSpiral();
-  G4LogicalVolume *lsp =  new G4LogicalVolume(sp,  // its solid
-    sp_mat,                                       // its material
-    "SpiralTest");
-
-  G4VPhysicalVolume *physsp = new G4PVPlacement(0,                    //no rotation
-          G4ThreeVector(0, 0, 0),
-          lsp,                //its logical volume
-          "SpiralTestPhys",                     //its name
-          logicWorld,                     //its mother  volume
-          false,                        //no boolean operation
-          0,                            //copy number
-          checkOverlaps);                      //overlaps checking
-
-*/
 
   G4Tubs *solidM0disk = new G4Tubs("SolM0disc", 0, M0discradius,M0discwidth,0,2*pi);
   G4LogicalVolume *M0discLog = new G4LogicalVolume(solidM0disk,  // its solid
@@ -195,7 +177,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
            0,                            //copy number
            false);
 
-
+//  ======= BackPlate placement ================================================          
+auto pBackPlate = new BackPlate ("BackPlate", 80*mm, logicWorld );
   //
   //always return the physical World
   //
