@@ -12,6 +12,11 @@
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
+#include "G4Torus.hh"
+#include "G4UnionSolid.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4IntersectionSolid.hh"
+
 
 #include "globals.hh"
 #include "G4TwoVector.hh"
@@ -25,8 +30,16 @@ public:
   BackPlate(G4String, G4double, G4LogicalVolume*);
   ~BackPlate();
 
-  G4double BackPlateRadius = (143.0 / 2.0) * mm;
-  G4double BackPlateWidth = 16.5 * mm;
+  G4double BackPlate_Radius = (143.0 / 2.0) * mm;
+  G4double BackPlate_Width = (16.5 / 2.0) * mm;
+
+  G4double BackPlateOD_InnerRadius = (143.0 / 2.0) * mm;
+  G4double BackPlateOD_OuterRadius = (175.0 / 2.0) * mm;
+  G4double BackPlateOD_Width = (19.5 / 2.0) * mm;
+
+  G4double Groove_InnerRadius = (106.0 / 2.0) * mm;
+  G4double Groove_OuterRadius = (126.0 / 2.0) * mm;
+  G4double Groove_Width = (10.0 / 2.0) * mm;
 
 private:
   G4double GrooveWeight;
