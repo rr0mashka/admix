@@ -111,6 +111,9 @@
 # "Envelope" is transparent blue to represent water
 #/vis/geometry/set/colour Envelope 0 0 0 1 .3
 /vis/geometry/set/colour BackPlateGroove_Log 0 0 0 1 .3
+/vis/geometry/set/colour PitBase_Log 0 0 0 1 .3
+/vis/geometry/set/colour PitMiddleDisk_Log 0 0 0 1 .3
+/vis/geometry/set/colour PitCap_Log 0 0 0 1 .3
 /vis/viewer/set/style surface
 /vis/viewer/set/hiddenMarker true
 /vis/viewer/set/viewpointThetaPhi 120 150

@@ -11,6 +11,7 @@ BackPlate::BackPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_vol
   G4Material* GrooveMaterial= nist->FindOrBuildMaterial("G4_WATER");
   G4Material* BackPlateMaterial = nist->FindOrBuildMaterial("G4_Cu");
 
+ G4double Phi_seg_frac = 2.0;
 
          G4Tubs *pBackPlateDisk_sol = new G4Tubs
          (
@@ -19,7 +20,7 @@ BackPlate::BackPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_vol
              BackPlate_Radius,
              BackPlate_Width,
              0,
-             2*CLHEP::pi
+             Phi_seg_frac*CLHEP::pi
           );
 
          G4LogicalVolume *pBackPlateDisk_Log = new G4LogicalVolume
@@ -55,7 +56,7 @@ G4double OD_offset =  ( BackPlateOD_Width - BackPlate_Width ); // this alignns b
             BackPlateOD_OuterRadius,
             BackPlateOD_Width,
             0,
-            2*CLHEP::pi
+            Phi_seg_frac*CLHEP::pi
          );
 
         G4LogicalVolume *pBackPlateOD_Log = new G4LogicalVolume
@@ -85,25 +86,25 @@ G4double OD_offset =  ( BackPlateOD_Width - BackPlate_Width ); // this alignns b
 
 
          G4Tubs *pBackPlateGroove_sol = new G4Tubs
-         (
+          (
             "BackPlateGroove_sol",
              Groove_InnerRadius,
              Groove_OuterRadius,
              Groove_Width,
              0,
-             2*CLHEP::pi
+             Phi_seg_frac*CLHEP::pi
           );
 
          G4LogicalVolume *pBackPlateGroove_Log = new G4LogicalVolume
-         (
+          (
              pBackPlateGroove_sol,  // its solid
              GrooveMaterial,// its material
              "BackPlateGroove_Log"
-           );
+          );
 
 
         G4VPhysicalVolume  *pBackPlateGroove_Phys = new G4PVPlacement
-        (
+         (
           nullptr,  // no rotation
           G4ThreeVector(0, 0, -1.0*Groove_offset),                          // at (0,0,0)
           pBackPlateGroove_Log,                                // its logical volume
@@ -112,84 +113,183 @@ G4double OD_offset =  ( BackPlateOD_Width - BackPlate_Width ); // this alignns b
           false,                                     // no boolean operation
           0,                                         // copy number
           true                                       // overlaps checking
-        );
-  //============================================================================
+         );
+  //===========================================================================
+
+//==============================================================================
+//======== central pit filled with water =======================================
+
+ // ====== Base of the pit =================================
+ G4Tubs *pPitDisk1_sol = new G4Tubs
+  (
+    "PitDisk1",
+     0,
+     18.00,
+     4.0,
+     0,
+     Phi_seg_frac*CLHEP::pi
+   );
+
+  G4Torus *pPitTorus1_sol= new G4Torus
+   (
+    "PitTorus1",
+     0*mm,
+     8.000*mm,
+     18.0*mm,
+     0,
+     Phi_seg_frac*CLHEP::pi
+   );
+
+ G4VSolid* pPitBase_sol = new G4SubtractionSolid("PitBase", pPitDisk1_sol, pPitTorus1_sol, nullptr, G4ThreeVector(0, 0, 4));
 
 
- //======= central pit filled with water ====================================
+ G4LogicalVolume *pPitBase_Log = new G4LogicalVolume
+ (
+   pPitBase_sol,    // its solid
+   GrooveMaterial,  // its material
+   "PitBase_Log"
+ );
+
+
+ G4VPhysicalVolume  *pPitBase_Phys = new G4PVPlacement
+  (
+   nullptr,  // no rotation
+   //G4ThreeVector(60, 40*mm, -20*mm),
+   //G4ThreeVector(0, 0, 0),                      // at (0,0,0)
+   G4ThreeVector(0, 0, 4.0-BackPlate_Width),                          // at (0,0,0)
+   pPitBase_Log,                                // its logical volume
+   "PitBase_Phys",                                  // its name
+   pBackPlateDisk_Log,                                   // its mother  volume
+   false,                                     // no boolean operation
+   0,                                         // copy number
+   false                                       // overlaps checking
+  );
+
+ //=============================================================================
+
+
+//=============  middle disk ===================================================
+G4Tubs *pPitMiddleDisk_sol = new G4Tubs
+ (
+   "PitMiddleDisk",
+    0,
+    10,
+    0.75,
+    0,
+    Phi_seg_frac*CLHEP::pi
+ );
+
+G4LogicalVolume *pPitMiddleDisk_Log = new G4LogicalVolume
+ (
+    pPitMiddleDisk_sol,  // its solid
+    GrooveMaterial,// its material
+    "PitMiddleDisk_Log"
+ );
+
+
+G4VPhysicalVolume  *pPitMiddleDisk_Phys = new G4PVPlacement
+(
+ nullptr,  // no rotation
+ G4ThreeVector(0, 0, 8.0 + 0.75-BackPlate_Width),                          // at (0,0,0)
+ pPitMiddleDisk_Log,                                // its logical volume
+ "PitMiddleDisk_Phys",                                  // its name
+ pBackPlateDisk_Log,                                   // its mother  volume
+ false,                                     // no boolean operation
+ 0,                                         // copy number
+ true                                       // overlaps checking
+);
+//==============================================================================
 
 
 
- //G4double Pit_offse =  ( BackPlate_Width -  Groove_Width ); // this alignns backplate part at the rear plane
-
-
-         G4Tubs *pPit_sol = new G4Tubs
-         (
-            "Pit_sol",
+//  ====== pit cap =============================================================
+         G4Tubs *pPitCapDisckTop_sol = new G4Tubs
+          (
+            "PitDiskTorusInner_sol",
              0,
-             10.0,
-             5.0,
+             10.000,
+             6.0,
              0,
-             2*CLHEP::pi
-          );
-
-
-         G4LogicalVolume *pPit_Log = new G4LogicalVolume
-         (
-             pPit_sol,  // its solid
-             GrooveMaterial,// its material
-             "Pit_Log"
+             Phi_seg_frac*CLHEP::pi
            );
 
 
-        G4VPhysicalVolume  *pPit_Phys = new G4PVPlacement
-        (
-          nullptr,  // no rotation
-          G4ThreeVector(0, 0, -50*mm),                          // at (0,0,0)
-          pPit_Log,                                // its logical volume
-          "Pit_Phys",                                  // its name
-          mother_volume_log,                                   // its mother  volume
-          false,                                     // no boolean operation
-          0,                                         // copy number
-          true                                       // overlaps checking
-        );
-
-
-
-        G4Torus *pTorus_sol_1 = new G4Torus
-        (
-          "Torus_sol_1",
-           0*mm,
-           5*mm,
-           5.01*mm,
+        G4Torus *pPitCapTorus_sol = new G4Torus
+         (
+          "PitCapTorus_sol",
            0,
-           2*CLHEP::pi
-        );
-
-        G4LogicalVolume *pTorus_Log_1 = new G4LogicalVolume
-        (
-           pTorus_sol_1,    // its solid
-           GrooveMaterial,  // its material
-           "Torus_Log_1"
+           4.9,
+           5.000,
+           0,
+           Phi_seg_frac*CLHEP::pi
          );
 
-        G4VPhysicalVolume  *pTorus_Phys_1 = new G4PVPlacement
-        (
-          nullptr,  // no rotation
-          G4ThreeVector(0, 0, -0*mm),                          // at (0,0,0)
-          pTorus_Log_1,                                // its logical volume
-          "Torus_Phys_1",                                  // its name
-          mother_volume_log,                                   // its mother  volume
-          false,                                     // no boolean operation
-          0,                                         // copy number
-          false                                       // overlaps checking
-        );
 
 
-  G4VSolid* union1 = new G4UnionSolid("pTorus_sol_1 + pPit_sol", pTorus_sol_1, pPit_sol);
+  G4VSolid* pPitCapTop_sol = new G4SubtractionSolid("PitCapTop",  pPitCapTorus_sol, pPitCapDisckTop_sol, nullptr, G4ThreeVector(0, 0, -6));
+
+/*
+  G4LogicalVolume *pPitCapTop_Log = new G4LogicalVolume
+   (
+     pPitCapTop_sol,    // its solid
+     GrooveMaterial,  // its material
+     "PitCapTop"
+   );
+
+  G4VPhysicalVolume  *pPitCapTop_Phys = new G4PVPlacement
+   (
+     nullptr,  // no rotation
+     G4ThreeVector(0, 40*mm, -20*mm),                          // at (0,0,0)
+     pPitCapTop_Log ,                                // its logical volume
+     "pPitCapTop_Phys",                                  // its name
+     mother_volume_log,                                   // its mother  volume
+     false,                                     // no boolean operation
+     0,                                         // copy number
+     true                                       // overlaps checking
+   );
+*/
 
 
- //=============================================================================
+
+
+//===============================================================
+
+   G4Tubs *pPitCapDisckBottom_sol = new G4Tubs
+    (
+      "PitCapDisckBottom_sol",
+       0,
+       5.0,
+       2.5,
+       0,
+       Phi_seg_frac*CLHEP::pi
+     );
+
+
+
+G4VSolid* pPitCap_sol = new G4UnionSolid("PitCapTop", pPitCapTop_sol, pPitCapDisckBottom_sol,  nullptr, G4ThreeVector(0, 0, 2.5));
+
+
+  G4LogicalVolume *pPitCap_Log = new G4LogicalVolume
+   (
+     pPitCap_sol,    // its solid
+     GrooveMaterial,  // its material
+     "PitCap_Log"
+   );
+
+
+  G4VPhysicalVolume  *pPitCap_Phys = new G4PVPlacement
+   (
+     nullptr,  // no rotation
+     G4ThreeVector(0, 0, 8.0 + 1.5 - BackPlate_Width),                          // at (0,0,0)
+     pPitCap_Log ,                                // its logical volume
+     "pPitCap_Phys",                                  // its name
+      pBackPlateDisk_Log,                                   // its mother  volume
+     false,                                     // no boolean operation
+     0,                                         // copy number
+     true                                       // overlaps checking
+   );
+
+
 
 
 }

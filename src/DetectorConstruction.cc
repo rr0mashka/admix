@@ -98,7 +98,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //
   G4double pi = CLHEP::pi;
 
-
+/*
   G4Tubs *solidM0disk = new G4Tubs("SolM0disc", 0, M0discradius,M0discwidth,0,2*pi);
   G4LogicalVolume *M0discLog = new G4LogicalVolume(solidM0disk,  // its solid
       copperM0,// its material
@@ -113,9 +113,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
        false,                        //no boolean operation
        0,                            //copy number
        checkOverlaps);                      //overlaps checking
+*/
+
 
 // spirals
-
+/*
     auto spiral1 = new ArchimedSpiral("firstspiral",30,6.5*mm,52*cm, 4.5*pi,
     0,3*mm,pi/2,pi);
 
@@ -176,8 +178,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
            false,                        //no boolean operation
            0,                            //copy number
            false);
-
-//  ======= BackPlate placement ================================================          
+*/
+//  ======= BackPlate placement ================================================
 auto pBackPlate = new BackPlate ("BackPlate", 80*mm, logicWorld );
   //
   //always return the physical World
