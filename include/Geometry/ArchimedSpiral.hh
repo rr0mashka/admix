@@ -3,6 +3,7 @@
 
 #include "globals.hh"
 #include "G4TwoVector.hh"
+#include "G4ThreeVector.hh"
 
 class G4MultiUnion;
 //class G4TwoVector;
@@ -27,10 +28,12 @@ private:
   G4double fPhiBeg, fPhiEnd;
   G4double fEdgeBeg, fEdgeEnd;
   G4double fRMin, fRMax;
-  G4int fNapp;
+  G4int fNapp, fNfake;
   G4double fAlpha;
   std::vector<G4TwoVector> fspiralpoints;
+  std::vector<G4TwoVector> ffakespiralpoints;
   G4MultiUnion *fSpiral;
+  G4double fWindingbeg;
 };
 
 #endif

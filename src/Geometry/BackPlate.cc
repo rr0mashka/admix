@@ -9,7 +9,7 @@ BackPlate::BackPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_vol
 
   G4NistManager* nist = G4NistManager::Instance();
   G4Material* GrooveMaterial= nist->FindOrBuildMaterial("G4_WATER");
-  G4Material* BackPlateMaterial = nist->FindOrBuildMaterial("G4_Cu");
+  G4Material* BackPlateMaterial = nist->FindOrBuildMaterial("G4_Al");
 
  G4double Phi_seg_frac = 2.0;
 

@@ -1,6 +1,5 @@
 #include "Geometry/ArchimedSpiral.hh"
 #include "G4VSolid.hh"
-#include "G4ThreeVector.hh"
 #include "G4MultiUnion.hh"
 #include "G4Transform3D.hh"
 #include "G4CutTubs.hh"
@@ -27,16 +26,25 @@ ArchimedSpiral::ArchimedSpiral(G4String name, G4int Napprox, G4double edgebeg, G
    fspiralpoints = {};
    G4ThreeVector a;
    G4double ph, r, x, y;
-   G4double windingbeg = fEdgeBeg/fAlpha;
+   fWindingbeg = fEdgeBeg/fAlpha;
    G4double phistep = deltawinding/fNapp;
    for (int i = 0; i<fNapp+1;i++){
-      ph = windingbeg + phistep*i;
+      ph = fWindingbeg + phistep*i;
       r = ph*fAlpha;
       y = r*sin(ph);
       x = r* cos(ph);
       fspiralpoints.push_back(G4TwoVector(y,x));
    };
-   fSpiral = new G4MultiUnion(fName);
+   fNfake = floor((fEdgeBeg/(fEdgeEnd - fEdgeBeg))*fNapp) + 1;
+   fNfake = std::max(fNfake,4);
+   G4double newphistep = fWindingbeg/fNfake;
+   for (int i = 0; i<fNfake+fNapp+1;i++){
+      (i<fNfake)? ph = newphistep*i: ph = fWindingbeg + phistep*(i-fNfake);
+      r = ph*fAlpha;
+      y = r*sin(ph);
+      x = r* cos(ph);
+      ffakespiralpoints.push_back(G4TwoVector(y,x));
+   };
    ConstructSolids();
 
 };
@@ -65,13 +73,31 @@ void ArchimedSpiral::ConstructSolids(){
   G4ThreeVector axis = G4ThreeVector(1,0,0);
   G4Transform3D tr =  G4Rotate3D(0, axis);
   G4Transform3D trrotate =  G4Rotate3D(0, axis);
-  G4Transform3D trtranslate =  G4Translate3D(0,0,0);
-  for (int i=0; i<fspiralpoints.size()-2;i++){
+//  G4Transform3D trtranslate =  G4Translate3D(G4ThreeVector(0,0,0));
+  G4Transform3D trtranslate = G4Translate3D(0.5*(ffakespiralpoints.at(1) - ffakespiralpoints.at(0)));
+
+  for (int i=0; i<ffakespiralpoints.size()-2;i++){
+    name = std::to_string(i);
+    deltar = ffakespiralpoints.at(i+1) - ffakespiralpoints.at(i);
+    deltarnext = ffakespiralpoints.at(i+2) - ffakespiralpoints.at(i+1);
+    if ((deltar.mag()<0.00001*CLHEP::mm)|| (deltarnext.mag()<0.00001*CLHEP::mm)) deltaphinext = 0;
+    else deltaphinext = acos(deltar*deltarnext/(deltar.mag()*deltarnext.mag()));
+    //tubs.push_back(new G4CutTubs(name,fRMin,fRMax,fPhiBeg,fPhiEnd,deltar.mag(),G4ThreeVector(0,0,-1),G4TreeVector(0,sin(deltaphi),cos(deltaphi))));
+    if (i>=fNfake) {
+      tub = new G4CutTubs(name,fRMin,fRMax,deltar.mag()/2,fPhiBeg,fPhiEnd,G4ThreeVector(0,sin(deltaphi/2),-cos(deltaphi/2)),G4ThreeVector(0,sin(deltaphinext/2),cos(deltaphinext/2)));
+      fSpiral->AddNode(*tub,tr);
+    }
+    trtranslate = G4Translate3D(0,deltar.mag()*sin(phi)/2 + deltarnext.mag()*sin(phi+deltaphinext)/2,deltar.mag()*cos(phi)/2+deltarnext.mag()*cos(phi+deltaphinext)/2)*trtranslate;
+    trrotate =  G4Rotate3D(-deltaphinext, axis)*trrotate;
+    tr = trtranslate*trrotate;
+    deltaphi = deltaphinext;
+    phi += deltaphinext;
+  };
+  /*for (int i=0; i<fspiralpoints.size()-2;i++){
     name = std::to_string(i);
     deltar = fspiralpoints.at(i+1) - fspiralpoints.at(i);
     deltarnext = fspiralpoints.at(i+2) - fspiralpoints.at(i+1);
     deltaphinext = acos(deltar*deltarnext/(deltar.mag()*deltarnext.mag()));
-    std::cout << deltaphinext/CLHEP::deg << std::endl;
     //tubs.push_back(new G4CutTubs(name,fRMin,fRMax,fPhiBeg,fPhiEnd,deltar.mag(),G4ThreeVector(0,0,-1),G4TreeVector(0,sin(deltaphi),cos(deltaphi))));
     tub = new G4CutTubs(name,fRMin,fRMax,deltar.mag()/2,fPhiBeg,fPhiEnd,G4ThreeVector(0,sin(deltaphi/2),-cos(deltaphi/2)),G4ThreeVector(0,sin(deltaphinext/2),cos(deltaphinext/2)));
     fSpiral->AddNode(*tub,tr);
@@ -80,7 +106,7 @@ void ArchimedSpiral::ConstructSolids(){
     tr = trtranslate*trrotate;
     deltaphi = deltaphinext;
     phi += deltaphinext;
-  };
+  };*/
   //name = std::to_string(fspiralpoints.size()-1);
   //tub = new G4CutTubs(name,fRMin,fRMax,deltarnext.mag()/2,fPhiBeg,fPhiEnd,G4ThreeVector(0,sin(deltaphi/2),-cos(deltaphi/2)),G4ThreeVector(0,0,1));
   //fSpiral->AddNode(*tub,tr);

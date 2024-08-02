@@ -43,6 +43,7 @@
 #include "G4CutTubs.hh"
 #include "Geometry/ArchimedSpiral.hh"
 #include "Geometry/BackPlate.hh"
+#include "Geometry/FrontPlate.hh"
 
 // GDML
 #include "G4GDMLParser.hh"
@@ -67,10 +68,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   const G4double world_sizeXY = 20*cm;
   const G4double world_sizeZ  = 20*cm;
-
-
-  const G4double M0discwidth = 10*mm;
-  const G4double M0discradius = 143.*0.5*mm;
 
 // world %%%%
 
@@ -98,90 +95,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //
   G4double pi = CLHEP::pi;
 
-/*
-  G4Tubs *solidM0disk = new G4Tubs("SolM0disc", 0, M0discradius,M0discwidth,0,2*pi);
-  G4LogicalVolume *M0discLog = new G4LogicalVolume(solidM0disk,  // its solid
-      copperM0,// its material
-      "logicM0disc");
-
-
-  G4VPhysicalVolume *phydisk = new G4PVPlacement(0,                    //no rotation
-       G4ThreeVector(0, 0, 0),
-       M0discLog,                //its logical volume
-       "M0discPhys",                     //its name
-       logicWorld,                     //its mother  volume
-       false,                        //no boolean operation
-       0,                            //copy number
-       checkOverlaps);                      //overlaps checking
-*/
-
-
-// spirals
-/*
-    auto spiral1 = new ArchimedSpiral("firstspiral",30,6.5*mm,52*cm, 4.5*pi,
-    0,3*mm,pi/2,pi);
-
-    G4MultiUnion* sp1 = spiral1->GetSpiral();
-    G4LogicalVolume *lsp1 =  new G4LogicalVolume(sp1,  // its solid
-      water_mat,                                       // its material
-      "Spiral1");
-
-    G4RotationMatrix* rm1 = new G4RotationMatrix();
-    rm1->rotateY(90.*deg);
-
-    G4VPhysicalVolume *physp1 = new G4PVPlacement(rm1,                    //no rotation
-           G4ThreeVector(0, 0, 40*mm),
-           lsp1,                //its logical volume
-           "M0discPhys",                     //its name
-           logicWorld,                     //its mother  volume
-           false,                        //no boolean operation
-           0,                            //copy number
-           false);                      //overlaps checking
-
-    G4RotationMatrix* rm2 = new G4RotationMatrix();
-    rm2->rotateY(90.*deg);
-    rm2->rotateX(90.*deg);
-
-   G4VPhysicalVolume *physp2 = new G4PVPlacement(rm2,                    //no rotation
-          G4ThreeVector(0, 0, 40*mm),
-          lsp1,                //its logical volume
-          "M0discPhys",                     //its name
-          logicWorld,                     //its mother  volume
-          false,                        //no boolean operation
-          0,                            //copy number
-          false);
-
-   G4RotationMatrix* rm3 = new G4RotationMatrix();
-   rm3->rotateY(90.*deg);
-   rm3->rotateX(180.*deg);
-
-   G4VPhysicalVolume *physp3 = new G4PVPlacement(rm3,                    //no rotation
-          G4ThreeVector(0, 0, 40*mm),
-          lsp1,                //its logical volume
-          "M0discPhys",                     //its name
-          logicWorld,                     //its mother  volume
-          false,                        //no boolean operation
-          0,                            //copy number
-          false);
-
-//
-
-    G4RotationMatrix* rm4 = new G4RotationMatrix();
-    rm4->rotateY(90.*deg);
-    rm4->rotateX(270.*deg);
-
-    G4VPhysicalVolume *physp4 = new G4PVPlacement(rm4,                    //no rotation
-           G4ThreeVector(0, 0, 40*mm),
-           lsp1,                //its logical volume
-           "M0discPhys",                     //its name
-           logicWorld,                     //its mother  volume
-           false,                        //no boolean operation
-           0,                            //copy number
-           false);
-*/
 //  ======= BackPlate placement ================================================
 auto pBackPlate = new BackPlate ("BackPlate", 80*mm, logicWorld );
-  //
+auto pFrontPlate = new FrontPlate ("FrontPlate",66.75*mm, logicWorld );
   //always return the physical World
   //
   return physWorld;
