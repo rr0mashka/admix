@@ -21,8 +21,6 @@
 #include "globals.hh"
 #include "G4TwoVector.hh"
 
-class G4MultiUnion;
-//class G4TwoVector;
 
 class BackPlate  {
 public:
@@ -42,7 +40,7 @@ public:
   G4double Groove_Width = (10.0 / 2.0) * mm;
 
 private:
-  G4double GrooveWeight;
+
 };
 
 #endif

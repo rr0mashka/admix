@@ -44,6 +44,9 @@
 #include "Geometry/ArchimedSpiral.hh"
 #include "Geometry/BackPlate.hh"
 #include "Geometry/FrontPlate.hh"
+#include "Geometry/NeutronModerator.hh"
+//Geometry
+
 
 // GDML
 #include "G4GDMLParser.hh"
@@ -66,8 +69,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 // %%%%% scales  %%%%%%
 
-  const G4double world_sizeXY = 20*cm;
-  const G4double world_sizeZ  = 20*cm;
+  const G4double world_sizeXY = 40*cm;
+  const G4double world_sizeZ  = 40*cm;
 
 // world %%%%
 
@@ -95,9 +98,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //
   G4double pi = CLHEP::pi;
 
-//  ======= BackPlate placement ================================================
-auto pBackPlate = new BackPlate ("BackPlate", 80*mm, logicWorld );
-auto pFrontPlate = new FrontPlate ("FrontPlate",66.75*mm, logicWorld );
+//  =======  placements of various parts ================================================
+auto pFrontPlate = new FrontPlate ("FrontPlate",6.75*mm, logicWorld );
+auto pBackPlate = new BackPlate ("BackPlate", 20*mm, logicWorld );
+auto pNeutronModerator = new NeutronModerator ("GlassDisk1", 50*mm, logicWorld );
+
   //always return the physical World
   //
   return physWorld;
