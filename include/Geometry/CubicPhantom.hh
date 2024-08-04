@@ -1,5 +1,5 @@
-#ifndef NeutronModerator_h
-#define NeutronModerator_h 1
+#ifndef CubicPhantom_h
+#define CubicPhantom_h 1
 
 #include "G4RunManager.hh"
 #include "G4NistManager.hh"
@@ -16,13 +16,16 @@
 #include "G4TwoVector.hh"
 
 
-class NeutronModerator  {
+class CubicPhantom  {
 public:
-  NeutronModerator(G4String, G4double, G4LogicalVolume*);
-  ~NeutronModerator();
+  CubicPhantom(G4String, G4double, G4LogicalVolume*);
+  ~CubicPhantom();
 
-  G4double GlassDisk_Diamter = 200.0 * mm;//200
-  G4double GlassDisk_Width =     72 * mm;//72
+  G4double PhantomSize_sizeXY = 100.0 * mm;//200
+  G4double PhantomSize_sizeZ = 50.0  * mm;//200
+
+  G4double ScoringCell_sizeXY = 10.0 * mm;//200
+  G4double ScoringCell_sizeZ = 10.0  * mm;//200
 
 };
 

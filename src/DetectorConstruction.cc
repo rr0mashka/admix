@@ -45,6 +45,7 @@
 #include "Geometry/BackPlate.hh"
 #include "Geometry/FrontPlate.hh"
 #include "Geometry/NeutronModerator.hh"
+#include "Geometry/CubicPhantom.hh"
 //Geometry
 
 
@@ -69,8 +70,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 // %%%%% scales  %%%%%%
 
-  const G4double world_sizeXY = 40*cm;
-  const G4double world_sizeZ  = 40*cm;
+  const G4double world_sizeXY = 80*cm;
+  const G4double world_sizeZ  = 80*cm;
 
 // world %%%%
 
@@ -101,7 +102,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 //  =======  placements of various parts ================================================
 auto pFrontPlate = new FrontPlate ("FrontPlate",6.75*mm, logicWorld );
 auto pBackPlate = new BackPlate ("BackPlate", 20*mm, logicWorld );
-auto pNeutronModerator = new NeutronModerator ("GlassDisk1", 50*mm, logicWorld );
+auto pNeutronModerator = new NeutronModerator ("GlassDisk1", 40*mm, logicWorld );
+auto pCubicPhantom = new CubicPhantom ("CubicPhantom", 200*mm, logicWorld );
+
 
   //always return the physical World
   //

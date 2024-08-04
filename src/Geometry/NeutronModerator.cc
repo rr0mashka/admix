@@ -8,11 +8,10 @@ NeutronModerator::NeutronModerator (G4String name, G4double z_pos, G4LogicalVolu
 {
 
   G4NistManager* nist = G4NistManager::Instance();
-  //G4Material* ModeratorMaterial= nist->FindOrBuildMaterial("“G4_PLEXIGLASS");
+  G4Material* ModeratorMaterial= nist->FindOrBuildMaterial("G4_PLEXIGLASS");
+  //G4Material* ModeratorMaterial= nist->FindOrBuildMaterial("G4_WATER");
 
-  G4Material* ModeratorMaterial= nist->FindOrBuildMaterial("G4_WATER");
-
-  z_pos = z_pos + GlassDisk_Width; // moving origin to the front face
+  z_pos = z_pos + 0.5*GlassDisk_Width; // moving origin to the front face
 
  G4double Phi_seg_frac = 2.0;
 
@@ -20,8 +19,8 @@ NeutronModerator::NeutronModerator (G4String name, G4double z_pos, G4LogicalVolu
          (
             "ModeratorGlassDisk_sol",
              0,
-             GlassDisk_Radius,
-             GlassDisk_Width,
+             0.5 * GlassDisk_Diamter,
+             0.5 * GlassDisk_Width,
              0,
              Phi_seg_frac*CLHEP::pi
           );
