@@ -103,8 +103,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 auto pFrontPlate = new FrontPlate ("FrontPlate",6.75*mm, logicWorld );
 auto pBackPlate = new BackPlate ("BackPlate", 20*mm, logicWorld );
 auto pNeutronModerator = new NeutronModerator ("GlassDisk1", 40*mm, logicWorld );
-auto pCubicPhantom = new CubicPhantom ("CubicPhantom", 200*mm, logicWorld );
 
+// will change later, manually for now
+
+zpos_phantom = 200*mm;
+auto pCubicPhantom = new CubicPhantom ("CubicPhantom", zpos_phantom, logicWorld );
+fScoringVolumes = pCubicPhantom->GetScoringCubes();
+vPos_X = pCubicPhantom->vPos_X;
+vPos_Y = pCubicPhantom->vPos_Y;
+vPos_Z = pCubicPhantom->vPos_Z;
 
   //always return the physical World
   //

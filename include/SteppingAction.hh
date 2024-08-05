@@ -24,37 +24,41 @@
 // ********************************************************************
 //
 //
-/// \file B1/include/SteppingAction.hh
+/// \file SteppingAction.hh
 /// \brief Definition of the B1::SteppingAction class
 
-#ifndef B1SteppingAction_h
-#define B1SteppingAction_h 1
+#ifndef MySteppingAction_h
+#define MySteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
 #include "globals.hh"
 
-class G4LogicalVolume;
+class G4VPhysicalVolume;
+
 
 /// Stepping action class
 ///
 
-
 class EventAction;
+class RunAction;
 
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(EventAction* eventAction);
-    ~SteppingAction() override = default;
+    SteppingAction(RunAction *runaction,EventAction* eventAction);
+    ~SteppingAction() override;
 
     // method from the base class
     void UserSteppingAction(const G4Step*) override;
 
   private:
+    RunAction* fRunAction = nullptr;
     EventAction* fEventAction = nullptr;
-    G4LogicalVolume* fScoringVolume = nullptr;
+    std::vector<G4VPhysicalVolume*> fScoringVolumes = {};
+    G4double xprev, yprev, zprev;
+    G4bool first_dedz_step;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 
 #endif

@@ -27,36 +27,32 @@
 /// \file B1/include/RunAction.hh
 /// \brief Definition of the B1::RunAction class
 
-#ifndef B1RunAction_h
-#define B1RunAction_h 1
+#ifndef MyRunAction_HH
+#define MyRunAction_HH 1
 
 #include "G4UserRunAction.hh"
-#include "G4Accumulable.hh"
+#include "G4Run.hh"
+#include "DetectorConstruction.hh"
+
+#include "G4AnalysisManager.hh"
+#include "G4SystemOfUnits.hh"
 #include "globals.hh"
-
-class G4Run;
-
-/// Run action class
-///
-/// In EndOfRunAction(), it calculates the dose in the selected volume
-/// from the energy deposit accumulated via stepping and event actions.
-/// The computed dose is then printed on the screen.
 
 class RunAction : public G4UserRunAction
 {
-  public:
+public:
     RunAction();
-    ~RunAction() override = default;
+    ~RunAction();
 
-    void BeginOfRunAction(const G4Run*) override;
-    void   EndOfRunAction(const G4Run*) override;
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 
-    void AddEdep (G4double edep);
+    const G4double MinZ = 0.*CLHEP::cm;
+    const G4double MaxZ = 100*CLHEP::cm;
 
-  private:
-    G4Accumulable<G4double> fEdep = 0.;
-    G4Accumulable<G4double> fEdep2 = 0.;
+    const G4double stepfordEdz = 1.* CLHEP::mm;
+    const G4double stepforfluence = 1.* CLHEP::mm;
+
 };
-
 
 #endif

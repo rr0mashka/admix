@@ -48,9 +48,9 @@ z_pos = z_pos + 0.5*PhantomSize_sizeZ; // moving origin to the front face
                 Cell_posY = -0.5*(PhantomSize_sizeXY - ScoringCell_sizeXY)+ ScoringCell_sizeXY*j;
                 Cell_posZ = -0.5*(PhantomSize_sizeZ - ScoringCell_sizeZ)+ ScoringCell_sizeZ*k;
 
-                //vPos_X.push_back(pos_X);
-                //vPos_Y.push_back(pos_Y);
-                //vPos_Z.push_back(pos_Z);
+                vPos_X.push_back(Cell_posX);
+                vPos_Y.push_back(Cell_posX);
+                vPos_Z.push_back(Cell_posX);
 
                 //std::cout<<"       DetectorConstruction   " << pos_X << "   "
                 //<<pos_Y<< "   " <<pos_Z<< std::endl;
@@ -67,7 +67,7 @@ z_pos = z_pos + 0.5*PhantomSize_sizeZ; // moving origin to the front face
                           true
                   );                        //overlaps checking
 
-                 //fScoringVolumes.push_back(phys_vol);
+                 fScoringCubes.push_back(phys_vol);
 
             }
           }

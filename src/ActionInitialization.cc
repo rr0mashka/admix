@@ -32,6 +32,7 @@
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "SteppingAction.hh"
+#include "TrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -45,15 +46,19 @@ void ActionInitialization::BuildForMaster() const
 
 void ActionInitialization::Build() const
 {
-  SetUserAction(new PrimaryGeneratorAction);
+  PrimaryGeneratorAction* generatorAction = new PrimaryGeneratorAction;
+  SetUserAction(generatorAction);
 
   auto runAction = new RunAction;
   SetUserAction(runAction);
 
-  auto eventAction = new EventAction(runAction);
+  auto eventAction = new EventAction(runAction,generatorAction);
   SetUserAction(eventAction);
 
-  SetUserAction(new SteppingAction(eventAction));
+  TrackingAction* trackingAction = new TrackingAction(runAction,eventAction);
+  SetUserAction(trackingAction);
+
+  SetUserAction(new SteppingAction(runAction,eventAction));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,6 +26,16 @@ public:
 
   G4double ScoringCell_sizeXY = 10.0 * mm;//200
   G4double ScoringCell_sizeZ = 10.0  * mm;//200
+  std::vector<G4double> vPos_X;
+  std::vector<G4double> vPos_Y;
+  std::vector<G4double> vPos_Z;
+
+  std::vector<G4VPhysicalVolume*> GetScoringCubes() const {
+    return fScoringCubes;
+  };
+
+private:
+  std::vector<G4VPhysicalVolume*> fScoringCubes = {};
 
 };
 

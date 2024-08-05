@@ -24,41 +24,70 @@
 // ********************************************************************
 //
 //
-/// \file B1/include/DetectorConstruction.hh
-/// \brief Definition of the B1::DetectorConstruction class
 
-#ifndef B1DetectorConstruction_h
-#define B1DetectorConstruction_h 1
+#include "TrackingAction.hh"
+#include "EventAction.hh"
+#include "DetectorConstruction.hh"
+#include "RunAction.hh"
 
-#include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
-
-
-class G4VPhysicalVolume;
-class G4LogicalVolume;
-
-/// Detector construction class to define materials and geometry.
-
-
-class DetectorConstruction : public G4VUserDetectorConstruction
-{
-  public:
-    DetectorConstruction() = default;
-    ~DetectorConstruction() override = default;
-
-    G4VPhysicalVolume* Construct() override;
-
-    std::vector<G4VPhysicalVolume*> GetScoringVolumes() const { return fScoringVolumes; }
-    std::vector<G4double> vPos_X;
-    std::vector<G4double> vPos_Y;
-    std::vector<G4double> vPos_Z;
-    G4double zpos_phantom;
-
-  protected:
-    std::vector<G4VPhysicalVolume*> fScoringVolumes = {};
-};
+#include "G4Track.hh"
+#include "G4Event.hh"
+#include "G4RunManager.hh"
+#include "G4LogicalVolume.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+TrackingAction::TrackingAction(RunAction* runAc ,EventAction* eventAction)
+:fRunAction(runAc),
+ fEventAction(eventAction)
+{
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+TrackingAction::~TrackingAction()
+{
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+void TrackingAction::PreUserTrackingAction(const G4Track* track)
+{
+  G4double En,xpos,ypos,zpos,xpr, ypr, zpr, dist;
+  G4String particle_name;
+  G4int particle_id;
+
+// particle characteristics
+
+  G4AnalysisManager *man = G4AnalysisManager::Instance();
+
+  particle_name=track->GetDefinition()->GetParticleName() ;
+  particle_id = track->GetDefinition()->GetPDGEncoding() ;
+  En = track->GetKineticEnergy() / CLHEP::MeV ;
+  xpos = track->GetPosition().x();
+  ypos = track->GetPosition().y();
+  zpos = track->GetPosition().z();
+
+// primary vertex characterics
+
+  xpr = fEventAction->xprime;
+  ypr = fEventAction->yprime;
+  zpr = fEventAction->zprime;
+
+// calculate distance from primary vertex
+  dist = sqrt( (xpos-xpr)*(xpos-xpr) + (ypos-ypr)*(ypos-ypr) + (zpos-zpr)*(zpos-zpr));
+
+  if(En>0.1){//keeping particles with energy> 100keV
+//if(particle_id==22){//keeping electrons only
+    man->FillNtupleDColumn(3,0,En);
+    man->FillNtupleSColumn(3,1,particle_name);
+    man->FillNtupleIColumn(3,2,particle_id);
+    man->FillNtupleDColumn(3,3,xpos);
+    man->FillNtupleDColumn(3,4,ypos);
+    man->FillNtupleDColumn(3,5,zpos);
+    man->FillNtupleDColumn(3,6,dist);
+    man->AddNtupleRow(3);
+  }
+}
