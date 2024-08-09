@@ -96,10 +96,13 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
      "MyCode0002",JustWarning,msg);
   }
 
-  G4double size = 0.0001;
-  G4double x0 = size * envSizeXY * (G4UniformRand()-0.5);
-  G4double y0 = size * envSizeXY * (G4UniformRand()-0.5);
-  G4double z0 = -0.5 * envSizeZ;
+  const G4double FieldRadius = 20.0 * mm;
+  G4double  phi = 2 * CLHEP::pi * G4UniformRand();
+  G4double x0 =  sin(phi) * FieldRadius * (G4UniformRand()-0.5);//size * envSizeXY * (G4UniformRand()-0.5);
+  G4double y0 =  cos(phi) * FieldRadius * (G4UniformRand()-0.5);//size * envSizeXY * (G4UniformRand()-0.5);
+
+  //std::cout << "Rnd:  "<<(G4UniformRand()-0.5)<<"   x0   "<<x0<<"      y0  "<<y0<<std::endl;
+  G4double z0 = -0.5 * envSizeZ + 200*mm;
 
   fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   fParticleGun->GeneratePrimaryVertex(anEvent);

@@ -63,7 +63,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //
   const G4String water_mat_name = "G4_WATER";
   G4Material* water_mat = nist->FindOrBuildMaterial(water_mat_name);
-  G4Material* world_mat = nist->FindOrBuildMaterial("G4_AIR");
+  G4Material* world_mat = nist->FindOrBuildMaterial("G4_Galactic");
   G4Material* copperM0 = nist->FindOrBuildMaterial("G4_Cu");
   G4Material* LiMat = nist->FindOrBuildMaterial("G4_Li");
 
@@ -102,7 +102,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 //  =======  placements of various parts ================================================
 auto pFrontPlate = new FrontPlate ("FrontPlate",6.75*mm, logicWorld );
 auto pBackPlate = new BackPlate ("BackPlate", 20*mm, logicWorld );
-auto pNeutronModerator = new NeutronModerator ("GlassDisk1", 40*mm, logicWorld );
+auto pNeutronModerator = new NeutronModerator ("GlassDisk1", 30*mm, logicWorld );
 
 // will change later, manually for now
 
