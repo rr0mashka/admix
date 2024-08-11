@@ -22,10 +22,10 @@ public:
   ~CubicPhantom();
 
   G4double PhantomSize_sizeXY = 100.0 * mm;//200
-  G4double PhantomSize_sizeZ = 50.0  * mm;//200
+  G4double PhantomSize_sizeZ = 100.0  * mm;//200
 
-  G4double ScoringCell_sizeXY = 10.0 * mm;//200
-  G4double ScoringCell_sizeZ = 10.0  * mm;//200
+  G4double ScoringCell_sizeXY = 4.0 * mm;//200
+  G4double ScoringCell_sizeZ = 4.0  * mm;//200
   std::vector<G4double> vPos_X;
   std::vector<G4double> vPos_Y;
   std::vector<G4double> vPos_Z;

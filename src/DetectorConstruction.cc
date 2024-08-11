@@ -106,7 +106,7 @@ auto pNeutronModerator = new NeutronModerator ("GlassDisk1", 30*mm, logicWorld )
 
 // will change later, manually for now
 
-zpos_phantom = 200*mm;
+zpos_phantom = 120*mm;
 auto pCubicPhantom = new CubicPhantom ("CubicPhantom", zpos_phantom, logicWorld );
 fScoringVolumes = pCubicPhantom->GetScoringCubes();
 vPos_X = pCubicPhantom->vPos_X;

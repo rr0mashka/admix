@@ -49,8 +49,8 @@ z_pos = z_pos + 0.5*PhantomSize_sizeZ; // moving origin to the front face
                 Cell_posZ = -0.5*(PhantomSize_sizeZ - ScoringCell_sizeZ)+ ScoringCell_sizeZ*k;
 
                 vPos_X.push_back(Cell_posX);
-                vPos_Y.push_back(Cell_posX);
-                vPos_Z.push_back(Cell_posX);
+                vPos_Y.push_back(Cell_posY);
+                vPos_Z.push_back(Cell_posZ);
 
                 //std::cout<<"       DetectorConstruction   " << pos_X << "   "
                 //<<pos_Y<< "   " <<pos_Z<< std::endl;
