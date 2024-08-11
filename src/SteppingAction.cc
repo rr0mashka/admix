@@ -66,6 +66,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   G4int i_z_fluence,i_p_fluence;
 
   G4AnalysisManager *man = G4AnalysisManager::Instance();
+  const DetectorConstruction* detConstruction = static_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 
   xi = step->GetPreStepPoint()->GetPosition().x();
   yi = step->GetPreStepPoint()->GetPosition().y();
@@ -116,7 +117,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
         man->FillNtupleIColumn(0,0,G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID());
         man->FillNtupleDColumn(0,1,xi);
         man->FillNtupleDColumn(0,2,yi);
-        man->FillNtupleDColumn(0,3,i*fRunAction->stepforfluence);
+        man->FillNtupleDColumn(0,3,i*fRunAction->stepforfluence + zpr - detConstruction->zpos_phantom);
         man->FillNtupleDColumn(0,4,En);
         man->FillNtupleIColumn(0,5,mytrack->GetDefinition()->GetPDGEncoding());
         man->FillNtupleSColumn(0,6,mytrack->GetDefinition()->GetParticleName());
@@ -129,7 +130,6 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
   G4VPhysicalVolume* volume  = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
   if (fScoringVolumes.size() == 0) {
-      const DetectorConstruction* detConstruction = static_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
       fScoringVolumes = detConstruction->GetScoringVolumes();
   };
 

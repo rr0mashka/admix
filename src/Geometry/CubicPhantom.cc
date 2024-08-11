@@ -7,7 +7,7 @@
 CubicPhantom::CubicPhantom (G4String name, G4double z_pos, G4LogicalVolume* mother_volume_log )
 {
 
-z_pos = z_pos + 0.5*PhantomSize_sizeZ; // moving origin to the front face
+  G4double z_pos_cent = z_pos + 0.5*PhantomSize_sizeZ; // moving origin to the front face
 
   G4NistManager *nist = G4NistManager::Instance();
   G4Material *PhantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
@@ -50,7 +50,7 @@ z_pos = z_pos + 0.5*PhantomSize_sizeZ; // moving origin to the front face
 
                 vPos_X.push_back(Cell_posX);
                 vPos_Y.push_back(Cell_posY);
-                vPos_Z.push_back(Cell_posZ);
+                vPos_Z.push_back(Cell_posZ + PhantomSize_sizeZ*0.5);
 
                 //std::cout<<"       DetectorConstruction   " << pos_X << "   "
                 //<<pos_Y<< "   " <<pos_Z<< std::endl;
@@ -58,7 +58,7 @@ z_pos = z_pos + 0.5*PhantomSize_sizeZ; // moving origin to the front face
                   phys_vol = new G4PVPlacement
                   (
                           0,                    //no rotation
-                          G4ThreeVector(Cell_posX, Cell_posY, Cell_posZ + z_pos),
+                          G4ThreeVector(Cell_posX, Cell_posY, Cell_posZ + z_pos_cent),
                           template_ScoringCell_Log,                //its logical volume
                           temp_str,                     //its name
                           mother_volume_log,                     //its mother  volume

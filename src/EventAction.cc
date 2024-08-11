@@ -103,7 +103,7 @@ void EventAction::EndOfEventAction(const G4Event*)
        man->FillNtupleDColumn(2,3,dose);
        man->FillNtupleDColumn(2,4, detConstruction->vPos_X[i]);
        man->FillNtupleDColumn(2,5, detConstruction->vPos_Y[i]);
-       man->FillNtupleDColumn(2,6, detConstruction->vPos_Z[i]+0.5*detConstruction->zpos_phantom);
+       man->FillNtupleDColumn(2,6, detConstruction->vPos_Z[i]);
        man->AddNtupleRow(2);
        //std::cout<<"       2nd tuple FiLLINg    "<<detConstruction->vPos_X[i]<< "   "
        //<<detConstruction->vPos_Y[i]<< "   " <<detConstruction->vPos_Z[i]<< std::endl;
