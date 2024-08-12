@@ -90,7 +90,7 @@ void EventAction::EndOfEventAction(const G4Event*)
   for (uint i=0;i<fEdepV.size();i++){
   // calculate mass to conver to grays
      if (fEdepV.at(i) > 0.) {
-       if (detConstruction->GetScoringVolumes().at(i)->GetLogicalVolume()->GetName()== "Cube"){
+       if (detConstruction->GetScoringVolumes().at(i)->GetLogicalVolume()->GetName()== "template_ScoringCell_Log"){
          mass = detConstruction->GetScoringVolumes().at(i)->GetLogicalVolume()->GetMass();
        };
 
