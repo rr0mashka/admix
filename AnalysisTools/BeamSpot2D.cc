@@ -1,7 +1,7 @@
 {
 
   gROOT->Reset();
-  //gStyle->SetOptStat(0);
+  gStyle->SetOptStat(0);
   //gStyle->SetOptTitle(0);
   gStyle->SetOptFit(0);
   gStyle->SetLabelFont(42);
@@ -52,7 +52,7 @@
 
 
 //======================= 87 MeV ========================================
-  TFile *f1 = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/V2/BNCT-build/output.root");
+  TFile *f1 = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/V3/BNCT-build/output.root");
 
 
 //==============================================================================
@@ -60,14 +60,15 @@
 
 
 //===================== 2D energy depostion ====================================
-TH2F *hBeamSpot1 = new TH2F("EnergyDeposition1","Dose, Depth: 70 - 80 [mm]", 30,-30,30, 30,-30,30);
-TH2F *hBeamSpot2 = new TH2F("EnergyDeposition2","Dose, Depth: 10 - 20 [mm]", 30,-30,30, 30,-30,30);
-TH2F *hBeamSpot3 = new TH2F("EnergyDeposition3","Dose, Depth: 80 - 90 [mm]", 30,-30,30, 30,-30,30);
-TH2F *hBeamSpot4 = new TH2F("EnergyDeposition4","Dose, Depth: 30 - 40 [mm]", 30,-30,30, 30,-30,30);
-TH2F *hBeamSpot5 = new TH2F("EnergyDeposition5","Dose, Depth: 40 - 50 [mm]", 30,-30,30, 30,-30,30);
-TH2F *hBeamSpot6 = new TH2F("EnergyDeposition6","Dose, Depth: 90 - 100 [mm]", 30,-30,30, 30,-30,30);
-TH2F *hBeamSpot7 = new TH2F("EnergyDeposition7","Dose, Depth: 100 - 110 [mm]", 30,-30,30, 30,-30,30);
-TH2F *hBeamSpot8 = new TH2F("EnergyDeposition8","Dose, Depth: 110 - 120 [mm]", 30,-30,30, 30,-30,30);
+TH2F *hBeamSpot1 = new TH2F("EnergyDeposition1","Dose, Depth: 0 - 10 [mm]", 50,-50,50, 50,-50,50);
+TH2F *hBeamSpot2 = new TH2F("EnergyDeposition2","Dose, Depth: 10 - 20 [mm]", 50,-50,50, 50,-50,50);
+TH2F *hBeamSpot3 = new TH2F("EnergyDeposition3","Dose, Depth: 20 - 50 [mm]", 50,-50,50, 50,-50,50);
+TH2F *hBeamSpot4 = new TH2F("EnergyDeposition4","Dose, Depth: 50 - 40 [mm]", 50,-50,50, 50,-50,50);
+TH2F *hBeamSpot5 = new TH2F("EnergyDeposition5","Dose, Depth: 40 - 50 [mm]", 50,-50,50, 50,-50,50);
+TH2F *hBeamSpot6 = new TH2F("EnergyDeposition6","Dose, Depth: 50 - 60 [mm]", 50,-50,50, 50,-50,50);
+TH2F *hBeamSpot7 = new TH2F("EnergyDeposition7","Dose, Depth: 80 - 90 [mm]", 50,-50,50, 50,-50,50);
+TH2F *hBeamSpot8 = new TH2F("EnergyDeposition8","Dose, Depth: 110 - 120 [mm]", 50,-50,50, 50,-50,50);
+
 
 
 //==============================================================================
@@ -90,11 +91,14 @@ int nentries1 = (int)t1->GetEntries();
 for (int i=0; i<nentries1; i++) {
 //for (int i=0; i<10000; i++) {
   t1 -> GetEntry(i);
-  if(Z>70 && Z<80)hBeamSpot1 ->Fill(X,Y, Dose*scaleDose);
-  if(Z>80 && Z<90)hBeamSpot3 ->Fill(X,Y, Dose*scaleDose);
-  if(Z>90 && Z<100)hBeamSpot6 ->Fill(X,Y, Dose*scaleDose);
-  if(Z>100 && Z<110)hBeamSpot7 ->Fill(X,Y, Dose*scaleDose);
-  if(Z>110 && Z<120)hBeamSpot8 ->Fill(X,Y, Dose*scaleDose);
+
+  //Dose*scaleDose
+  if(Z>0 && Z<10)hBeamSpot1 ->Fill(X,Y, Energy);
+  if(Z>20 && Z<50)hBeamSpot3 ->Fill(X,Y, Energy);
+  if(Z>50 && Z<60)hBeamSpot6 ->Fill(X,Y, Energy);
+  if(Z>80 && Z<90)hBeamSpot7 ->Fill(X,Y, Energy);
+  if(Z>110 && Z<120)hBeamSpot8 ->Fill(X,Y,Energy);
+  cout<< " Dose:   "<< Dose;
 }
 
 
@@ -129,11 +133,11 @@ double Zrange_max = 45e-9;//proton 87 MeV
 TCanvas* c3 = new TCanvas("c3", "Produced particle", 1600, 360);
 c3->Divide(4,1, 0.01, 0.01);
 c3->cd(1);
-//hDensityProfile3->GetYaxis()->SetRangeUser(0,  max_y_plot[2]);
+
 hBeamSpot1->GetXaxis()->SetTitle("x [mm]");
 hBeamSpot1->GetYaxis()->SetTitle("y [mm]");
 hBeamSpot1->GetZaxis()->SetTitle("Dose, Gy / beam particle");
-//hBeamSpot1->GetZaxis()->SetRangeUser(0,  Zrange_max);
+//hBeamSpot1->GetZaxis()->SetRangeUser(0,  1e-30);
 hBeamSpot1->GetXaxis()->SetTitleSize(TileSize);
 hBeamSpot1->GetYaxis()->SetTitleSize(TileSize);
 hBeamSpot1->GetZaxis()->SetTitleSize(TileSize);

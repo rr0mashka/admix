@@ -3,8 +3,10 @@
 #include "G4ThreeVector.hh"
 #include "G4MultiUnion.hh"
 #include "G4Transform3D.hh"
+#include "G4StepLimiterPhysics.hh"
+#include "G4UserLimits.hh"
 
-NeutronModerator::NeutronModerator (G4String name, G4double z_pos, G4LogicalVolume* mother_volume_log )
+NeutronModerator::NeutronModerator (G4String name, G4double z_pos, G4LogicalVolume* mother_volume_log, G4double maxStep)
 {
 
   G4NistManager* nist = G4NistManager::Instance();
@@ -45,6 +47,9 @@ NeutronModerator::NeutronModerator (G4String name, G4double z_pos, G4LogicalVolu
           true                                       // overlaps checking
         );
 
+      
+        auto fStepLimit = new G4UserLimits(maxStep);
+        pGlassDisk_Log ->SetUserLimits(fStepLimit);
 
 
 

@@ -4,8 +4,11 @@
 #include "G4LogicalVolume.hh"
 #include "G4UnionSolid.hh"
 #include "G4GDMLParser.hh"
+#include "G4MultiUnion.hh"
+#include "G4Transform3D.hh"
 
-FrontPlate::FrontPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_volume_log )
+
+FrontPlate::FrontPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_volume_log, G4double maxStep )
 {
   G4double pi = CLHEP::pi;
   G4bool checkOverlaps = true;
@@ -102,5 +105,10 @@ FrontPlate::FrontPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_v
         false,                        //no boolean operation
         0,                            //copy number
         checkOverlaps);
+
+        auto fStepLimit = new G4UserLimits(maxStep);
+        LitiumDiscLog -> SetUserLimits(fStepLimit);
+        M0discLog ->SetUserLimits(fStepLimit);
+        lsp1->SetUserLimits(fStepLimit);
 
 }

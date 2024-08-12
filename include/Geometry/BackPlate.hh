@@ -16,6 +16,8 @@
 #include "G4UnionSolid.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4IntersectionSolid.hh"
+#include "G4StepLimiterPhysics.hh"
+#include "G4UserLimits.hh"
 
 
 #include "globals.hh"
@@ -25,7 +27,7 @@
 class BackPlate  {
 public:
 
-  BackPlate(G4String, G4double, G4LogicalVolume*);
+  BackPlate(G4String, G4double, G4LogicalVolume*, G4double);
   ~BackPlate();
 
   G4double BackPlate_Radius = (143.0 / 2.0) * mm;

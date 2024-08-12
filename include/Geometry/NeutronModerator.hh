@@ -18,7 +18,7 @@
 
 class NeutronModerator  {
 public:
-  NeutronModerator(G4String, G4double, G4LogicalVolume*);
+  NeutronModerator(G4String, G4double, G4LogicalVolume*, G4double);
   ~NeutronModerator();
 
   G4double GlassDisk_Diamter = 200.0 * mm;//200

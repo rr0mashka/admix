@@ -4,7 +4,7 @@
 #include "G4MultiUnion.hh"
 #include "G4Transform3D.hh"
 
-BackPlate::BackPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_volume_log )
+BackPlate::BackPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_volume_log, G4double maxStep )
 {
 
   G4NistManager* nist = G4NistManager::Instance();
@@ -290,6 +290,14 @@ G4VSolid* pPitCap_sol = new G4UnionSolid("PitCapTop", pPitCapTop_sol, pPitCapDis
    );
 
 
+
+   auto fStepLimit = new G4UserLimits(maxStep);
+   pBackPlateDisk_Log ->SetUserLimits(fStepLimit);
+   pBackPlateOD_Log ->SetUserLimits(fStepLimit);
+   pBackPlateGroove_Log ->SetUserLimits(fStepLimit);
+   pPitBase_Log ->SetUserLimits(fStepLimit);
+   pPitMiddleDisk_Log ->SetUserLimits(fStepLimit);
+   pPitCap_Log ->SetUserLimits(fStepLimit);
 
 
 }

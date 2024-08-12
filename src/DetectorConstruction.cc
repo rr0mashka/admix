@@ -74,7 +74,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   const G4double world_sizeZ  = 80*cm;
 
 // world %%%%
-
+//auto fStepLimit = new G4UserLimits();
 
   auto solidWorld = new G4Box("World",                           // its name
     0.5 * world_sizeXY, 0.5 * world_sizeXY, 0.5 * world_sizeZ);  // its size
@@ -94,20 +94,17 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 // %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-    //
-    // AMG6
-    //
-  G4double pi = CLHEP::pi;
+G4double pi = CLHEP::pi;
 
 //  =======  placements of various parts ================================================
-auto pFrontPlate = new FrontPlate ("FrontPlate",6.75*mm, logicWorld );
-auto pBackPlate = new BackPlate ("BackPlate", 20*mm, logicWorld );
-auto pNeutronModerator = new NeutronModerator ("GlassDisk1", 30*mm, logicWorld );
+auto pFrontPlate = new FrontPlate ("FrontPlate",6.75*mm, logicWorld, 1*mm );
+auto pBackPlate = new BackPlate ("BackPlate", 20*mm, logicWorld, 1*mm );
+auto pNeutronModerator = new NeutronModerator ("GlassDisk1", 30*mm, logicWorld, 1*mm );
 
 // will change later, manually for now
 
 zpos_phantom = 120*mm;
-auto pCubicPhantom = new CubicPhantom ("CubicPhantom", zpos_phantom, logicWorld );
+auto pCubicPhantom = new CubicPhantom ("CubicPhantom", zpos_phantom, logicWorld, 1*mm );
 fScoringVolumes = pCubicPhantom->GetScoringCubes();
 vPos_X = pCubicPhantom->vPos_X;
 vPos_Y = pCubicPhantom->vPos_Y;

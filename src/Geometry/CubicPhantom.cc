@@ -4,7 +4,7 @@
 #include "G4MultiUnion.hh"
 #include "G4Transform3D.hh"
 
-CubicPhantom::CubicPhantom (G4String name, G4double z_pos, G4LogicalVolume* mother_volume_log )
+CubicPhantom::CubicPhantom (G4String name, G4double z_pos, G4LogicalVolume* mother_volume_log,  G4double maxStep )
 {
 
   G4double z_pos_cent = z_pos + 0.5*PhantomSize_sizeZ; // moving origin to the front face
@@ -73,8 +73,7 @@ CubicPhantom::CubicPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
           }
        }
 
-
-
-
+       auto fStepLimit = new G4UserLimits(maxStep);
+       template_ScoringCell_Log ->SetUserLimits(fStepLimit);
 
 }

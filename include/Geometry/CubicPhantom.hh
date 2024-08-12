@@ -14,11 +14,13 @@
 #include "G4Tubs.hh"
 #include "globals.hh"
 #include "G4TwoVector.hh"
+#include "G4StepLimiterPhysics.hh"
+#include "G4UserLimits.hh"
 
 
 class CubicPhantom  {
 public:
-  CubicPhantom(G4String, G4double, G4LogicalVolume*);
+  CubicPhantom(G4String, G4double, G4LogicalVolume*,  G4double);
   ~CubicPhantom();
 
   G4double PhantomSize_sizeXY = 100.0 * mm;//200

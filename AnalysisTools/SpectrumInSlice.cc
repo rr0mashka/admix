@@ -45,7 +45,7 @@
   //1000020040//alfa
 
 
-TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/V2/BNCT-build/output.root");
+TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/V3/BNCT-build/output.root");
 //==============================================================================
 
    TTree *t1 = (TTree*)f->Get("Fluences");
@@ -67,12 +67,20 @@ TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/V2/BNCT-build/out
    //for(int i=0; i<5; i++) hFluence[i] = (TH1F*) hFluence_Ref->Clone();
    TH1F *hSpectrum   = new TH1F("hSpectrum ","Proton Energy Spectrum",100,0,300);
 
+   TH2F *hSpectrum2D   = new TH2F("hSpectrum ","Proton Energy Spectrum",200,-200,+200, 300, 0, +300);
+
    int nentries = (int)t1->GetEntries();
   for (int i=0; i<nentries; i++) {
      t1 -> GetEntry(i);
 
        if(particle_id == 2212) {
-        if(Zsurf>=200 && Zsurf<300)  hSpectrum -> Fill(Energy);
+         if(fabs(X)<10 && fabs(Y)<10){
+
+           hSpectrum2D->Fill(Zsurf, Energy);
+           if(Zsurf>=-121 && Zsurf<-120)  hSpectrum -> Fill(Energy);
+
+
+         }
        }
      //if(strcmp(particle_name, "alpha") == 0 ) hFluence[4] -> Fill(Zsurf);
      //if(strcmp(particle_name, "alpha") == 0 ) cout<< particle_name << "   PDG ID = "<< particle_id <<endl;
@@ -104,6 +112,28 @@ hSpectrum->GetXaxis()->SetTitleFont(42);
   //hFluence[pid_it]->SetMarkerColor(ModelAttr[pid_it].colour);
   //hFluence[pid_it]->SetMarkerSize(ModelAttr[pid_it].size);
 hSpectrum->Draw();
+
+
+TCanvas *c2 = new TCanvas("c2", "c2", 960, 720);
+
+hSpectrum2D->GetYaxis()->SetTickLength(0.02);
+hSpectrum2D->GetYaxis()->SetNdivisions(505);
+hSpectrum2D->GetXaxis()->CenterTitle();
+hSpectrum2D->GetYaxis()->CenterTitle();
+hSpectrum2D->GetYaxis()->SetTitle("E (MeV)");
+hSpectrum2D->GetXaxis()->SetTitle("z (mm)");
+//hSpectrum->GetYaxis()->SetRangeUser(1, 200000);
+hSpectrum2D->GetYaxis()->SetTitleSize(0.045*TextSizeScale);
+hSpectrum2D->GetYaxis()->SetTitleOffset(1.2);
+hSpectrum2D->GetXaxis()->SetTitleSize(0.045*TextSizeScale);
+hSpectrum2D->GetXaxis()->SetTitleOffset(1.0);
+hSpectrum2D->GetYaxis()->SetLabelSize(0.04*TextSizeScale);
+hSpectrum2D->GetXaxis()->SetLabelSize(0.04*TextSizeScale);
+hSpectrum2D->GetYaxis()->SetLabelFont(42);
+hSpectrum2D->GetYaxis()->SetTitleFont(42);
+hSpectrum2D->GetXaxis()->SetTitleFont(42);
+hSpectrum2D->Draw("colz");
+
 
 
 

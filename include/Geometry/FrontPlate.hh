@@ -9,11 +9,13 @@
 #include "G4SystemOfUnits.hh"
 #include "G4CutTubs.hh"
 #include "G4Torus.hh"
+#include "G4StepLimiterPhysics.hh"
+#include "G4UserLimits.hh"
 
 class FrontPlate  {
 public:
 
-  FrontPlate(G4String, G4double, G4LogicalVolume*);
+  FrontPlate(G4String, G4double, G4LogicalVolume*, G4double);
   ~FrontPlate();
 
   G4double FrontPlateDisc_Radius = (143.0 / 2.0) * mm;

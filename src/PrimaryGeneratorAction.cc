@@ -96,7 +96,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
      "MyCode0002",JustWarning,msg);
   }
 
-  const G4double FieldRadius = 20.0 * mm;
+  const G4double FieldRadius = 5.0 * mm;
   G4double  phi = 2 * CLHEP::pi * G4UniformRand();
   G4double x0 =  sin(phi) * FieldRadius * (G4UniformRand()-0.5);//size * envSizeXY * (G4UniformRand()-0.5);
   G4double y0 =  cos(phi) * FieldRadius * (G4UniformRand()-0.5);//size * envSizeXY * (G4UniformRand()-0.5);
