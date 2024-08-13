@@ -3,6 +3,7 @@
 /run/initialize
 
 /gun/particle proton
-/gun/energy 222.2 MeV
+/gun/energy 2.2 MeV
 #
+/run/printProgress 100
 /run/beamOn 10000

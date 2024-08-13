@@ -113,15 +113,17 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
         ibigger = i_z_fluence;
       };
       for (int i=ismaller; i<ibigger;i++){
-        if(En>0.00){ //keeping only fluences for particles with  Energy >10 keV
+
+        G4int PDG_Id = mytrack->GetDefinition()->GetPDGEncoding();
+        if(PDG_Id == 2112 || PDG_Id == 2212){ //keeping only fluences for particles with  Energy >10 keV
         man->FillNtupleIColumn(0,0,G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID());
         man->FillNtupleDColumn(0,1,xi);
         man->FillNtupleDColumn(0,2,yi);
         man->FillNtupleDColumn(0,3,i*fRunAction->stepforfluence + zpr - detConstruction->zpos_phantom);
         man->FillNtupleDColumn(0,4,En);
-        man->FillNtupleIColumn(0,5,mytrack->GetDefinition()->GetPDGEncoding());
+        man->FillNtupleIColumn(0,5,PDG_Id);
         man->FillNtupleSColumn(0,6,mytrack->GetDefinition()->GetParticleName());
-        man->FillNtupleSColumn(0,7,mytrack->GetMaterial()->GetName());
+        //man->FillNtupleSColumn(0,7,mytrack->GetMaterial()->GetName());
         man->AddNtupleRow(0);
        }
       }

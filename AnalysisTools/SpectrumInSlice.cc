@@ -8,7 +8,7 @@
   gStyle->SetTitleFont(42);
 
   gStyle->SetPadLeftMargin(0.16);
-  gStyle->SetPadRightMargin(0.03);
+  gStyle->SetPadRightMargin(0.15);
   gStyle->SetPadTopMargin(0.1);//!!
   gStyle->SetPadBottomMargin(0.12);//!!
 
@@ -73,8 +73,9 @@ TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/V3/BNCT-build/out
   for (int i=0; i<nentries; i++) {
      t1 -> GetEntry(i);
 
-       if(particle_id == 2212) {
-         if(fabs(X)<10 && fabs(Y)<10){
+      // if(particle_id == 2212) {   //protons
+      if(particle_id == 2112) {    //neutrons
+         if(fabs(X)<50 && fabs(Y)<50){
 
            hSpectrum2D->Fill(Zsurf, Energy);
            if(Zsurf>=-121 && Zsurf<-120)  hSpectrum -> Fill(Energy);

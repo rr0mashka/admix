@@ -57,14 +57,14 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
   G4double En,xpos,ypos,zpos,xpr, ypr, zpr, dist;
   G4String particle_name;
-  G4int particle_id;
+  G4int PDG_Id;
 
 // particle characteristics
 
   G4AnalysisManager *man = G4AnalysisManager::Instance();
 
   particle_name=track->GetDefinition()->GetParticleName() ;
-  particle_id = track->GetDefinition()->GetPDGEncoding() ;
+  PDG_Id = track->GetDefinition()->GetPDGEncoding() ;
   En = track->GetKineticEnergy() / CLHEP::MeV ;
   xpos = track->GetPosition().x();
   ypos = track->GetPosition().y();
@@ -79,15 +79,15 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 // calculate distance from primary vertex
   dist = sqrt( (xpos-xpr)*(xpos-xpr) + (ypos-ypr)*(ypos-ypr) + (zpos-zpr)*(zpos-zpr));
 
-  if(En>0.1){//keeping particles with energy> 100keV
+  if(PDG_Id == 2112 ||PDG_Id == 2212){//keeping particles with energy> 100keV
 //if(particle_id==22){//keeping electrons only
     man->FillNtupleDColumn(3,0,En);
-    man->FillNtupleSColumn(3,1,particle_name);
-    man->FillNtupleIColumn(3,2,particle_id);
+    //man->FillNtupleSColumn(3,1,particle_name);
+    man->FillNtupleIColumn(3,2,PDG_Id);
     man->FillNtupleDColumn(3,3,xpos);
     man->FillNtupleDColumn(3,4,ypos);
     man->FillNtupleDColumn(3,5,zpos);
-    man->FillNtupleDColumn(3,6,dist);
+    //man->FillNtupleDColumn(3,6,dist);
     man->AddNtupleRow(3);
   }
 }
