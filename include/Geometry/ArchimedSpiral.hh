@@ -4,6 +4,7 @@
 #include "globals.hh"
 #include "G4TwoVector.hh"
 #include "G4ThreeVector.hh"
+#include <vector>
 
 class G4MultiUnion;
 //class G4TwoVector;

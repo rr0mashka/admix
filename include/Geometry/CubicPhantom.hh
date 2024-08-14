@@ -16,6 +16,7 @@
 #include "G4TwoVector.hh"
 #include "G4StepLimiterPhysics.hh"
 #include "G4UserLimits.hh"
+#include <vector>
 
 
 class CubicPhantom  {
@@ -24,10 +25,10 @@ public:
   ~CubicPhantom();
 
   G4double PhantomSize_sizeXY = 100.0 * mm;//200
-  G4double PhantomSize_sizeZ = 100.0  * mm;//200
+  G4double PhantomSize_sizeZ = 0.1  * mm;//200
 
-  G4double ScoringCell_sizeXY = 4.0 * mm;//200
-  G4double ScoringCell_sizeZ = 4.0  * mm;//200
+  G4double ScoringCell_sizeXY = 100 * mm;//200
+  G4double ScoringCell_sizeZ = 0.1  * mm;//200
   std::vector<G4double> vPos_X;
   std::vector<G4double> vPos_Y;
   std::vector<G4double> vPos_Z;

@@ -115,7 +115,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       for (int i=ismaller; i<ibigger;i++){
 
         G4int PDG_Id = mytrack->GetDefinition()->GetPDGEncoding();
-        if(PDG_Id == 2112 || PDG_Id == 2212){ //keeping only fluences for particles with  Energy >10 keV
+      //  if(PDG_Id == 2112 || PDG_Id == 2212){
+        if(PDG_Id == 2112 ){ //keeping only fluences for neutons only
         man->FillNtupleIColumn(0,0,G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID());
         man->FillNtupleDColumn(0,1,xi);
         man->FillNtupleDColumn(0,2,yi);

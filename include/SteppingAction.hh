@@ -32,6 +32,7 @@
 
 #include "G4UserSteppingAction.hh"
 #include "globals.hh"
+#include <vector>
 
 class G4VPhysicalVolume;
 

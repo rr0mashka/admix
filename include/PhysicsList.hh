@@ -11,6 +11,7 @@
 #include "G4HadronInelasticQBBC.hh"
 #include "QBBC.hh"
 #include "QGSP_BIC_HP.hh"
+#include "QGSP_BIC_AllHP.hh"
 
 #include "G4HadronPhysicsINCLXX.hh"
 #include "G4IonElasticPhysics.hh"
@@ -27,7 +28,7 @@
 #include "globals.hh"
 
 
-class PhysicsList: public QGSP_BIC_HP
+class PhysicsList: public QGSP_BIC_AllHP
 {
 
 public:

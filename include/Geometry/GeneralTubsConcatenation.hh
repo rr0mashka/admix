@@ -3,6 +3,7 @@
 
 #include "globals.hh"
 #include "G4TwoVector.hh"
+#include <vector>
 
 class G4MultiUnion;
 

@@ -45,7 +45,7 @@
   //1000020040//alfa
 
 
-TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/V3/BNCT-build/output.root");
+TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/V4/BNCT-build/output.root");
 //==============================================================================
 
    TTree *t1 = (TTree*)f->Get("Fluences");
@@ -65,9 +65,9 @@ TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/V3/BNCT-build/out
    //TH1F *hFluence_Ref   = new TH1F("hFluence","Fluence (z)",120,0,120);
    //TH1F *hFluence[5];
    //for(int i=0; i<5; i++) hFluence[i] = (TH1F*) hFluence_Ref->Clone();
-   TH1F *hSpectrum   = new TH1F("hSpectrum ","Proton Energy Spectrum",100,0,300);
+   TH1F *hSpectrum   = new TH1F("hSpectrum ","Proton Energy Spectrum",100,0, 1e-6);
 
-   TH2F *hSpectrum2D   = new TH2F("hSpectrum ","Proton Energy Spectrum",200,-200,+200, 300, 0, +300);
+   TH2F *hSpectrum2D   = new TH2F("hSpectrum ","Proton Energy Spectrum",200,-200,+200, 300, 0, +1.0);
 
    int nentries = (int)t1->GetEntries();
   for (int i=0; i<nentries; i++) {
@@ -78,7 +78,7 @@ TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/V3/BNCT-build/out
          if(fabs(X)<50 && fabs(Y)<50){
 
            hSpectrum2D->Fill(Zsurf, Energy);
-           if(Zsurf>=-121 && Zsurf<-120)  hSpectrum -> Fill(Energy);
+           if(Zsurf>=0 && Zsurf<1)  hSpectrum -> Fill(Energy);
 
 
          }

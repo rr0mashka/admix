@@ -37,7 +37,7 @@
 //:G4VModularPhysicsList()
 
 PhysicsList::PhysicsList()
-:QGSP_BIC_HP()
+:QGSP_BIC_AllHP()
 
 {
 
