@@ -15,13 +15,17 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
+list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
+find_package(ROOT REQUIRED)  ## COMPONENTS RIO Net)
+
+
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
 # Setup include directory for this project
 #
 include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include  ${Geant4_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS})
-
+include(${ROOT_USE_FILE})
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
@@ -33,7 +37,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh  ${PROJECT_SOURCE_DIR}/incl
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(exampleB1 exampleB1.cc ${sources} ${headers})
-target_link_libraries(exampleB1 ${Geant4_LIBRARIES})
+target_link_libraries(exampleB1 ${Geant4_LIBRARIES}  ${ROOT_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

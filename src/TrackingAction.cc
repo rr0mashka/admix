@@ -81,13 +81,13 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 
   if(PDG_Id == 2112 ||PDG_Id == 2212){//keeping particles with energy> 100keV
 //if(particle_id==22){//keeping electrons only
-    man->FillNtupleDColumn(3,0,En);
+    man->FillNtupleDColumn(1,0,En);
     //man->FillNtupleSColumn(3,1,particle_name);
-    man->FillNtupleIColumn(3,2,PDG_Id);
-    man->FillNtupleDColumn(3,3,xpos);
-    man->FillNtupleDColumn(3,4,ypos);
-    man->FillNtupleDColumn(3,5,zpos);
+    man->FillNtupleIColumn(1,2,PDG_Id);
+    man->FillNtupleDColumn(1,3,xpos);
+    man->FillNtupleDColumn(1,4,ypos);
+    man->FillNtupleDColumn(1,5,zpos);
     //man->FillNtupleDColumn(3,6,dist);
-    man->AddNtupleRow(3);
+    man->AddNtupleRow(1);
   }
 }

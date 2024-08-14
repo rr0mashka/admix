@@ -24,41 +24,69 @@
 // ********************************************************************
 //
 //
-/// \file B1/include/RunAction.hh
-/// \brief Definition of the B1::RunAction class
+/// \file VectorAccummulable.hh
+/// \brief Definition of the VectorAccummulable class
+///
+/// This class defines an accummulable of a vector<T> type
+/// that merges the vectors filled on workers in a single vector.
 
-#ifndef MyRunAction_HH
-#define MyRunAction_HH 1
+#ifndef VectorAccumulable_h
+#define VectorAccumulable_h 1
 
-#include "G4UserRunAction.hh"
-#include "G4Run.hh"
-#include "DetectorConstruction.hh"
-
-#include "G4AnalysisManager.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4VAccumulable.hh"
 #include "globals.hh"
-#include "VectorAccumulable.hh"
+#include <vector>
 
-
-class RunAction : public G4UserRunAction
+template <typename T>
+class VectorAccumulable : public G4VAccumulable
 {
-public:
-    RunAction();
-    ~RunAction();
+  public:
+    VectorAccumulable(){};
+    ~VectorAccumulable() override = default;
 
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void EndOfRunAction(const G4Run*);
+    void AddValue(G4int,T value);
+    const std::vector<T>& GetVector() const;
 
-    const G4double MinZ = 0.*CLHEP::cm;
-    const G4double MaxZ = 100*CLHEP::cm;
+    void Merge(const G4VAccumulable& other) override;
+    void Reset() override;
+    inline void SetVectorLength(G4int value){
+      fLength = value;
+    }
 
-    const G4double stepfordEdz = 1.* CLHEP::mm;
-    const G4double stepforfluence = 1.* CLHEP::mm;
-    VectorAccumulable<G4double> fEnergyCube, fDoseCube;
-    void AddDoseCube(std::vector<G4double>);
-    void AddEdepCube(std::vector<G4double>);
-    G4String fOutputfile;
 
+
+  private:
+    std::vector<T> fTVector = {};
+    G4int fLength = 0;
 };
+
+// inline functions
+
+template <typename T>
+inline const std::vector<T>& VectorAccumulable<T>::GetVector() const
+{
+  return fTVector;
+}
+
+template <typename T>
+inline void VectorAccumulable<T>::Merge(const G4VAccumulable& other) {
+  G4int i = 0;
+  for (const auto& value : static_cast<const VectorAccumulable<T>&>(other).fTVector )  {
+    fTVector.at(i)+=value;
+    i++;
+  }
+}
+
+template <typename T>
+inline void VectorAccumulable<T>::Reset() {
+  for (int i=0;i<fLength;i++){
+    fTVector.push_back(0);
+  }
+}
+
+template <typename T>
+inline void VectorAccumulable<T>::AddValue(G4int i,T value) {
+  fTVector.at(i)+= value;
+}
 
 #endif

@@ -33,6 +33,8 @@
 #include "G4RunManager.hh"
 #include "G4PrimaryVertex.hh"
 #include "G4AccumulableManager.hh"
+#include "TFile.h"
+#include "TTree.h"
 
 RunAction::RunAction()
 {
@@ -61,24 +63,6 @@ RunAction::RunAction()
 
 // Differential energy for the primary particle (step will be an input parameter)
 
-  man -> CreateNtuple("dEdz","dEdz");
-  man->CreateNtupleDColumn("Edep_MeV");
-  man->CreateNtupleDColumn("Step");
-  man->CreateNtupleDColumn("Z");
-  man->CreateNtupleDColumn("En");
-  man->CreateNtupleIColumn("Event");
-  man->FinishNtuple(1);
-
-  man->CreateNtuple("Dose_in_volume_N", "Dose_in_volume_N");
-  man->CreateNtupleDColumn("Edep_MeV");
-  man->CreateNtupleIColumn("VolumeId");
-  man->CreateNtupleIColumn("Event");
-  man->CreateNtupleDColumn("dose");
-  man->CreateNtupleDColumn("X");
-  man->CreateNtupleDColumn("Y");
-  man->CreateNtupleDColumn("Z");
-  man->FinishNtuple(2);
-
   man->CreateNtuple("Produced particles", "Produced particles");
   man->CreateNtupleDColumn("En");
   man->CreateNtupleSColumn("Particle_Name");
@@ -87,8 +71,12 @@ RunAction::RunAction()
   man->CreateNtupleDColumn("Y");
   man->CreateNtupleDColumn("Z");
   man->CreateNtupleDColumn("Distance_fr_pr_vertex");
-  man->FinishNtuple(3);
+  man->FinishNtuple(1);
 
+  fEnergyCube = VectorAccumulable<G4double>();
+  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+  accumulableManager->RegisterAccumulable(&fEnergyCube);
+  accumulableManager->RegisterAccumulable(&fDoseCube);
 }
 
 RunAction::~RunAction()
@@ -98,8 +86,14 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {
 
     G4AnalysisManager *man = G4AnalysisManager::Instance();
-    man->OpenFile("output.root");
-
+    fOutputfile = "output.root";
+    man->OpenFile(fOutputfile);
+    const DetectorConstruction* detConstruction = static_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+    fEnergyCube.SetVectorLength(detConstruction->GetScoringVolumes().size());
+    std::cout << detConstruction->GetScoringVolumes().size() << std::endl;
+    fDoseCube.SetVectorLength(detConstruction->GetScoringVolumes().size());
+    G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+    accumulableManager->Reset();
 
     // set printing event number per each event
 }
@@ -108,9 +102,61 @@ void RunAction::BeginOfRunAction(const G4Run*)
 void RunAction::EndOfRunAction(const G4Run*)
 {
     G4AnalysisManager *man = G4AnalysisManager::Instance();
+    G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+    accumulableManager->Merge();
+    if (IsMaster()){
+      std::vector<G4double> EnCubes = fEnergyCube.GetVector();
+      std::vector<G4double> DoseCubes = fDoseCube.GetVector();
+      std::cout << EnCubes.size() << std::endl;
+      const DetectorConstruction* detConstruction = static_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+      G4String output2 = "Run_" + fOutputfile;
+      TFile *file = new TFile(output2,"recreate");
+      G4int VolumeId;
+      G4double X, Y, Z;
+      G4double Edep, dose;
+      TTree *treecub = new TTree("Dose_in_volume_N","Dose_in_volume_N");
+      treecub->Branch("Edep", &Edep,"Edep/D");
+      treecub->Branch("VolumeId",&VolumeId,"VolumeId/I");
+      treecub->Branch("dose",&dose,"dose/D");
+      treecub->Branch("X",&X,"X/D");
+      treecub->Branch("Y",&Y,"Y/D");
+      treecub->Branch("Z",&Z,"Z/D");
+      for (uint i=0;i<EnCubes.size();i++){
+        Edep = EnCubes.at(i);
+        VolumeId = i;
+        dose = DoseCubes.at(i);
+        X =  detConstruction->vPos_X[i];
+        Y  = detConstruction->vPos_Y[i];
+        Z  = detConstruction->vPos_Z[i];
+        treecub->Fill();
+      }
+      treecub->Write();
+      file->Close();
+    };
 
     man->Write();
     man->CloseFile();
 }
+
+void RunAction::AddEdepCube(std::vector<G4double> encube){
+  if (encube.size()!=fEnergyCube.GetVector().size()){
+    std::cout << "cubes vector sizes don't match, something wrong" << std::endl;
+    return;
+  }
+  for (int i=0;i<fEnergyCube.GetVector().size();i++){
+    fEnergyCube.AddValue(i,encube.at(i));
+  };
+}
+
+void RunAction::AddDoseCube(std::vector<G4double> dosecube){
+  if (dosecube.size()!=fDoseCube.GetVector().size()){
+    std::cout << "cubes vector sizes don't match, something wrong" << std::endl;
+    return;
+  }
+  for (int i=0;i<fDoseCube.GetVector().size();i++){
+    fDoseCube.AddValue(i,dosecube.at(i));
+  };
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
