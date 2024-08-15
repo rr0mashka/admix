@@ -97,9 +97,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 G4double pi = CLHEP::pi;
 
 //  =======  placements of various parts ================================================
-auto pFrontPlate = new FrontPlate ("FrontPlate",6.75*mm, logicWorld, 4*mm );
-auto pBackPlate = new BackPlate ("BackPlate", 20*mm, logicWorld, 4*mm );
-auto pNeutronModerator = new NeutronModerator ("GlassDisk1", 30*mm, logicWorld, 4*mm );
+auto pFrontPlate = new FrontPlate ("FrontPlate",6.75*mm, logicWorld, 1*mm );
+auto pBackPlate = new BackPlate ("BackPlate", 20*mm, logicWorld, 1*mm );
+auto pNeutronModerator = new NeutronModerator ("GlassDisk1", 30*mm, logicWorld, 2*mm );
 
 // will change later, manually for now
 
