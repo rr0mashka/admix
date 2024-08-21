@@ -12,6 +12,8 @@ NeutronModerator::NeutronModerator (G4String name, G4double z_pos, G4LogicalVolu
   G4NistManager* nist = G4NistManager::Instance();
   G4Material* ModeratorMaterial= nist->FindOrBuildMaterial("G4_PLEXIGLASS");
   //G4Material* ModeratorMaterial= nist->FindOrBuildMaterial("G4_WATER");
+  //G4Material* ModeratorMaterial= nist->FindOrBuildMaterial("G4_MAGNESIUM_FLUORIDE");
+
 
   z_pos = z_pos + 0.5*GlassDisk_Width; // moving origin to the front face
 
@@ -47,7 +49,7 @@ NeutronModerator::NeutronModerator (G4String name, G4double z_pos, G4LogicalVolu
           true                                       // overlaps checking
         );
 
-      
+
         auto fStepLimit = new G4UserLimits(maxStep);
         pGlassDisk_Log ->SetUserLimits(fStepLimit);
 
