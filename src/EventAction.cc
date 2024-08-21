@@ -40,7 +40,9 @@
 EventAction::EventAction(RunAction* runAction, PrimaryGeneratorAction* generatorAction)
 : fRunAction(runAction),
   fGeneratorAction(generatorAction)
-{}
+{
+  fNumberOfNeutrons = 0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -98,6 +100,7 @@ void EventAction::EndOfEventAction(const G4Event*)
        //std::cout<<"       2nd tuple FiLLINg    "<<detConstruction->vPos_X[i]<< "   "
        //<<detConstruction->vPos_Y[i]<< "   " <<detConstruction->vPos_Z[i]<< std::endl;
   };
+  fRunAction->AddNeutrons(fNumberOfNeutrons);
   fRunAction->AddDoseCube(doses);
   fRunAction->AddEdepCube(fEdepV);
 
@@ -122,6 +125,8 @@ std::vector<G4double> EventAction::InitializeEnVector(G4double Min_Z,G4double Ma
     };
     return temp;
 }
+
+
 
 std::vector<G4double> EventAction::Initialize_EinVol_Vector(G4int N){
   std::vector<G4double> temp = {};

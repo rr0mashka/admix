@@ -50,6 +50,7 @@ class EventAction : public G4UserEventAction
     void EndOfEventAction(const G4Event* event) override;
 
     void AddEdep(G4double edep, G4int i) { fEdepV.at(i) += edep; };
+    void AddProducedNeutrons() { fNumberOfNeutrons += 1; };
 
     G4double xprime, yprime, zprime, distdEdx;
     std::vector<G4double> vdEdz;
@@ -63,6 +64,7 @@ class EventAction : public G4UserEventAction
     RunAction* fRunAction = nullptr;
     PrimaryGeneratorAction* fGeneratorAction;
     std::vector<G4double> fEdepV;
+    G4int fNumberOfNeutrons;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

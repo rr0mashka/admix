@@ -38,7 +38,7 @@
 #include "G4SystemOfUnits.hh"
 #include "globals.hh"
 #include "VectorAccumulable.hh"
-
+#include "G4Accumulable.hh"
 
 class RunAction : public G4UserRunAction
 {
@@ -57,7 +57,9 @@ public:
     VectorAccumulable<G4double> fEnergyCube, fDoseCube;
     void AddDoseCube(std::vector<G4double>);
     void AddEdepCube(std::vector<G4double>);
+    void AddNeutrons(G4int);
     G4String fOutputfile;
+    G4Accumulable<G4int> fNumberOfNeutrons = 0.;
 
 };
 

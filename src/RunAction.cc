@@ -74,9 +74,11 @@ RunAction::RunAction()
   man->FinishNtuple(1);
 
   fEnergyCube = VectorAccumulable<G4double>();
+
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
   accumulableManager->RegisterAccumulable(&fEnergyCube);
   accumulableManager->RegisterAccumulable(&fDoseCube);
+  accumulableManager->RegisterAccumulable(fNumberOfNeutrons);
 }
 
 RunAction::~RunAction()
@@ -84,7 +86,6 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
-
     G4AnalysisManager *man = G4AnalysisManager::Instance();
     fOutputfile = "output.root";
     man->OpenFile(fOutputfile);
@@ -132,6 +133,7 @@ void RunAction::EndOfRunAction(const G4Run*)
       }
       treecub->Write();
       file->Close();
+      std::cout << "Number of produced neutrons in this run " << fNumberOfNeutrons.GetValue() << std::endl;
     };
 
     man->Write();
@@ -156,6 +158,10 @@ void RunAction::AddDoseCube(std::vector<G4double> dosecube){
   for (int i=0;i<fDoseCube.GetVector().size();i++){
     fDoseCube.AddValue(i,dosecube.at(i));
   };
+}
+
+void RunAction::AddNeutrons(G4int i){
+    fNumberOfNeutrons+= i;
 }
 
 

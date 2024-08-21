@@ -90,4 +90,13 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
     //man->FillNtupleDColumn(3,6,dist);
     man->AddNtupleRow(1);
   }
+  G4VPhysicalVolume* phvolume  = track->GetVolume();
+  if (phvolume) {
+    if ((phvolume->GetLogicalVolume()->GetName() == "LLitiumdisc") && (PDG_Id == 2112)){
+      fEventAction->AddProducedNeutrons();
+    };
+  }
+
+
+
 }
