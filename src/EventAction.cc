@@ -41,7 +41,7 @@ EventAction::EventAction(RunAction* runAction, PrimaryGeneratorAction* generator
 : fRunAction(runAction),
   fGeneratorAction(generatorAction)
 {
-  fNumberOfNeutrons = 0;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,6 +58,7 @@ void EventAction::BeginOfEventAction(const G4Event*)
   distdEdx = 0.;
 
 // get primary vertex
+  fNumberOfNeutrons = 0;
   xprime = fGeneratorAction->GetParticleGun()->GetParticlePosition().x();
   yprime = fGeneratorAction->GetParticleGun()->GetParticlePosition().y();
   zprime = fGeneratorAction->GetParticleGun()->GetParticlePosition().z();
