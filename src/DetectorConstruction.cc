@@ -45,6 +45,7 @@
 #include "Geometry/BackPlate.hh"
 #include "Geometry/FrontPlate.hh"
 #include "Geometry/NeutronModerator.hh"
+#include "Geometry/CoolingPipe.hh"
 #include "Geometry/CubicPhantom.hh"
 //Geometry
 
@@ -100,6 +101,10 @@ G4double pi = CLHEP::pi;
 auto pFrontPlate = new FrontPlate ("FrontPlate",6.75*mm, logicWorld, 1*mm );
 auto pBackPlate = new BackPlate ("BackPlate", 20*mm, logicWorld, 1*mm );
 auto pNeutronModerator = new NeutronModerator ("GlassDisk1", 30*mm, logicWorld, 2*mm );
+
+auto pCoolingPipe1 = new CoolingPipe ("Pipe1", -61.2*mm, 61.2*mm, 8.0*mm, logicWorld, 2*mm );
+auto pCoolingPipe2 = new CoolingPipe ("Pipe1", 61.2*mm, 61.2*mm, 8.0*mm, logicWorld, 2*mm );
+auto pCoolingPipe3 = new CoolingPipe ("Pipe1", 61.2*mm, -61.2*mm, 8.0*mm, logicWorld, 2*mm );
 
 // will change later, manually for now
 

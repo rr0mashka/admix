@@ -124,6 +124,11 @@
 # Neutron Modetor
 /vis/geometry/set/colour ModeratorGlassDisk_Log 0 0 1 1 .2
 
+# CoolingPipese
+/vis/geometry/set/colour PipeShell_Log 0 0 2 0.5 .6
+/vis/geometry/set/colour WaterInPipe_Log 0 0 0 1 .5
+
+
 # Phantom
 /vis/geometry/set/colour template_ScoringCell_Log 0 0 0.2 1 .25
 
