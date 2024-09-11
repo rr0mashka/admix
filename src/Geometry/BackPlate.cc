@@ -147,7 +147,61 @@ G4double OD_offset =  ( BackPlateOD_Width - BackPlate_Width ); // this alignns b
           0,                                         // copy number
           true                                       // overlaps checking
          );
-  //===========================================================================
+  //============================================================================
+
+
+// outer rectungular part of bacplate ==========================================
+
+G4Box* pBackPlateOuterBox_sol = new G4Box(
+  "BackPlateOuterBox",                           // its name
+  BackPlateOD_OuterRadius,
+  BackPlateOD_OuterRadius + 1.0,
+  BackPlateOD_Width
+);  // its size
+
+G4Tubs *pBackPlateOD_Subtr_sol = new G4Tubs
+(
+   "BackPlateOD_Subtr_sol",
+    0,
+    BackPlateOD_OuterRadius,
+    BackPlateOD_Width+1.0,
+    0,
+    Phi_seg_frac*CLHEP::pi
+ );
+
+ G4Tubs *pBackPlateOD_Subtr2_sol = new G4Tubs
+ (
+    "BackPlateOD_Subtr2_sol",
+     BackPlateOD_OuterRadius*1.41 - 6.0,
+     BackPlateOD_OuterRadius*1.5,
+     BackPlateOD_Width+1.0,
+     0,
+     Phi_seg_frac*CLHEP::pi
+  );
+
+ G4VSolid* pBackPlateOuterPart_step1_sol = new G4SubtractionSolid("BackPlateOuterPart1", pBackPlateOuterBox_sol, pBackPlateOD_Subtr_sol, nullptr, G4ThreeVector(0, 0, 0));
+ G4VSolid* pBackPlateOuterPart_step2_sol = new G4SubtractionSolid("BackPlateOuterPart2", pBackPlateOuterPart_step1_sol, pBackPlateOD_Subtr2_sol, nullptr, G4ThreeVector(0, 0, 0));
+
+ G4LogicalVolume *pBackPlateOuterPart_Log = new G4LogicalVolume
+  (
+     pBackPlateOuterPart_step2_sol,  // its solid
+     BackPlateMaterial,// its material
+     "BackPlateOuterPart_Log"
+  );
+
+
+G4VPhysicalVolume  *pBackPlateOuterPart = new G4PVPlacement
+ (
+  nullptr,  // no rotation
+  G4ThreeVector(0, 0, z_pos - OD_offset),                          // at (0,0,0)
+  pBackPlateOuterPart_Log,                                // its logical volume
+  "BackPlateOuterPart_Phys",                                  // its name
+   mother_volume_log,                                   // its mother  volume
+  false,                                     // no boolean operation
+  0,                                         // copy number
+  true                                       // overlaps checking
+ );
+//==============================================================================
 
 //==============================================================================
 //======== central pit filled with water =======================================
