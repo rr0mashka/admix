@@ -4,47 +4,20 @@
 #include "G4MultiUnion.hh"
 #include "G4Transform3D.hh"
 #include "G4SystemOfUnits.hh"
+#include "CustomMaterials.hh"
 
 BackPlate::BackPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_volume_log, G4double maxStep )
 {
 
   G4NistManager* nist = G4NistManager::Instance();
   G4Material* GrooveMaterial= nist->FindOrBuildMaterial("G4_WATER");
-  //G4Material* BackPlateMaterial = nist->FindOrBuildMaterial("G4_Al");
 
-
-
-  //========AGM6 material =======================
-
-  G4double AMG6_density =  2.640*g/cm3;
-  G4int ncomp = 6;
-
-  G4Material* BackPlateMaterial  = new G4Material("AMG6", AMG6_density, ncomp);
-  G4Material* pAl = nist->FindOrBuildMaterial("G4_Al");
-  G4Material* pMg = nist->FindOrBuildMaterial("G4_Mg");
-  G4Material* pMn = nist->FindOrBuildMaterial("G4_Mn");
-  G4Material* pTi = nist->FindOrBuildMaterial("G4_Ti");
-  G4Material* pNa = nist->FindOrBuildMaterial("G4_Na");
-  G4Material* pCu = nist->FindOrBuildMaterial("G4_Na");
-
-  G4double frac_Cu = 0.001;
-  G4double frac_Na = 0.0001;
-  G4double frac_Ti = 0.0006;
-  G4double frac_Mn = 0.007;
-  G4double frac_Mg = 0.062;
-  G4double frac_Al = 1 - frac_Mg - frac_Mn - frac_Ti - frac_Na  - frac_Cu;
-
-  BackPlateMaterial->AddMaterial(pAl, frac_Al);
-  BackPlateMaterial->AddMaterial(pMg, frac_Mg);
-  BackPlateMaterial->AddMaterial(pMn, frac_Mn);
-  BackPlateMaterial->AddMaterial(pTi, frac_Ti);
-  BackPlateMaterial->AddMaterial(pNa, frac_Na);
-  BackPlateMaterial->AddMaterial(pCu, frac_Cu);
-
+  CustomMaterials* pCustomMaterials = new CustomMaterials();
+  G4Material* pAMG6_mat  = pCustomMaterials->GetMaterial("AMG6");
   //============================================================================
 
 
- G4double Phi_seg_frac = 2.0;
+   G4double Phi_seg_frac = 2.0;
 
          G4Tubs *pBackPlateDisk_sol = new G4Tubs
          (
@@ -59,7 +32,7 @@ BackPlate::BackPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_vol
          G4LogicalVolume *pBackPlateDisk_Log = new G4LogicalVolume
          (
              pBackPlateDisk_sol,  // its solid
-             BackPlateMaterial,// its material
+             pAMG6_mat,// its material
              "BackPlateDisk_Log"
            );
 
@@ -95,7 +68,7 @@ G4double OD_offset =  ( BackPlateOD_Width - BackPlate_Width ); // this alignns b
         G4LogicalVolume *pBackPlateOD_Log = new G4LogicalVolume
         (
             pBackPlateOD_sol,  // its solid
-            BackPlateMaterial,// its material
+            pAMG6_mat,// its material
             "BackPlateOuterDisk_Log"
           );
 
@@ -185,7 +158,7 @@ G4Tubs *pBackPlateOD_Subtr_sol = new G4Tubs
  G4LogicalVolume *pBackPlateOuterPart_Log = new G4LogicalVolume
   (
      pBackPlateOuterPart_step2_sol,  // its solid
-     BackPlateMaterial,// its material
+     pAMG6_mat,// its material
      "BackPlateOuterPart_Log"
   );
 

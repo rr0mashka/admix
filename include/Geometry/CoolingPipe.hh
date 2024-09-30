@@ -23,7 +23,7 @@ public:
 
   G4double Pipe_InnerDiamter = 25.4 * mm;
   G4double WallThickness     =  2.0 * mm;
-  G4double PipeLength        =  100 * mm;
+  G4double PipeLength        =  110 * mm;
 
   G4double  FittingPipeWallThickness = 2.5*mm;
   G4double FittingPipeLength        =  30 * mm;

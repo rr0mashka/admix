@@ -47,6 +47,7 @@
 #include "Geometry/NeutronModerator.hh"
 #include "Geometry/CoolingPipe.hh"
 #include "Geometry/CubicPhantom.hh"
+#include "Geometry/AcceleratorPipe.hh"
 //Geometry
 
 
@@ -106,15 +107,18 @@ auto pCoolingPipe1 = new CoolingPipe ("Pipe1", -61.2*mm, 61.2*mm, 8.0*mm, logicW
 auto pCoolingPipe2 = new CoolingPipe ("Pipe1", 61.2*mm, 61.2*mm, 8.0*mm, logicWorld, 2*mm );
 auto pCoolingPipe3 = new CoolingPipe ("Pipe1", 61.2*mm, -61.2*mm, 8.0*mm, logicWorld, 2*mm );
 
+auto pAcceleratorPipe = new AcceleratorPipe ("AcceleratorPipe", 8.0*mm, logicWorld, 2*mm );
+
 // will change later, manually for now
 
+/*
 zpos_phantom = 120*mm;
 auto pCubicPhantom = new CubicPhantom ("CubicPhantom", zpos_phantom, logicWorld, 1*mm );
 fScoringVolumes = pCubicPhantom->GetScoringCubes();
 vPos_X = pCubicPhantom->vPos_X;
 vPos_Y = pCubicPhantom->vPos_Y;
 vPos_Z = pCubicPhantom->vPos_Z;
-
+*/
   //always return the physical World
   //
   return physWorld;

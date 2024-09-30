@@ -5,6 +5,7 @@
 #include "G4Transform3D.hh"
 #include "G4StepLimiterPhysics.hh"
 #include "G4UserLimits.hh"
+#include "CustomMaterials.hh"
 
 CoolingPipe::CoolingPipe (G4String name, G4double x_pos, G4double y_pos,  G4double z_pos,  G4LogicalVolume* mother_volume_log, G4double maxStep)
 {
@@ -13,34 +14,8 @@ CoolingPipe::CoolingPipe (G4String name, G4double x_pos, G4double y_pos,  G4doub
   G4Material* PipeShellMaterial= nist->FindOrBuildMaterial("G4_POLYVINYLIDENE_CHLORIDE");
   G4Material* WaterInThePipe= nist->FindOrBuildMaterial("G4_WATER");
 
-  //========AGM6 material =======================
-
-  G4double AMG6_density =  2.640*g/cm3;
-  G4int ncomp = 6;
-
-  G4Material* BackPlateMaterial  = new G4Material("AMG6", AMG6_density, ncomp);
-  G4Material* pAl = nist->FindOrBuildMaterial("G4_Al");
-  G4Material* pMg = nist->FindOrBuildMaterial("G4_Mg");
-  G4Material* pMn = nist->FindOrBuildMaterial("G4_Mn");
-  G4Material* pTi = nist->FindOrBuildMaterial("G4_Ti");
-  G4Material* pNa = nist->FindOrBuildMaterial("G4_Na");
-  G4Material* pCu = nist->FindOrBuildMaterial("G4_Na");
-
-  G4double frac_Cu = 0.001;
-  G4double frac_Na = 0.0001;
-  G4double frac_Ti = 0.0006;
-  G4double frac_Mn = 0.007;
-  G4double frac_Mg = 0.062;
-  G4double frac_Al = 1 - frac_Mg - frac_Mn - frac_Ti - frac_Na  - frac_Cu;
-
-  BackPlateMaterial->AddMaterial(pAl, frac_Al);
-  BackPlateMaterial->AddMaterial(pMg, frac_Mg);
-  BackPlateMaterial->AddMaterial(pMn, frac_Mn);
-  BackPlateMaterial->AddMaterial(pTi, frac_Ti);
-  BackPlateMaterial->AddMaterial(pNa, frac_Na);
-  BackPlateMaterial->AddMaterial(pCu, frac_Cu);
-
-  //============================================================================
+  CustomMaterials* pCustomMaterials = new CustomMaterials();
+  G4Material* pAMG6_mat  = pCustomMaterials->GetMaterial("AMG6");
 
   z_pos = z_pos - 0.5 * PipeLength; // moving origin to the rear face
 
@@ -126,7 +101,7 @@ G4Tubs *pFittingPipe_sol = new G4Tubs
 G4LogicalVolume *pFittingPipe_Log = new G4LogicalVolume
 (
     pFittingPipe_sol,  // its solid
-    BackPlateMaterial,// its material
+    pAMG6_mat,// its material
     "FittingPipe_Log"
   );
 

@@ -12,6 +12,9 @@ CubicPhantom::CubicPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
   G4NistManager *nist = G4NistManager::Instance();
   G4Material *PhantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
 
+  //CustomMaterials* pCustomMaterials = new CustomMaterials();
+  //G4Material* PhantomMaterial  = pCustomMaterials->GetMaterial("SoftTissueWithBoron");
+
 
         G4Box* template_ScoringCell_Sol =  new G4Box
         (
