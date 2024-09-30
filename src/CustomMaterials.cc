@@ -195,7 +195,7 @@ void CustomMaterials::DefineMaterials()
   G4Material* pMn = nist->FindOrBuildMaterial("G4_Mn");
   G4Material* pTi = nist->FindOrBuildMaterial("G4_Ti");
   G4Material* pNa = nist->FindOrBuildMaterial("G4_Na");
-  G4Material* pCu = nist->FindOrBuildMaterial("G4_Na");
+  G4Material* pCu = nist->FindOrBuildMaterial("G4_Cu");
 
   G4double frac_Cu = 0.001;
   G4double frac_Na = 0.0001;
