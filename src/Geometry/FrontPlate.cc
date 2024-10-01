@@ -10,6 +10,7 @@
 
 FrontPlate::FrontPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_volume_log, G4double maxStep )
 {
+  z_pos = z_pos + FrontPlateDisc_Width;
   G4double pi = CLHEP::pi;
   G4bool checkOverlaps = true;
   G4NistManager* nist = G4NistManager::Instance();

@@ -21,7 +21,7 @@ AcceleratorPipe::AcceleratorPipe (G4String name, G4double z_pos, G4LogicalVolume
          (
             "AcceleratorPipe",
              61,
-             72,
+             70, // to make it fit
              8,
              0,
              Phi_seg_frac*CLHEP::pi
@@ -52,7 +52,7 @@ AcceleratorPipe::AcceleratorPipe (G4String name, G4double z_pos, G4LogicalVolume
      "AcceleratorPipe3",
      65.5,
      82.5,
-     22,
+     11,
      0,
      Phi_seg_frac*CLHEP::pi
    );
@@ -79,13 +79,15 @@ AcceleratorPipe::AcceleratorPipe (G4String name, G4double z_pos, G4LogicalVolume
 
     G4Tubs *pAcceleratorPipe6 = new G4Tubs
     (
-     "AcceleratorPipe5",
+     "AcceleratorPipe6",
      50,
      67,
      6,
      0,
      Phi_seg_frac*CLHEP::pi
    );
+
+
 
          G4LogicalVolume *pAcceleratorPipe_Log = new G4LogicalVolume
          (
