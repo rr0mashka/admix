@@ -49,16 +49,9 @@ gStyle->SetLineStyleString(11,"32 18");
   //1000020040//alfa
 
 
-TFile *f = new TFile("/home/azarkin/MedPhys/V6/BNCT-build/NoFantom_BeamR20_300M_merged.root");
+TFile *f = new TFile("/home/azarkin/MedPhys/V7/BNCT-build/output_woAP_200_4.root");
 
-
-
-////TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/V5/BNCT-build/output_2.2MeV_40M_Plex_NoPhantom.root");
-////TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/V5/BNCT-build/output_2.2MeV_40M_Plex_NoPhantom_AMg6.root");
-//TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/V5/BNCT-build/output_2.2MeV_40M_Plex_Phantom1cm.root");
-
-
-TFile* fout = new TFile("./HaverstedHistos.root", "RECREATE");
+TFile* fout = new TFile("./HarverstedHistos_woAP_200_4.root", "RECREATE");
 
 //==============================================================================
 
@@ -95,10 +88,10 @@ TFile* fout = new TFile("./HaverstedHistos.root", "RECREATE");
 
    vector<float> Fluence1D_Binning;
    float Bin_width = 5.0;
-   for(int i =0; i<=20; i++ ) Fluence1D_Binning.push_back(i*Bin_width);
-   TH1F  *hFluence1D_1  = new TH1F("hFluences1d_1 ","Output Neutron Field Density ", 20, &Fluence1D_Binning[0]);
-   TH1F  *hFluence1D_2  = new TH1F("hFluences1d_2 ","Output Neutron Field Density ", 20, &Fluence1D_Binning[0]);
-   TH1F  *hFluence1D_3  = new TH1F("hFluences1d_3 ","Output Neutron Field Density ", 20, &Fluence1D_Binning[0]);
+   for(int i =0; i<=24; i++ ) Fluence1D_Binning.push_back(i*Bin_width);
+   TH1F  *hFluence1D_1  = new TH1F("hFluences1d_1 ","Output Neutron Field Density ", 24, &Fluence1D_Binning[0]);
+   TH1F  *hFluence1D_2  = new TH1F("hFluences1d_2 ","Output Neutron Field Density ", 24, &Fluence1D_Binning[0]);
+   TH1F  *hFluence1D_3  = new TH1F("hFluences1d_3 ","Output Neutron Field Density ", 24, &Fluence1D_Binning[0]);
 
    vector<float> Fluence1D_AzimuBinning;
    int N_az_bin = 20;
@@ -118,16 +111,16 @@ TFile* fout = new TFile("./HaverstedHistos.root", "RECREATE");
 
       // if(particle_id == 2212) {   //protons
       if(particle_id == 2112) {    //neutrons
-         if(fabs(X)<100 && fabs(Y)<100){
+         if(fabs(X)<120 && fabs(Y)<120){
 
 
            hSpectrum2D->Fill(Zsurf, Energy);
 
-           if(Zsurf>=10 && Zsurf<11)  {
+           if(Zsurf>=120 && Zsurf<121)  {
              hSpectrum -> Fill(Energy);
              double R = sqrt(pow(X,2)+pow(Y,2));
              int R_int = (int) R/Bin_width;
-             float BinArea = 4 * 3.14159 * (  pow((R_int+1)* Bin_width, 2 ) -  pow( R_int * Bin_width, 2 ) );//area of rings at diffrent r
+             float BinArea = 3.14159 * (  pow((R_int+1)* Bin_width, 2 ) -  pow( R_int * Bin_width, 2 ) );//area of rings at diffrent r
              //cout<<"iBin:  "<<R_int<<"   BinArea:  "<<BinArea<<endl;
              double EnergyEV = Energy*1e+6; // converting MeV to eV for the better readability
              if( EnergyEV < 0.5 )hFluence1D_1 -> Fill(R, 1.0/BinArea);
@@ -141,7 +134,7 @@ TFile* fout = new TFile("./HaverstedHistos.root", "RECREATE");
             else NeutonTan = Y/(X+0.0001);
             float phi =  atan(NeutonTan);
             if(X < 0) phi = 3.14159 - phi;
-            phi = 3.14159/2.0 + phi;
+            phi = 3.14159/2.0 + phi;//sgifthing origin for a better view
             cout<<"R:  "<<R<<endl;
             if(R <  50) hFluence_phi_1 -> Fill(phi);
             if(R >= 50 && R < 75) hFluence_phi_2 -> Fill(phi);

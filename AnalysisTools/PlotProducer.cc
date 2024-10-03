@@ -1,14 +1,14 @@
 {
 
   gROOT->Reset();
-  //gStyle->SetOptStat(0);
+  // gStyle->SetOptStat(0);
   //gStyle->SetOptTitle(0);
   gStyle->SetOptFit(0);
   gStyle->SetLabelFont(42);
   gStyle->SetTitleFont(42);
 
-  gStyle->SetPadLeftMargin(0.12);
-  gStyle->SetPadRightMargin(0.12);
+  gStyle->SetPadLeftMargin(0.14);
+  gStyle->SetPadRightMargin(0.07);
   gStyle->SetPadTopMargin(0.07);//!!
   gStyle->SetPadBottomMargin(0.12);//!!
 
@@ -41,12 +41,12 @@ gStyle->SetLineStyleString(11,"32 18");
 
 
 
-float N_protons = 300e+6;
+float N_protons = 1500e+6;  //number of  incedent protons
 float Current = 1.6e-19 * N_protons*1000; // accelarator cuccrent  in mA
-float sqMM_2_sqCM =100;
+float sqMM_2_sqCM =100; //conversion factor for square mm to square cm
 
 
-TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/DATA/data/HaverstedHistos_1.root");
+TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/DATA/data/HaverstedHistos_1500M.root");
 
 TH1F  *hFluence1D_1 = (TH1F*)f->Get("hFluence1D_1");
 TH1F  *hFluence1D_2 = (TH1F*)f->Get("hFluence1D_2");
