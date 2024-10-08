@@ -14,7 +14,7 @@ CoolingPipe::CoolingPipe (G4String name, G4double x_pos, G4double y_pos,  G4doub
   G4Material* PipeShellMaterial= nist->FindOrBuildMaterial("G4_POLYVINYLIDENE_CHLORIDE");
   G4Material* WaterInThePipe= nist->FindOrBuildMaterial("G4_WATER");
 
-  CustomMaterials* pCustomMaterials = new CustomMaterials();
+  CustomMaterials* pCustomMaterials = CustomMaterials::Instance();
   G4Material* pAMG6_mat  = pCustomMaterials->GetMaterial("AMG6");
 
   z_pos = z_pos - 0.5 * PipeLength; // moving origin to the rear face

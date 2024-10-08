@@ -10,7 +10,7 @@
 AcceleratorPipe::AcceleratorPipe (G4String name, G4double z_pos, G4LogicalVolume* mother_volume_log, G4double maxStep)
 {
 
-  CustomMaterials* pCustomMaterials = new CustomMaterials();
+  CustomMaterials* pCustomMaterials = CustomMaterials::Instance();
   G4Material* pAMG6_mat  = pCustomMaterials->GetMaterial("AMG6");
 
   z_pos = z_pos - 0.5*AcceleratorPipe_Width; // moving origin to the front face

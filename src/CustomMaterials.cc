@@ -11,9 +11,15 @@
 #include "G4ElementTable.hh"
 #include "G4NistManager.hh"
 
+using namespace std;
+
+CustomMaterials* CustomMaterials::instancePtr = nullptr;
+mutex CustomMaterials::mtx;
+
+
 CustomMaterials::CustomMaterials()
 {
-    ;
+  DefineMaterials();
 }
 
 CustomMaterials::~CustomMaterials()
@@ -86,7 +92,7 @@ void CustomMaterials::DefineMaterials()
   matH2O = new G4Material("Water",d,2);
   matH2O->AddElement(elH,2);
   matH2O->AddElement(elO,1);
-  matH2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  matH2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV)/
 
   // MIRD soft tissue
   d = 0.9869 *g/cm3;
@@ -236,7 +242,16 @@ void CustomMaterials::DefineMaterials()
 G4Material* CustomMaterials::GetMaterial(G4String material)
 {
   // Returns a material
-  DefineMaterials();
   G4Material* pttoMaterial = G4Material::GetMaterial(material);
   return pttoMaterial;
+}
+
+CustomMaterials* CustomMaterials::Instance() {
+    if (CustomMaterials::instancePtr == nullptr) {
+        lock_guard<mutex> lock(CustomMaterials::mtx);
+        if (CustomMaterials::instancePtr == nullptr) {
+            CustomMaterials::instancePtr = new CustomMaterials();
+        }
+    }
+    return CustomMaterials::instancePtr;
 }
