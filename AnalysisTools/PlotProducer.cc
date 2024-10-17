@@ -137,7 +137,11 @@ hFluence2D->GetXaxis()->SetTitleFont(42);
 hFluence2D->Draw("colz");
 
 
+
 TCanvas *c3_1 = new TCanvas("c3_1", "c3_1", 960, 720);
+float Maximum1 = hNeutronFlux_vs_Z_En1->GetMaximum();
+float Minimum1 = 0.0001* Maximum1 ;
+hNeutronFlux_vs_Z_En1->GetZaxis()->SetRangeUser(Minimum1 ,Maximum1);
 hNeutronFlux_vs_Z_En1->GetYaxis()->SetTickLength(0.02);
 hNeutronFlux_vs_Z_En1->GetYaxis()->SetNdivisions(505);
 hNeutronFlux_vs_Z_En1->GetXaxis()->CenterTitle();
@@ -157,6 +161,9 @@ hNeutronFlux_vs_Z_En1->Draw("colz");
 
 
 TCanvas *c3_2 = new TCanvas("c3_2", "c3_2", 960, 720);
+float Maximum2 = hNeutronFlux_vs_Z_En2->GetMaximum();
+float Minimum2 = 0.0001* Maximum2 ;
+hNeutronFlux_vs_Z_En2->GetZaxis()->SetRangeUser(Minimum2 ,Maximum2);
 hNeutronFlux_vs_Z_En2->GetYaxis()->SetTickLength(0.02);
 hNeutronFlux_vs_Z_En2->GetYaxis()->SetNdivisions(505);
 hNeutronFlux_vs_Z_En2->GetXaxis()->CenterTitle();
@@ -175,6 +182,9 @@ hNeutronFlux_vs_Z_En2->GetXaxis()->SetTitleFont(42);
 hNeutronFlux_vs_Z_En2->Draw("colz");
 
 TCanvas *c3_3 = new TCanvas("c3_3", "c3_3", 960, 720);
+float Maximum3 = hNeutronFlux_vs_Z_En3->GetMaximum();
+float Minimum3 = 0.00001* Maximum3;
+hNeutronFlux_vs_Z_En3->GetZaxis()->SetRangeUser(Minimum3 ,Maximum3);
 hNeutronFlux_vs_Z_En3->GetYaxis()->SetTickLength(0.02);
 hNeutronFlux_vs_Z_En3->GetYaxis()->SetNdivisions(505);
 hNeutronFlux_vs_Z_En3->GetXaxis()->CenterTitle();
@@ -191,6 +201,7 @@ hNeutronFlux_vs_Z_En3->GetYaxis()->SetLabelFont(42);
 hNeutronFlux_vs_Z_En3->GetYaxis()->SetTitleFont(42);
 hNeutronFlux_vs_Z_En3->GetXaxis()->SetTitleFont(42);
 hNeutronFlux_vs_Z_En3->Draw("colz");
+
 
 
 
