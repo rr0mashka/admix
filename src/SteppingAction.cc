@@ -65,6 +65,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   G4int i_z_dEdx,i_p_dEdx;
   G4int i_z_fluence,i_p_fluence;
 
+  G4int xi_interim, yi_interim;
+
   G4AnalysisManager *man = G4AnalysisManager::Instance();
   const DetectorConstruction* detConstruction = static_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 
@@ -112,14 +114,18 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
         ismaller = i_p_fluence;
         ibigger = i_z_fluence;
       };
+      G4int isteps = ibigger - ismaller;
+      G4double xstep = (xi_post - xi)/isteps;
+      G4double ystep = (yi_post - yi)/isteps;
       for (int i=ismaller; i<ibigger;i++){
-
         G4int PDG_Id = mytrack->GetDefinition()->GetPDGEncoding();
       //  if(PDG_Id == 2112 || PDG_Id == 2212){
         if(PDG_Id == 2112 ){ //keeping only fluences for neutons only
+        xi_interim = xi + (i-ismaller)*xstep;
+        yi_interim = yi + (i-ismaller)*ystep;
         man->FillNtupleIColumn(0,0,G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID());
-        man->FillNtupleDColumn(0,1,xi);
-        man->FillNtupleDColumn(0,2,yi);
+        man->FillNtupleDColumn(0,1,xi_interim);
+        man->FillNtupleDColumn(0,2,yi_interim);
         man->FillNtupleDColumn(0,3,i*fRunAction->stepforfluence + zpr - detConstruction->zpos_phantom);
         man->FillNtupleDColumn(0,4,En);
         man->FillNtupleIColumn(0,5,PDG_Id);
