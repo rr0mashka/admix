@@ -1,4 +1,7 @@
 {
+TFile *f = new TFile("/home/azarkin/MedPhys/V7/BNCT-build/output_10.root");
+TFile* fout = new TFile("./HarverstedHistos_10.root", "RECREATE");
+
 
   gROOT->Reset();
   //gStyle->SetOptStat(0);
@@ -48,11 +51,6 @@ gStyle->SetLineStyleString(11,"32 18");
   PIDofInterest.push_back(1000020040);  //alpha
   //1000020040//alfa
 
-
-TFile *f = new TFile("/home/azarkin/MedPhys/V7/BNCT-build/output_woAP_200_4.root");
-
-TFile* fout = new TFile("./HarverstedHistos_woAP_200_4.root", "RECREATE");
-
 //==============================================================================
 
    TTree *t1 = (TTree*)f->Get("Fluences");
@@ -85,13 +83,16 @@ TFile* fout = new TFile("./HarverstedHistos_woAP_200_4.root", "RECREATE");
    TH1F *hSpectrum   = new TH1F("hSpectrum ","Neutron Energy Spectrum",(int)Energy1D_Binning.size() - 1 , &Energy1D_Binning[0]);
 
    TH2F  *hFluence2D  = new TH2F("hFluences2d ","Output Neutron Field Spot ",30,-120,+120, 30,-120,+120);
+   TH2F  *hNeutronFlux_vs_Z_En1  = new TH2F("NeutronFlux_vs_Z_En1","Neutron Field Profile", 250,-300, 200, 100, 0,+200);
+   TH2F  *hNeutronFlux_vs_Z_En2  = new TH2F("NeutronFlux_vs_Z_En2","Neutron Field Profile", 250,-300, 200, 100, 0,+200);
+   TH2F  *hNeutronFlux_vs_Z_En3  = new TH2F("NeutronFlux_vs_Z_En3","Neutron Field Profile", 250,-300, 200, 100, 0,+200);
 
    vector<float> Fluence1D_Binning;
    float Bin_width = 5.0;
-   for(int i =0; i<=24; i++ ) Fluence1D_Binning.push_back(i*Bin_width);
-   TH1F  *hFluence1D_1  = new TH1F("hFluences1d_1 ","Output Neutron Field Density ", 24, &Fluence1D_Binning[0]);
-   TH1F  *hFluence1D_2  = new TH1F("hFluences1d_2 ","Output Neutron Field Density ", 24, &Fluence1D_Binning[0]);
-   TH1F  *hFluence1D_3  = new TH1F("hFluences1d_3 ","Output Neutron Field Density ", 24, &Fluence1D_Binning[0]);
+   for(int i =0; i<=30; i++ ) Fluence1D_Binning.push_back(i*Bin_width);
+   TH1F  *hFluence1D_1  = new TH1F("hFluences1d_1 ","Output Neutron Field Density ", 30, &Fluence1D_Binning[0]);
+   TH1F  *hFluence1D_2  = new TH1F("hFluences1d_2 ","Output Neutron Field Density ", 30, &Fluence1D_Binning[0]);
+   TH1F  *hFluence1D_3  = new TH1F("hFluences1d_3 ","Output Neutron Field Density ", 30, &Fluence1D_Binning[0]);
 
    vector<float> Fluence1D_AzimuBinning;
    int N_az_bin = 20;
@@ -111,18 +112,26 @@ TFile* fout = new TFile("./HarverstedHistos_woAP_200_4.root", "RECREATE");
 
       // if(particle_id == 2212) {   //protons
       if(particle_id == 2112) {    //neutrons
-         if(fabs(X)<120 && fabs(Y)<120){
+
+        double R = sqrt(pow(X,2)+pow(Y,2));
+        int R_int = (int) R/Bin_width;
+        float BinArea = 3.14159 * (  pow((R_int+1)* Bin_width, 2 ) -  pow( R_int * Bin_width, 2 ) );//area of rings at diffrent r
+        double EnergyEV = Energy*1e+6; // converting MeV to eV for the better readability
+
+        if( EnergyEV < 0.5 )hNeutronFlux_vs_Z_En1 -> Fill(Zsurf, R, 1.0/BinArea);
+        if( EnergyEV > 0.5 && EnergyEV < 10000 ) hNeutronFlux_vs_Z_En2 -> Fill(Zsurf, R, 1.0/BinArea);
+        if( EnergyEV > 10000 ) hNeutronFlux_vs_Z_En3 -> Fill(Zsurf, R, 1.0/BinArea);
+
+
+         if(fabs(X)<150 && fabs(Y)<150){
 
 
            hSpectrum2D->Fill(Zsurf, Energy);
 
            if(Zsurf>=120 && Zsurf<121)  {
              hSpectrum -> Fill(Energy);
-             double R = sqrt(pow(X,2)+pow(Y,2));
-             int R_int = (int) R/Bin_width;
-             float BinArea = 3.14159 * (  pow((R_int+1)* Bin_width, 2 ) -  pow( R_int * Bin_width, 2 ) );//area of rings at diffrent r
+
              //cout<<"iBin:  "<<R_int<<"   BinArea:  "<<BinArea<<endl;
-             double EnergyEV = Energy*1e+6; // converting MeV to eV for the better readability
              if( EnergyEV < 0.5 )hFluence1D_1 -> Fill(R, 1.0/BinArea);
              if( EnergyEV > 0.5 && EnergyEV < 10000 ) hFluence1D_2 -> Fill(R, 1.0/BinArea);
              if( EnergyEV > 10000 ) hFluence1D_3 -> Fill(R, 1.0/BinArea);
@@ -212,7 +221,60 @@ hFluence2D->GetXaxis()->SetTitleFont(42);
 hFluence2D->Draw("colz");
 
 
+TCanvas *c3_1 = new TCanvas("c3_1", "c3_1", 960, 720);
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetTickLength(0.02);
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetNdivisions(505);
+hNeutronFlux_vs_Z_En1->GetXaxis()->CenterTitle();
+hNeutronFlux_vs_Z_En1->GetYaxis()->CenterTitle();
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetTitle("R (mm)");
+hNeutronFlux_vs_Z_En1->GetXaxis()->SetTitle("Z (mm)");
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetTitleSize(0.045*TextSizeScale);
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetTitleOffset(1.2);
+hNeutronFlux_vs_Z_En1->GetXaxis()->SetTitleSize(0.045*TextSizeScale);
+hNeutronFlux_vs_Z_En1->GetXaxis()->SetTitleOffset(1.0);
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetLabelSize(0.04*TextSizeScale);
+hNeutronFlux_vs_Z_En1->GetXaxis()->SetLabelSize(0.04*TextSizeScale);
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetLabelFont(42);
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetTitleFont(42);
+hNeutronFlux_vs_Z_En1->GetXaxis()->SetTitleFont(42);
+hNeutronFlux_vs_Z_En1->Draw("colz");
 
+
+TCanvas *c3_2 = new TCanvas("c3_2", "c3_2", 960, 720);
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetTickLength(0.02);
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetNdivisions(505);
+hNeutronFlux_vs_Z_En2->GetXaxis()->CenterTitle();
+hNeutronFlux_vs_Z_En2->GetYaxis()->CenterTitle();
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetTitle("R (mm)");
+hNeutronFlux_vs_Z_En2->GetXaxis()->SetTitle("Z (mm)");
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetTitleSize(0.045*TextSizeScale);
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetTitleOffset(1.2);
+hNeutronFlux_vs_Z_En2->GetXaxis()->SetTitleSize(0.045*TextSizeScale);
+hNeutronFlux_vs_Z_En2->GetXaxis()->SetTitleOffset(1.0);
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetLabelSize(0.04*TextSizeScale);
+hNeutronFlux_vs_Z_En2->GetXaxis()->SetLabelSize(0.04*TextSizeScale);
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetLabelFont(42);
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetTitleFont(42);
+hNeutronFlux_vs_Z_En2->GetXaxis()->SetTitleFont(42);
+hNeutronFlux_vs_Z_En2->Draw("colz");
+
+TCanvas *c3_3 = new TCanvas("c3_3", "c3_3", 960, 720);
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetTickLength(0.02);
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetNdivisions(505);
+hNeutronFlux_vs_Z_En3->GetXaxis()->CenterTitle();
+hNeutronFlux_vs_Z_En3->GetYaxis()->CenterTitle();
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetTitle("R (mm)");
+hNeutronFlux_vs_Z_En3->GetXaxis()->SetTitle("Z (mm)");
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetTitleSize(0.045*TextSizeScale);
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetTitleOffset(1.2);
+hNeutronFlux_vs_Z_En3->GetXaxis()->SetTitleSize(0.045*TextSizeScale);
+hNeutronFlux_vs_Z_En3->GetXaxis()->SetTitleOffset(1.0);
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetLabelSize(0.04*TextSizeScale);
+hNeutronFlux_vs_Z_En3->GetXaxis()->SetLabelSize(0.04*TextSizeScale);
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetLabelFont(42);
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetTitleFont(42);
+hNeutronFlux_vs_Z_En3->GetXaxis()->SetTitleFont(42);
+hNeutronFlux_vs_Z_En3->Draw("colz");
 
 
 TCanvas *c4 = new TCanvas("c4", "c4", 960, 720);
@@ -340,6 +402,9 @@ fout->WriteObject(hSpectrum, "Spectrum1D");
 
 
 fout->WriteObject(hFluence2D , "Fluence2D");
+fout->WriteObject(hNeutronFlux_vs_Z_En1 , "NeutronFlux_vs_Z_En1");
+fout->WriteObject(hNeutronFlux_vs_Z_En2 , "NeutronFlux_vs_Z_En2");
+fout->WriteObject(hNeutronFlux_vs_Z_En3 , "NeutronFlux_vs_Z_En3");
 
 //fout->Close();
 
