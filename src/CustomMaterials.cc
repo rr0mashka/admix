@@ -92,7 +92,7 @@ void CustomMaterials::DefineMaterials()
   matH2O = new G4Material("Water",d,2);
   matH2O->AddElement(elH,2);
   matH2O->AddElement(elO,1);
-  matH2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV)/
+  matH2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
   // MIRD soft tissue
   d = 0.9869 *g/cm3;
@@ -234,6 +234,15 @@ void CustomMaterials::DefineMaterials()
   G4Material* Admixture = nist->FindOrBuildMaterial("G4_B");
   TissueWithAdmixture->AddMaterial(soft, 1 - admix_fr);
   TissueWithAdmixture->AddMaterial(Admixture, admix_fr);
+
+
+// oak wood
+
+  G4Material* WoodDiskMaterial = new G4Material("OakWood", density, 3);
+  WoodDiskMaterial->AddElement(nist->FindOrBuildElement("C"), 50.0 * perCent);
+  WoodDiskMaterial->AddElement(nist->FindOrBuildElement("H"), 6.0 * perCent);
+  WoodDiskMaterial->AddElement(nist->FindOrBuildElement("O"), 44.0 * perCent);
+
   //============================================================================
 
 
