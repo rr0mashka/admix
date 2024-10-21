@@ -48,6 +48,7 @@
 #include "Geometry/CoolingPipe.hh"
 #include "Geometry/CubicPhantom.hh"
 #include "Geometry/AcceleratorPipe.hh"
+#include "Geometry/MiceWoodDisk.hh"
 //Geometry
 
 
@@ -109,6 +110,7 @@ auto pCoolingPipe3 = new CoolingPipe ("Pipe1", 61.2*mm, -61.2*mm, 8.0*mm, logicW
 
 auto pAcceleratorPipe = new AcceleratorPipe ("AcceleratorPipe", 1.75*mm, logicWorld, 2*mm );
 
+auto pMiceWoodDisk = new MiceWoodDisk ("MiceWoodDisk", 130*mm, logicWorld, 2*mm );
 // will change later, manually for now
 
 /*

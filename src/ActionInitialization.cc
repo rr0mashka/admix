@@ -33,6 +33,7 @@
 #include "EventAction.hh"
 #include "SteppingAction.hh"
 #include "TrackingAction.hh"
+#include "CustomMaterials.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

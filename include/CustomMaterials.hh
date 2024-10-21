@@ -9,9 +9,8 @@ class G4Material;
 class CustomMaterials
 {
 public:
-  CustomMaterials();
   ~ CustomMaterials();
-
+  static CustomMaterials *Instance();
 public:
   G4Material* matH2O;
   G4Material* soft;
@@ -20,11 +19,14 @@ public:
   G4Material* adipose;
   G4Material* glandular;
   G4Material* adipose_glandular;
-  void  DefineMaterials();
+
   G4Material* GetMaterial(G4String); //returns the material
+  static CustomMaterials* instancePtr;
+  static std::mutex mtx;
 
 private:
-
+  CustomMaterials();
+  void  DefineMaterials();
   //G4Material* Titanium;
   //G4Material*Vacuum;
 

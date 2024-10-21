@@ -1,17 +1,15 @@
 {
 
   gROOT->Reset();
-  // gStyle->SetOptStat(0);
+   gStyle->SetOptStat(0);
   //gStyle->SetOptTitle(0);
   gStyle->SetOptFit(0);
   gStyle->SetLabelFont(42);
   gStyle->SetTitleFont(42);
-
   gStyle->SetPadLeftMargin(0.14);
   gStyle->SetPadRightMargin(0.07);
   gStyle->SetPadTopMargin(0.07);//!!
   gStyle->SetPadBottomMargin(0.12);//!!
-
   gStyle->SetPadTickX(1);
   gStyle->SetPadTickY(1);
   //gPad->SetLogy();
@@ -40,13 +38,11 @@ gStyle->SetLineStyleString(11,"32 18");
 //==============================================================================
 
 
-
-float N_protons = 1500e+6;  //number of  incedent protons
+float N_protons = 1000e+6;  //number of  incedent protons
 float Current = 1.6e-19 * N_protons*1000; // accelarator cuccrent  in mA
 float sqMM_2_sqCM =100; //conversion factor for square mm to square cm
 
-
-TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/DATA/data/HaverstedHistos_1500M.root");
+TFile *f = new TFile("/home/maxim/Programs/Geant4/MedPhys/BNCT/V7/BNCT/HarverstedHistos_New_1000M.root");
 
 TH1F  *hFluence1D_1 = (TH1F*)f->Get("hFluence1D_1");
 TH1F  *hFluence1D_2 = (TH1F*)f->Get("hFluence1D_2");
@@ -61,6 +57,9 @@ TH2F  *hSpectrum2D = (TH2F*)f->Get("Spectrum2D");
 TH2F  *hFluence2D = (TH2F*)f->Get("Fluence2D");
 
 
+TH2F  *hNeutronFlux_vs_Z_En1 = (TH2F*)f->Get("NeutronFlux_vs_Z_En1");
+TH2F  *hNeutronFlux_vs_Z_En2 = (TH2F*)f->Get("NeutronFlux_vs_Z_En2");
+TH2F  *hNeutronFlux_vs_Z_En3 = (TH2F*)f->Get("NeutronFlux_vs_Z_En3");
 
  hFluence1D_1 ->Scale(sqMM_2_sqCM/Current);
  hFluence1D_2 ->Scale(sqMM_2_sqCM/Current);
@@ -137,6 +136,71 @@ hFluence2D->GetYaxis()->SetTitleFont(42);
 hFluence2D->GetXaxis()->SetTitleFont(42);
 hFluence2D->Draw("colz");
 
+
+
+TCanvas *c3_1 = new TCanvas("c3_1", "c3_1", 960, 720);
+float Maximum1 = hNeutronFlux_vs_Z_En1->GetMaximum();
+float Minimum1 = 0.0001* Maximum1 ;
+hNeutronFlux_vs_Z_En1->GetZaxis()->SetRangeUser(Minimum1 ,Maximum1);
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetTickLength(0.02);
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetNdivisions(505);
+hNeutronFlux_vs_Z_En1->GetXaxis()->CenterTitle();
+hNeutronFlux_vs_Z_En1->GetYaxis()->CenterTitle();
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetTitle("R (mm)");
+hNeutronFlux_vs_Z_En1->GetXaxis()->SetTitle("Z (mm)");
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetTitleSize(0.045*TextSizeScale);
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetTitleOffset(1.2);
+hNeutronFlux_vs_Z_En1->GetXaxis()->SetTitleSize(0.045*TextSizeScale);
+hNeutronFlux_vs_Z_En1->GetXaxis()->SetTitleOffset(1.0);
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetLabelSize(0.04*TextSizeScale);
+hNeutronFlux_vs_Z_En1->GetXaxis()->SetLabelSize(0.04*TextSizeScale);
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetLabelFont(42);
+hNeutronFlux_vs_Z_En1->GetYaxis()->SetTitleFont(42);
+hNeutronFlux_vs_Z_En1->GetXaxis()->SetTitleFont(42);
+hNeutronFlux_vs_Z_En1->Draw("colz");
+
+
+TCanvas *c3_2 = new TCanvas("c3_2", "c3_2", 960, 720);
+float Maximum2 = hNeutronFlux_vs_Z_En2->GetMaximum();
+float Minimum2 = 0.0001* Maximum2 ;
+hNeutronFlux_vs_Z_En2->GetZaxis()->SetRangeUser(Minimum2 ,Maximum2);
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetTickLength(0.02);
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetNdivisions(505);
+hNeutronFlux_vs_Z_En2->GetXaxis()->CenterTitle();
+hNeutronFlux_vs_Z_En2->GetYaxis()->CenterTitle();
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetTitle("R (mm)");
+hNeutronFlux_vs_Z_En2->GetXaxis()->SetTitle("Z (mm)");
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetTitleSize(0.045*TextSizeScale);
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetTitleOffset(1.2);
+hNeutronFlux_vs_Z_En2->GetXaxis()->SetTitleSize(0.045*TextSizeScale);
+hNeutronFlux_vs_Z_En2->GetXaxis()->SetTitleOffset(1.0);
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetLabelSize(0.04*TextSizeScale);
+hNeutronFlux_vs_Z_En2->GetXaxis()->SetLabelSize(0.04*TextSizeScale);
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetLabelFont(42);
+hNeutronFlux_vs_Z_En2->GetYaxis()->SetTitleFont(42);
+hNeutronFlux_vs_Z_En2->GetXaxis()->SetTitleFont(42);
+hNeutronFlux_vs_Z_En2->Draw("colz");
+
+TCanvas *c3_3 = new TCanvas("c3_3", "c3_3", 960, 720);
+float Maximum3 = hNeutronFlux_vs_Z_En3->GetMaximum();
+float Minimum3 = 0.00001* Maximum3;
+hNeutronFlux_vs_Z_En3->GetZaxis()->SetRangeUser(Minimum3 ,Maximum3);
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetTickLength(0.02);
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetNdivisions(505);
+hNeutronFlux_vs_Z_En3->GetXaxis()->CenterTitle();
+hNeutronFlux_vs_Z_En3->GetYaxis()->CenterTitle();
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetTitle("R (mm)");
+hNeutronFlux_vs_Z_En3->GetXaxis()->SetTitle("Z (mm)");
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetTitleSize(0.045*TextSizeScale);
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetTitleOffset(1.2);
+hNeutronFlux_vs_Z_En3->GetXaxis()->SetTitleSize(0.045*TextSizeScale);
+hNeutronFlux_vs_Z_En3->GetXaxis()->SetTitleOffset(1.0);
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetLabelSize(0.04*TextSizeScale);
+hNeutronFlux_vs_Z_En3->GetXaxis()->SetLabelSize(0.04*TextSizeScale);
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetLabelFont(42);
+hNeutronFlux_vs_Z_En3->GetYaxis()->SetTitleFont(42);
+hNeutronFlux_vs_Z_En3->GetXaxis()->SetTitleFont(42);
+hNeutronFlux_vs_Z_En3->Draw("colz");
 
 
 

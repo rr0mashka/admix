@@ -12,7 +12,7 @@ BackPlate::BackPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_vol
   G4NistManager* nist = G4NistManager::Instance();
   G4Material* GrooveMaterial= nist->FindOrBuildMaterial("G4_WATER");
 
-  CustomMaterials* pCustomMaterials = new CustomMaterials();
+  CustomMaterials* pCustomMaterials = CustomMaterials::Instance();
   G4Material* pAMG6_mat  = pCustomMaterials->GetMaterial("AMG6");
   //============================================================================
 

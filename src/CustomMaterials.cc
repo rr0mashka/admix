@@ -11,9 +11,15 @@
 #include "G4ElementTable.hh"
 #include "G4NistManager.hh"
 
+using namespace std;
+
+CustomMaterials* CustomMaterials::instancePtr = nullptr;
+mutex CustomMaterials::mtx;
+
+
 CustomMaterials::CustomMaterials()
 {
-    ;
+  DefineMaterials();
 }
 
 CustomMaterials::~CustomMaterials()
@@ -228,6 +234,15 @@ void CustomMaterials::DefineMaterials()
   G4Material* Admixture = nist->FindOrBuildMaterial("G4_B");
   TissueWithAdmixture->AddMaterial(soft, 1 - admix_fr);
   TissueWithAdmixture->AddMaterial(Admixture, admix_fr);
+
+
+// oak wood
+
+  G4Material* WoodDiskMaterial = new G4Material("OakWood", density, 3);
+  WoodDiskMaterial->AddElement(nist->FindOrBuildElement("C"), 50.0 * perCent);
+  WoodDiskMaterial->AddElement(nist->FindOrBuildElement("H"), 6.0 * perCent);
+  WoodDiskMaterial->AddElement(nist->FindOrBuildElement("O"), 44.0 * perCent);
+
   //============================================================================
 
 
@@ -236,7 +251,16 @@ void CustomMaterials::DefineMaterials()
 G4Material* CustomMaterials::GetMaterial(G4String material)
 {
   // Returns a material
-  DefineMaterials();
   G4Material* pttoMaterial = G4Material::GetMaterial(material);
   return pttoMaterial;
+}
+
+CustomMaterials* CustomMaterials::Instance() {
+    if (CustomMaterials::instancePtr == nullptr) {
+        lock_guard<mutex> lock(CustomMaterials::mtx);
+        if (CustomMaterials::instancePtr == nullptr) {
+            CustomMaterials::instancePtr = new CustomMaterials();
+        }
+    }
+    return CustomMaterials::instancePtr;
 }
