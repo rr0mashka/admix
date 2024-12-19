@@ -1,5 +1,5 @@
-#ifndef NeutronModerator_h
-#define NeutronModerator_h 1
+#ifndef CellsPhantom_h
+#define CellsPhantom_h 1
 
 #include "G4RunManager.hh"
 #include "G4NistManager.hh"
@@ -16,13 +16,13 @@
 #include "G4TwoVector.hh"
 
 
-class NeutronModerator  {
+class CellsPhantom  {
 public:
-  NeutronModerator(G4String, G4double, G4LogicalVolume*, G4double);
-  ~NeutronModerator();
+  CellsPhantom(G4String, G4double, G4LogicalVolume*, G4double);
+  ~CellsPhantom();
 
-  G4double GlassDisk_Diamter = 160.0 * mm;//160
-  G4double GlassDisk_Width =     80 * mm;//80
+G4double PhantomDisk_Diamter = 220.0 * mm;
+G4double PhantomDisk_Width = 50 * mm;
 
 };
 

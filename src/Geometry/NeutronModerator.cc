@@ -5,14 +5,14 @@
 #include "G4Transform3D.hh"
 #include "G4StepLimiterPhysics.hh"
 #include "G4UserLimits.hh"
+#include "CustomMaterials.hh"
+
 
 NeutronModerator::NeutronModerator (G4String name, G4double z_pos, G4LogicalVolume* mother_volume_log, G4double maxStep)
 {
 
-  G4NistManager* nist = G4NistManager::Instance();
-  G4Material* ModeratorMaterial= nist->FindOrBuildMaterial("G4_PLEXIGLASS");
-  //G4Material* ModeratorMaterial= nist->FindOrBuildMaterial("G4_WATER");
-  //G4Material* ModeratorMaterial= nist->FindOrBuildMaterial("G4_MAGNESIUM_FLUORIDE");
+    CustomMaterials* pCustomMaterials = CustomMaterials::Instance();
+    G4Material* pPolyBiz_mat  = pCustomMaterials->GetMaterial("PolyBiz");
 
 
   z_pos = z_pos + 0.5*GlassDisk_Width; // moving origin to the front face
@@ -32,7 +32,7 @@ NeutronModerator::NeutronModerator (G4String name, G4double z_pos, G4LogicalVolu
          G4LogicalVolume *pGlassDisk_Log = new G4LogicalVolume
          (
              pGlassDisk_sol,  // its solid
-             ModeratorMaterial,// its material
+             pPolyBiz_mat,// its material
              "ModeratorGlassDisk_Log"
            );
 
@@ -52,7 +52,5 @@ NeutronModerator::NeutronModerator (G4String name, G4double z_pos, G4LogicalVolu
 
         auto fStepLimit = new G4UserLimits(maxStep);
         pGlassDisk_Log ->SetUserLimits(fStepLimit);
-
-
 
 }

@@ -218,6 +218,26 @@ void CustomMaterials::DefineMaterials()
   matAMG6->AddMaterial(pCu, frac_Cu);
 
   //============================================================================
+    
+  //=============================== PolyBiz ====================================
+
+  G4double PolyBiz_density =  2.920*g/cm3;
+  G4int ncomponents = 3;
+
+  G4Material* matPolyBiz = new G4Material("PolyBiz", PolyBiz_density, ncomponents);
+  G4Material* pH = nist->FindOrBuildMaterial("G4_H");
+  G4Material* pC = nist->FindOrBuildMaterial("G4_C");
+  G4Material* pBi = nist->FindOrBuildMaterial("G4_Bi");
+
+  G4double frac_H = 0.03;
+  G4double frac_C = 0.20;
+  G4double frac_Bi = 0.77;
+
+  matPolyBiz->AddMaterial(pH, frac_H);
+  matPolyBiz->AddMaterial(pC, frac_C);
+  matPolyBiz->AddMaterial(pBi, frac_Bi);
+
+  //============================================================================
 
 
   //======== soft tissue with boron mixture ==================================
