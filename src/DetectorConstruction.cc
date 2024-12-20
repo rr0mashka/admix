@@ -50,6 +50,7 @@
 #include "Geometry/AcceleratorPipe.hh"
 #include "Geometry/MiceWoodDisk.hh"
 #include "Geometry/CellsPhantom.hh"
+#include "Geometry/SphericalPhantom.hh"
 //Geometry
 
 
@@ -111,22 +112,31 @@ auto pCoolingPipe3 = new CoolingPipe ("Pipe1", 61.2*mm, -61.2*mm, 8.0*mm, logicW
 
 auto pAcceleratorPipe = new AcceleratorPipe ("AcceleratorPipe", 1.75*mm, logicWorld, 2*mm );
 
-auto pCellsPhantom = new CellsPhantom ("CellsPhantom", 120*mm, logicWorld, 2*mm);
+// auto pCellsPhantom = new CellsPhantom ("CellsPhantom", 120*mm, logicWorld, 2*mm);
     
-// auto pMiceWoodDisk = new MiceWoodDisk ("MiceWoodDisk", 130*mm, logicWorld, 2*mm );
+//auto pMiceWoodDisk = new MiceWoodDisk ("MiceWoodDisk", 130*mm, logicWorld, 2*mm );
 // will change later, manually for now
 
-/*
-zpos_phantom = 120*mm;
+
+/* zpos_phantom = 120*mm;
 auto pCubicPhantom = new CubicPhantom ("CubicPhantom", zpos_phantom, logicWorld, 1*mm );
 fScoringVolumes = pCubicPhantom->GetScoringCubes();
 vPos_X = pCubicPhantom->vPos_X;
 vPos_Y = pCubicPhantom->vPos_Y;
-vPos_Z = pCubicPhantom->vPos_Z;
-*/
-  //always return the physical World
-  //
-  return physWorld;
+vPos_Z = pCubicPhantom->vPos_Z; */
+    
+    // Создание и размещение сферического фантома
+        G4double phantomZPosition = 140*mm; // Установите нужное значение для Z позиции
+        G4double maxStep = 1.0 * mm; // Размер максимального шага вокселей, настроить по необходимости
+
+        SphericalPhantom* sphericalPhantom = new SphericalPhantom("SphericalPhantom", phantomZPosition, logicWorld, maxStep);
+
+        // Получение векторов позиций
+        vPos_X = sphericalPhantom->vPos_X;
+        vPos_Y = sphericalPhantom->vPos_Y;
+        vPos_Z = sphericalPhantom->vPos_Z;
+
+return physWorld; // Вернуть физический объем мира
 }
 
 

@@ -94,6 +94,22 @@ void CustomMaterials::DefineMaterials()
   matH2O->AddElement(elO,1);
   matH2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
+    
+  // Lipid
+  d = 0.900*g/cm3;
+  G4Material* lipid = new G4Material("Lipid",d,3);
+  lipid->AddElement(elC, 3);
+  lipid->AddElement(elH, 5);
+  lipid->AddElement(elO, 1);
+
+  // Protein
+  d = 1.200*g/cm3;
+  G4Material* protein = new G4Material("Protein",d,4);
+  protein->AddElement(elC, 4);
+  protein->AddElement(elH, 7);
+  protein->AddElement(elO, 2);
+  protein->AddElement(elN, 1);
+
   // MIRD soft tissue
   d = 0.9869 *g/cm3;
   soft = new G4Material("soft_tissue",d,16);
@@ -115,7 +131,6 @@ void CustomMaterials::DefineMaterials()
   soft->AddElement(elPb,0.00000016);
 
   // MIRD Skeleton
-
   d = 1.4862*g/cm3;
   skeleton = new G4Material("skeleton",d,15);
   skeleton -> AddElement(elH,0.0704);
@@ -239,6 +254,12 @@ void CustomMaterials::DefineMaterials()
 
   //============================================================================
 
+  //========================== CatBrain ================================
+  G4Material* CatBrain = new G4Material("CatBrain", 1.05 * g / cm3, 3);
+  CatBrain->AddMaterial(matH2O, 0.80); // 80% воды
+  CatBrain->AddMaterial(lipid, 0.10);  // 10% жиров
+  CatBrain->AddMaterial(protein, 0.10); // 10% белков
+  //============================================================================
 
   //======== soft tissue with boron mixture ==================================
 
