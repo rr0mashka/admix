@@ -131,7 +131,10 @@
 /vis/geometry/set/colour FittingPipe 1 1 1 1
 
 # Phantom
-/vis/geometry/set/colour template_ScoringCell_Log 0 0 0.2 1 .25
+#/vis/geometry/set/colour template_BrainCell_Log 0 0 0.8 1. .9
+/vis/geometry/set/colour template_BrainCell_Log 0 0.603 0.200 0.450
+/vis/geometry/set/colour template_BoneCell_Log 0 0.8 0.9 0.8
+/vis/geometry/set/colour template_SkinCell_Log 0 1. 0.8 0.
 
 # Cells Phantom
 /vis/geometry/set/colour PhantomDisk_Log 1 1 1 1 .5

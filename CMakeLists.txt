@@ -30,8 +30,8 @@ include(${ROOT_USE_FILE})
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
 #
-file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/src/Geometry/*.cc)
-file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh  ${PROJECT_SOURCE_DIR}/include/Geometry/*.hh)
+file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/src/Geometry/*.cc ${PROJECT_SOURCE_DIR}/src/Geometry/SensitiveVolumes/*.cc)
+file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh  ${PROJECT_SOURCE_DIR}/include/Geometry/*.hh ${PROJECT_SOURCE_DIR}/src/Geometry/SensitiveVolumes/*.hh)
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries

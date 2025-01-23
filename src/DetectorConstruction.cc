@@ -113,7 +113,7 @@ auto pCoolingPipe3 = new CoolingPipe ("Pipe1", 61.2*mm, -61.2*mm, 8.0*mm, logicW
 auto pAcceleratorPipe = new AcceleratorPipe ("AcceleratorPipe", 1.75*mm, logicWorld, 2*mm );
 
 // auto pCellsPhantom = new CellsPhantom ("CellsPhantom", 120*mm, logicWorld, 2*mm);
-    
+
 //auto pMiceWoodDisk = new MiceWoodDisk ("MiceWoodDisk", 130*mm, logicWorld, 2*mm );
 // will change later, manually for now
 
@@ -124,20 +124,24 @@ fScoringVolumes = pCubicPhantom->GetScoringCubes();
 vPos_X = pCubicPhantom->vPos_X;
 vPos_Y = pCubicPhantom->vPos_Y;
 vPos_Z = pCubicPhantom->vPos_Z; */
-    
+
     // Создание и размещение сферического фантома
-        G4double phantomZPosition = 140*mm; // Установите нужное значение для Z позиции
-        G4double maxStep = 1.0 * mm; // Размер максимального шага вокселей, настроить по необходимости
+G4double phantomZPosition = 190*mm; // Установите нужное значение для Z позиции
+G4double maxStep = 1.0 * mm; // Размер максимального шага вокселей, настроить по необходимости
 
-        SphericalPhantom* sphericalPhantom = new SphericalPhantom("SphericalPhantom", phantomZPosition, logicWorld, maxStep);
-
-        // Получение векторов позиций
+SphericalPhantom* sphericalPhantom = new SphericalPhantom("SphericalPhantom", phantomZPosition, logicWorld, maxStep, 40*mm,5*mm, 5*mm);
+sphericalPhantom->SetDetector(this);
+    /*    // Получение векторов позиций
         vPos_X = sphericalPhantom->vPos_X;
         vPos_Y = sphericalPhantom->vPos_Y;
-        vPos_Z = sphericalPhantom->vPos_Z;
+        vPos_Z = sphericalPhantom->vPos_Z; */
 
 return physWorld; // Вернуть физический объем мира
 }
 
+
+void DetectorConstruction::SetSD(G4LogicalVolume* l, G4VSensitiveDetector* sd){
+  SetSensitiveDetector(l, sd);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

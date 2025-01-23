@@ -37,6 +37,7 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
+class G4VSensitiveDetector;
 
 /// Detector construction class to define materials and geometry.
 
@@ -54,6 +55,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     std::vector<G4double> vPos_Y;
     std::vector<G4double> vPos_Z;
     G4double zpos_phantom;
+    void SetSD(G4LogicalVolume*, G4VSensitiveDetector*);
 
   protected:
     std::vector<G4VPhysicalVolume*> fScoringVolumes = {};
