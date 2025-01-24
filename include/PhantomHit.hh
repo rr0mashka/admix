@@ -31,14 +31,20 @@ class PhantomHit : public G4VHit
     // Set methods
     void SetEdep(G4double de) { fEdep = de; };
     void SetPos(G4ThreeVector xyz) { fPos = xyz; };
+    void SetVolName(G4String name) {fVolName = name;};
+    void SetEdepBoron(G4double de) { fEdepBoron = de; };
 
     // Get methods
     G4double GetEdep() const { return fEdep; };
     G4ThreeVector GetPos() const { return fPos; };
+    G4String GetVolName() const {return fVolName;};
+    G4double GetEdepBoron(G4double de) { return fEdepBoron; };
 
   private:
     G4double fEdep = 0.;
+    G4double fEdepBoron = 0;
     G4ThreeVector fPos;
+    G4String fVolName;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

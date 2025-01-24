@@ -4,6 +4,7 @@
 #include "G4SDManager.hh"
 #include "G4Step.hh"
 #include "G4ThreeVector.hh"
+#include "G4Track.hh"
 #include "G4ios.hh"
 
 PhantomVolume::PhantomVolume(G4String name):
@@ -24,7 +25,27 @@ void PhantomVolume::Initialize(G4HCofThisEvent* hitCollection){
 }
 
 G4bool PhantomVolume::ProcessHits(G4Step* step, G4TouchableHistory* history){
- return false;
+  G4double edep = step->GetTotalEnergyDeposit();
+
+  if (edep == 0.) return false;
+
+  auto newHit = new PhantomHit();
+
+  G4VPhysicalVolume *phv = step->GetPostStepPoint()->GetPhysicalVolume();
+  G4Track* mytrack =  step->GetTrack();
+  if (!mytrack) return false;
+  if (!phv) return false;
+  G4String partname = mytrack->GetDefinition()->GetParticleName();
+
+  if ((partname == "alpha") || (partname == "Li7")) {
+    newHit->SetEdepBoron(edep);
+  };
+  newHit->SetVolName(phv->GetName());
+  newHit->SetEdep(edep);
+  newHit->SetPos(phv->GetObjectTranslation());
+
+  fHitsCollection->insert(newHit);
+  return false;
 }
 
 void PhantomVolume::EndOfEvent(G4HCofThisEvent* hitCollection){
