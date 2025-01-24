@@ -24,29 +24,12 @@ void Run::RecordEvent(const G4Event* event)
 
   PhantomHitsCollection* hitsc = static_cast<PhantomHitsCollection*>(HCE->GetHC(hcID));
 
+  for (int i=0; i<hitsc->entries(); i++) {
+    PhantomHit* hit = static_cast<PhantomHit*>((*hitsc)[i]);
+    fEdepMap[hit->GetVolName()] += hit->GetEdep();
+    fEdepBoronMap[hit->GetVolName()] += hit->GetEdepBoron();
+  };
 
-  /*for (auto& mapElement : (*evtMap->GetMap())) {
-    auto edep = *(mapElement.second);
-    if (edep > eThreshold) nbOfFired++;
-    // auto copyNb  = mapElement.first;
-    // G4cout << "\n  cryst" << copyNb << ": " << edep/keV << " keV ";
-  }
-  if (nbOfFired == 2) fGoodEvents++;
-
-  // Dose deposit in patient
-  //
-  G4double dose = 0.;
-
-  evtMap = static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fCollID_patient));
-
-  for (auto& mapElement : (*evtMap->GetMap())) {
-    dose += *(mapElement.second);
-    // auto copyNb  = mapElement.first;
-    // G4cout << "\n  patient" << copyNb << ": " << G4BestUnit(dose,"Dose");
-  }
-  fSumDose += dose;
-  fStatDose += dose;
-*/
   G4Run::RecordEvent(event);
 }
 
@@ -54,9 +37,20 @@ void Run::RecordEvent(const G4Event* event)
 
 void Run::Merge(const G4Run* run)
 {
+  G4String volname;
+  G4double edep;
   const Run* localRun = static_cast<const Run*>(run);
-//  fGoodEvents += localRun->fGoodEvents;
-//  fSumDose += localRun->fSumDose;
-//  fStatDose += localRun->fStatDose;
-//  G4Run::Merge(run);
+  std::map<G4String, G4double>::const_iterator it;
+  for (it = localRun->fEdepMap.begin(); it != localRun->fEdepMap.end(); ++it) {
+    volname = it->first;
+    edep = it->second;
+    fEdepMap[volname]+=edep;
+  };
+  for (it = localRun->fEdepBoronMap.begin(); it != localRun->fEdepBoronMap.end(); ++it) {
+    G4String volname = it->first;
+    G4int edep = it->second;
+    fEdepBoronMap[volname]+=edep;
+  }
+
+  G4Run::Merge(run);
 }

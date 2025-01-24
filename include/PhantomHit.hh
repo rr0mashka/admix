@@ -38,7 +38,7 @@ class PhantomHit : public G4VHit
     G4double GetEdep() const { return fEdep; };
     G4ThreeVector GetPos() const { return fPos; };
     G4String GetVolName() const {return fVolName;};
-    G4double GetEdepBoron(G4double de) { return fEdepBoron; };
+    G4double GetEdepBoron() { return fEdepBoron; };
 
   private:
     G4double fEdep = 0.;

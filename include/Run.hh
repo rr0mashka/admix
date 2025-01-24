@@ -27,7 +27,8 @@ class Run : public G4Run
   //  G4StatAnalysis GetStatDose() const { return fStatDose; }
 
   private:
-
+    std::map<G4String, G4double> fEdepMap;
+    std::map<G4String, G4double> fEdepBoronMap;
 };
 
 #endif
