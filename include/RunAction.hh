@@ -39,6 +39,7 @@
 #include "globals.hh"
 #include "VectorAccumulable.hh"
 #include "G4Accumulable.hh"
+#include "Run.hh"
 
 class RunAction : public G4UserRunAction
 {
@@ -46,8 +47,11 @@ public:
     RunAction();
     ~RunAction();
 
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void EndOfRunAction(const G4Run*);
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
+
+    G4Run* GenerateRun() override;
+
 
     const G4double MinZ = 0.*CLHEP::cm;
     const G4double MaxZ = 100*CLHEP::cm;
@@ -60,6 +64,9 @@ public:
     void AddNeutrons(G4int);
     G4String fOutputfile;
     G4Accumulable<G4int> fNumberOfNeutrons = 0.;
+
+private:
+    Run* fRun = nullptr;
 
 };
 

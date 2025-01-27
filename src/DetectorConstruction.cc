@@ -131,10 +131,10 @@ G4double maxStep = 1.0 * mm; // Размер максимального шага
 
 SphericalPhantom* sphericalPhantom = new SphericalPhantom("SphericalPhantom", phantomZPosition, logicWorld, maxStep, 40*mm,5*mm, 5*mm);
 sphericalPhantom->SetDetector(this);
-    /*    // Получение векторов позиций
+        // Получение векторов позиций
         vPos_X = sphericalPhantom->vPos_X;
         vPos_Y = sphericalPhantom->vPos_Y;
-        vPos_Z = sphericalPhantom->vPos_Z; */
+        vPos_Z = sphericalPhantom->vPos_Z;
 
 return physWorld; // Вернуть физический объем мира
 }

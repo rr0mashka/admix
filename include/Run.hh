@@ -20,6 +20,7 @@ class Run : public G4Run
 
     void RecordEvent(const G4Event*) override;
     void Merge(const G4Run*) override;
+    void EndOfRun();
 
   public:
   //  G4int GetNbGoodEvents() const { return fGoodEvents; }
