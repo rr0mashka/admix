@@ -23,7 +23,6 @@ void Run::RecordEvent(const G4Event* event)
     return;
   }
   G4int hcID = G4SDManager::GetSDMpointer()->GetCollectionID("PhantomHitsCollection");
-  std::cout << "id " << hcID << "!!!!!!!!!!!" << std::endl;
 
   PhantomHitsCollection* hitsc = static_cast<PhantomHitsCollection*>(HCE->GetHC(hcID));
 
@@ -60,6 +59,25 @@ void Run::Merge(const G4Run* run)
 
 void Run::EndOfRun(){
     G4AnalysisManager *man = G4AnalysisManager::Instance();
+    man->CreateNtuple("Doses in phantom", "Doses in phantom");
+    man->CreateNtupleDColumn("Edep");
+    man->CreateNtupleDColumn("EdepBoron");
+    man->CreateNtupleSColumn("VolumeName");
+    man->CreateNtupleDColumn("dose");
+    man->CreateNtupleDColumn("dose_boron");
+    man->CreateNtupleDColumn("X");
+    man->CreateNtupleDColumn("Y");
+    man->CreateNtupleDColumn("Z");
+    man->FinishNtuple(2);
+
+    man->CreateNtuple("Hits in detector", "Hits in detector");
+    man->CreateNtupleDColumn("Edep");
+    man->CreateNtupleSColumn("VolumeName");
+    man->CreateNtupleDColumn("dose");
+    man->CreateNtupleDColumn("X");
+    man->CreateNtupleDColumn("Y");
+    man->CreateNtupleDColumn("Z");
+    man->FinishNtuple(3);
     std::map<G4String, G4double>::const_iterator it;
     G4VPhysicalVolume* volume;
     G4double mass, Edep, EdepBoron, dose, doseboron;

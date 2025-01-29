@@ -139,18 +139,13 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
   G4VPhysicalVolume* volume  = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
   if (fScoringVolumes.size() == 0) {
-      fScoringVolumes = detConstruction->GetScoringVolumes();
+      fScoringVolumes = detConstruction->GetPhantomLVs();
   };
 
-  for (uint i = 0; i<fScoringVolumes.size(); i++){
-    if (volume == fScoringVolumes.at(i)){
+  /*for (uint i = 0; i<fScoringVolumes.size(); i++){
+    if (volume->GetLogicalVolume() == fScoringVolumes.at(i)){
         fEventAction->AddEdep(edepStep,i);
     };
-    if (volume->GetMotherLogical()){
-      if ((volume->GetMotherLogical()->GetName() != "World") && (volume->GetMotherLogical()->GetName() == fScoringVolumes.at(i)->GetLogicalVolume()->GetName())){
-          fEventAction->AddEdep(edepStep,i);
-      };
-    };
-  };
+  };*/
 
 }

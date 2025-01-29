@@ -133,6 +133,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   fSphericalPhantom = new SphericalPhantom("SphericalPhantom", phantomZPosition, logicWorld, maxStep, 40*mm,5*mm, 5*mm);
           // Получение векторов позиций
+//fScoringVolumes = fSphericalPhantom->GetScoringCubes();
   vPos_X = fSphericalPhantom->vPos_X;
   vPos_Y = fSphericalPhantom->vPos_Y;
   vPos_Z = fSphericalPhantom->vPos_Z;

@@ -32,13 +32,13 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include "Geometry/SphericalPhantom.hh"
 #include <vector>
 
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4VSensitiveDetector;
-class SphericalPhantom;
 
 /// Detector construction class to define materials and geometry.
 
@@ -57,6 +57,14 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     std::vector<G4double> vPos_Y;
     std::vector<G4double> vPos_Z;
     G4double zpos_phantom;
+
+    std::vector<G4LogicalVolume*> GetPhantomLVs() const {
+        if (!fSphericalPhantom) return {};
+        return fSphericalPhantom->GetSLVs();
+    };
+    G4int GetNPhantoms() const {
+      return vPos_X.size();
+    }
 
   protected:
     std::vector<G4VPhysicalVolume*> fScoringVolumes = {};

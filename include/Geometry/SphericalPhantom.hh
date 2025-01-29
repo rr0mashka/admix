@@ -8,8 +8,9 @@
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
 #include "globals.hh"
-#include "DetectorConstruction.hh"
 #include <vector>
+
+class DetectorConstruction;
 
 class SphericalPhantom {
 public:

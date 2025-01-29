@@ -22,7 +22,6 @@ void PhantomVolume::Initialize(G4HCofThisEvent* hitCollection){
   // Add this collection in hce
 
   G4int hcID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollectionName);
-  std::cout << "id    " << hcID << std::endl;
   hitCollection->AddHitsCollection(hcID, fHitsCollection);
 }
 

@@ -66,7 +66,7 @@ void EventAction::BeginOfEventAction(const G4Event*)
   vdEdz = InitializeZVector(fRunAction->MinZ, fRunAction->MaxZ, fRunAction->stepfordEdz);
   vEn = InitializeEnVector(fRunAction->MinZ, fRunAction->MaxZ, fRunAction->stepforfluence);
   const DetectorConstruction* detConstruction = static_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
-  fEdepV = Initialize_EinVol_Vector(detConstruction->GetScoringVolumes().size());
+  fEdepV = Initialize_EinVol_Vector(detConstruction->GetNPhantoms());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,29 +81,29 @@ void EventAction::EndOfEventAction(const G4Event*)
   G4AnalysisManager *man = G4AnalysisManager::Instance();
   // accumulate statistics in run action
   std::vector<G4double> doses = {};
-  for (uint i=0;i<fEdepV.size();i++){
+  mass = detConstruction->GetPhantomLVs().at(0)->GetMass();
+  /*for (uint i=0;i<fEdepV.size();i++){
   // calculate mass to conver to grays
-       if (detConstruction->GetScoringVolumes().at(i)->GetLogicalVolume()->GetName()== "template_ScoringCell_Log"){
-         mass = detConstruction->GetScoringVolumes().at(i)->GetLogicalVolume()->GetMass();
-       };
+    //   if (detConstruction->GetScoringVolumes().at(i)->GetLogicalVolume()->GetName()== "template_BrainCell_Log"){
+    //   };
 
       // dose = (fEdepV.at(i)/CLHEP::eV)/(mass*e_SI);
        doses.push_back(((fEdepV.at(i)/CLHEP::eV)*e_SI)/(mass/kg));
        //std::cout<<"MASS  "<<mass<<"    "<<kg<<"   "<<e_SI<<"   "<< "   E: "<<fEdepV.at(i)<<std::endl;
-  /*     man->FillNtupleDColumn(1,0,fEdepV.at(i));
+       man->FillNtupleDColumn(1,0,fEdepV.at(i));
        man->FillNtupleIColumn(1,1,i);
        man->FillNtupleIColumn(1,2,G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID());
        man->FillNtupleDColumn(1,3,dose);
        man->FillNtupleDColumn(1,4, detConstruction->vPos_X[i]);
        man->FillNtupleDColumn(1,5, detConstruction->vPos_Y[i]);
        man->FillNtupleDColumn(1,6, detConstruction->vPos_Z[i]);
-       man->AddNtupleRow(1);*/
+       man->AddNtupleRow(1);
        //std::cout<<"       2nd tuple FiLLINg    "<<detConstruction->vPos_X[i]<< "   "
        //<<detConstruction->vPos_Y[i]<< "   " <<detConstruction->vPos_Z[i]<< std::endl;
-  };
+  };*/
   fRunAction->AddNeutrons(fNumberOfNeutrons);
-  fRunAction->AddDoseCube(doses);
-  fRunAction->AddEdepCube(fEdepV);
+  //fRunAction->AddDoseCube(doses);
+  //fRunAction->AddEdepCube(fEdepV);
 
 
 }

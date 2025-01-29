@@ -19,6 +19,7 @@ class PhantomVolume : public G4VSensitiveDetector
     G4bool ProcessHits(G4Step* step, G4TouchableHistory* history) override;
     void EndOfEvent(G4HCofThisEvent* hitCollection) override;
 
+
   private:
       PhantomHitsCollection* fHitsCollection = nullptr;
       G4String fHitsCollectionName;

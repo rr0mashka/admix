@@ -73,27 +73,6 @@ RunAction::RunAction()
   man->CreateNtupleDColumn("Distance_fr_pr_vertex");
   man->FinishNtuple(1);
 
-  man->CreateNtuple("Doses in phantom", "Doses in phantom");
-  man->CreateNtupleDColumn("Edep");
-  man->CreateNtupleDColumn("EdepBoron");
-  man->CreateNtupleSColumn("VolumeName");
-  man->CreateNtupleDColumn("dose");
-  man->CreateNtupleDColumn("dose_boron");
-  man->CreateNtupleDColumn("X");
-  man->CreateNtupleDColumn("Y");
-  man->CreateNtupleDColumn("Z");
-  man->FinishNtuple(2);
-
-  man->CreateNtuple("Hits in detector", "Hits in detector");
-  man->CreateNtupleDColumn("Edep");
-  man->CreateNtupleSColumn("VolumeName");
-  man->CreateNtupleDColumn("dose");
-  man->CreateNtupleDColumn("X");
-  man->CreateNtupleDColumn("Y");
-  man->CreateNtupleDColumn("Z");
-  man->FinishNtuple(3);
-
-
   fEnergyCube = VectorAccumulable<G4double>();
 
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
@@ -111,9 +90,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
     fOutputfile = "output.root";
     man->OpenFile(fOutputfile);
     const DetectorConstruction* detConstruction = static_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
-    fEnergyCube.SetVectorLength(detConstruction->GetScoringVolumes().size());
-    std::cout << detConstruction->GetScoringVolumes().size() << std::endl;
-    fDoseCube.SetVectorLength(detConstruction->GetScoringVolumes().size());
+    fEnergyCube.SetVectorLength(detConstruction->GetNPhantoms());
+    fDoseCube.SetVectorLength(detConstruction->GetNPhantoms());
     G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
     accumulableManager->Reset();
 
