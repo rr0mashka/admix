@@ -27,12 +27,16 @@ public:
     std::vector<G4VPhysicalVolume*> GetScoringCubes() const {
         return fScoringCubes;
     };
+    std::vector<G4LogicalVolume*> GetSLVs() const {
+        return fLogvolumes;
+    };
 
-    void SetDetector(DetectorConstruction*);
 
 private:
     std::vector<G4VPhysicalVolume*> fScoringCubes;
     DetectorConstruction* fdet = nullptr;
+    G4LogicalVolume* template_BrainCell_Log, *template_BoneCell_Log, *template_SkinCell_Log;
+    std::vector<G4LogicalVolume*> fLogvolumes = {};
 };
 
 #endif

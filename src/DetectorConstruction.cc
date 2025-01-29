@@ -41,6 +41,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
 #include "G4CutTubs.hh"
+#include "G4SDManager.hh"
 #include "Geometry/ArchimedSpiral.hh"
 #include "Geometry/BackPlate.hh"
 #include "Geometry/FrontPlate.hh"
@@ -51,6 +52,7 @@
 #include "Geometry/MiceWoodDisk.hh"
 #include "Geometry/CellsPhantom.hh"
 #include "Geometry/SphericalPhantom.hh"
+#include "Geometry/SensitiveVolumes/PhantomVolume.hh"
 //Geometry
 
 
@@ -99,49 +101,57 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 // %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-G4double pi = CLHEP::pi;
+  G4double pi = CLHEP::pi;
 
-//  =======  placements of various parts ================================================
-auto pFrontPlate = new FrontPlate ("FrontPlate",1.75*mm, logicWorld, 1*mm );
-auto pBackPlate = new BackPlate ("BackPlate", 20*mm, logicWorld, 1*mm );
-auto pNeutronModerator = new NeutronModerator ("GlassDisk1", 30*mm, logicWorld, 2*mm );
+  //  =======  placements of various parts ================================================
+  auto pFrontPlate = new FrontPlate ("FrontPlate",1.75*mm, logicWorld, 1*mm );
+  auto pBackPlate = new BackPlate ("BackPlate", 20*mm, logicWorld, 1*mm );
+  auto pNeutronModerator = new NeutronModerator ("GlassDisk1", 30*mm, logicWorld, 2*mm );
 
-auto pCoolingPipe1 = new CoolingPipe ("Pipe1", -61.2*mm, 61.2*mm, 8.0*mm, logicWorld, 2*mm );
-auto pCoolingPipe2 = new CoolingPipe ("Pipe1", 61.2*mm, 61.2*mm, 8.0*mm, logicWorld, 2*mm );
-auto pCoolingPipe3 = new CoolingPipe ("Pipe1", 61.2*mm, -61.2*mm, 8.0*mm, logicWorld, 2*mm );
+  auto pCoolingPipe1 = new CoolingPipe ("Pipe1", -61.2*mm, 61.2*mm, 8.0*mm, logicWorld, 2*mm );
+  auto pCoolingPipe2 = new CoolingPipe ("Pipe1", 61.2*mm, 61.2*mm, 8.0*mm, logicWorld, 2*mm );
+  auto pCoolingPipe3 = new CoolingPipe ("Pipe1", 61.2*mm, -61.2*mm, 8.0*mm, logicWorld, 2*mm );
 
-auto pAcceleratorPipe = new AcceleratorPipe ("AcceleratorPipe", 1.75*mm, logicWorld, 2*mm );
+  auto pAcceleratorPipe = new AcceleratorPipe ("AcceleratorPipe", 1.75*mm, logicWorld, 2*mm );
 
-// auto pCellsPhantom = new CellsPhantom ("CellsPhantom", 120*mm, logicWorld, 2*mm);
+  // auto pCellsPhantom = new CellsPhantom ("CellsPhantom", 120*mm, logicWorld, 2*mm);
 
-//auto pMiceWoodDisk = new MiceWoodDisk ("MiceWoodDisk", 130*mm, logicWorld, 2*mm );
-// will change later, manually for now
+  //auto pMiceWoodDisk = new MiceWoodDisk ("MiceWoodDisk", 130*mm, logicWorld, 2*mm );
+  // will change later, manually for now
 
 
-/* zpos_phantom = 120*mm;
-auto pCubicPhantom = new CubicPhantom ("CubicPhantom", zpos_phantom, logicWorld, 1*mm );
-fScoringVolumes = pCubicPhantom->GetScoringCubes();
-vPos_X = pCubicPhantom->vPos_X;
-vPos_Y = pCubicPhantom->vPos_Y;
-vPos_Z = pCubicPhantom->vPos_Z; */
+  /* zpos_phantom = 120*mm;
+  auto pCubicPhantom = new CubicPhantom ("CubicPhantom", zpos_phantom, logicWorld, 1*mm );
+  fScoringVolumes = pCubicPhantom->GetScoringCubes();
+  vPos_X = pCubicPhantom->vPos_X;
+  vPos_Y = pCubicPhantom->vPos_Y;
+  vPos_Z = pCubicPhantom->vPos_Z; */
 
-    // Создание и размещение сферического фантома
-G4double phantomZPosition = 190*mm; // Установите нужное значение для Z позиции
-G4double maxStep = 1.0 * mm; // Размер максимального шага вокселей, настроить по необходимости
+      // Создание и размещение сферического фантома
+  G4double phantomZPosition = 190*mm; // Установите нужное значение для Z позиции
+  G4double maxStep = 1.0 * mm; // Размер максимального шага вокселей, настроить по необходимости
 
-SphericalPhantom* sphericalPhantom = new SphericalPhantom("SphericalPhantom", phantomZPosition, logicWorld, maxStep, 40*mm,5*mm, 5*mm);
-sphericalPhantom->SetDetector(this);
-        // Получение векторов позиций
-        vPos_X = sphericalPhantom->vPos_X;
-        vPos_Y = sphericalPhantom->vPos_Y;
-        vPos_Z = sphericalPhantom->vPos_Z;
+  fSphericalPhantom = new SphericalPhantom("SphericalPhantom", phantomZPosition, logicWorld, maxStep, 40*mm,5*mm, 5*mm);
+          // Получение векторов позиций
+  vPos_X = fSphericalPhantom->vPos_X;
+  vPos_Y = fSphericalPhantom->vPos_Y;
+  vPos_Z = fSphericalPhantom->vPos_Z;
 
-return physWorld; // Вернуть физический объем мира
+  return physWorld; // Вернуть физический объем мира
 }
 
 
-void DetectorConstruction::SetSD(G4LogicalVolume* l, G4VSensitiveDetector* sd){
-  SetSensitiveDetector(l, sd);
-}
+void DetectorConstruction::ConstructSDandField(){
+  if (fSphericalPhantom){
+    // set sensitivedetecor for spherical phantom
+    auto phantomcellSD = new PhantomVolume("phantomcellSD");
+    std::vector<G4LogicalVolume*> logvs = fSphericalPhantom->GetSLVs();
+    G4SDManager::GetSDMpointer()->AddNewDetector(phantomcellSD);
+    for (int i=0;i<logvs.size(); i++){
+      SetSensitiveDetector(logvs.at(i), phantomcellSD);
+    };
+  };
+};
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

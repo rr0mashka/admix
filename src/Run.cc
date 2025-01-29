@@ -19,10 +19,11 @@ void Run::RecordEvent(const G4Event* event)
   //
   G4HCofThisEvent* HCE = event->GetHCofThisEvent();
   if (!HCE) {
-    std::cout << "here" << std::endl;
+    std::cout << "wtf?" << std::endl;
     return;
   }
   G4int hcID = G4SDManager::GetSDMpointer()->GetCollectionID("PhantomHitsCollection");
+  std::cout << "id " << hcID << "!!!!!!!!!!!" << std::endl;
 
   PhantomHitsCollection* hitsc = static_cast<PhantomHitsCollection*>(HCE->GetHC(hcID));
 

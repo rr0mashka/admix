@@ -10,7 +10,7 @@
 class PhantomVolume : public G4VSensitiveDetector
  {
   public:
-    PhantomVolume(G4String name);
+    PhantomVolume(G4String);
     ~PhantomVolume();
 
 
@@ -21,7 +21,7 @@ class PhantomVolume : public G4VSensitiveDetector
 
   private:
       PhantomHitsCollection* fHitsCollection = nullptr;
-
+      G4String fHitsCollectionName;
 };
 
 

@@ -27,14 +27,18 @@ SphericalPhantom::SphericalPhantom(G4String name, G4double z_pos, G4LogicalVolum
         0.5 * ScoringCell_sizeXY,
         0.5 * ScoringCell_sizeZ);
 
-    G4LogicalVolume* template_BrainCell_Log = new G4LogicalVolume(
+    template_BrainCell_Log = new G4LogicalVolume(
         template_ScoringCell_Sol, PhantomMaterial, "template_BrainCell_Log");
 
-    G4LogicalVolume* template_BoneCell_Log = new G4LogicalVolume(
+    template_BoneCell_Log = new G4LogicalVolume(
         template_ScoringCell_Sol, PhantomMaterial, "template_BoneCell_Log");
 
-    G4LogicalVolume* template_SkinCell_Log = new G4LogicalVolume(
+    template_SkinCell_Log = new G4LogicalVolume(
         template_ScoringCell_Sol, PhantomMaterial, "template_SkinCell_Log");
+
+    fLogvolumes.push_back(template_BrainCell_Log);
+    fLogvolumes.push_back(template_BoneCell_Log);
+    fLogvolumes.push_back(template_SkinCell_Log);
 
     G4int N_tissuecells_XY = (int(tissueradius/ScoringCell_sizeXY)%2 == 0)? int(tissueradius/ScoringCell_sizeXY) : int(tissueradius/ScoringCell_sizeXY)+1;
     G4int N_tissuecells_Z = (int(tissueradius / ScoringCell_sizeZ)%2 == 0)? int(tissueradius / ScoringCell_sizeZ) : int(tissueradius / ScoringCell_sizeZ)+1;
@@ -187,13 +191,5 @@ SphericalPhantom::SphericalPhantom(G4String name, G4double z_pos, G4LogicalVolum
 
 
 
-    auto phantomcellSD = new PhantomVolume("phantomcellSD");
-    if (!fdet) return;
-    fdet->SetSD(template_BrainCell_Log, phantomcellSD);
-    fdet->SetSD(template_BoneCell_Log, phantomcellSD);
-    fdet->SetSD(template_SkinCell_Log, phantomcellSD);
-}
 
-void SphericalPhantom::SetDetector(DetectorConstruction* det){
-  fdet = det;
-}
+};

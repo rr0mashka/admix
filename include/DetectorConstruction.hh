@@ -38,6 +38,7 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4VSensitiveDetector;
+class SphericalPhantom;
 
 /// Detector construction class to define materials and geometry.
 
@@ -49,16 +50,19 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     ~DetectorConstruction() override = default;
 
     G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
 
     std::vector<G4VPhysicalVolume*> GetScoringVolumes() const { return fScoringVolumes; }
     std::vector<G4double> vPos_X;
     std::vector<G4double> vPos_Y;
     std::vector<G4double> vPos_Z;
     G4double zpos_phantom;
-    void SetSD(G4LogicalVolume*, G4VSensitiveDetector*);
 
   protected:
     std::vector<G4VPhysicalVolume*> fScoringVolumes = {};
+
+  private:
+    SphericalPhantom* fSphericalPhantom = nullptr;
 };
 
 

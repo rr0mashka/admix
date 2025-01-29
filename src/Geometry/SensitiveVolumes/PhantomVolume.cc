@@ -7,9 +7,10 @@
 #include "G4Track.hh"
 #include "G4ios.hh"
 
-PhantomVolume::PhantomVolume(G4String name):
+PhantomVolume::PhantomVolume(const G4String name):
 G4VSensitiveDetector(name){
-
+  fHitsCollectionName = "PhantomHitsCollection";
+  collectionName.insert("PhantomHitsCollection");
 };
 PhantomVolume::~PhantomVolume(){
 
@@ -17,10 +18,11 @@ PhantomVolume::~PhantomVolume(){
 
 void PhantomVolume::Initialize(G4HCofThisEvent* hitCollection){
   // Create hits collection
-  fHitsCollection = new PhantomHitsCollection(SensitiveDetectorName, "PhantomHitsCollection");
+  fHitsCollection = new PhantomHitsCollection(SensitiveDetectorName,fHitsCollectionName);
   // Add this collection in hce
 
-  G4int hcID = G4SDManager::GetSDMpointer()->GetCollectionID("PhantomHitsCollection");
+  G4int hcID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollectionName);
+  std::cout << "id    " << hcID << std::endl;
   hitCollection->AddHitsCollection(hcID, fHitsCollection);
 }
 
@@ -45,7 +47,7 @@ G4bool PhantomVolume::ProcessHits(G4Step* step, G4TouchableHistory* history){
   newHit->SetPos(phv->GetObjectTranslation());
 
   fHitsCollection->insert(newHit);
-  return false;
+  return true;
 }
 
 void PhantomVolume::EndOfEvent(G4HCofThisEvent* hitCollection){
