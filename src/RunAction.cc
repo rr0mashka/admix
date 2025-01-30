@@ -73,6 +73,28 @@ RunAction::RunAction()
   man->CreateNtupleDColumn("Distance_fr_pr_vertex");
   man->FinishNtuple(1);
 
+  if (IsMaster()){
+    man->CreateNtuple("Doses in phantom", "Doses in phantom");
+    man->CreateNtupleDColumn("Edep");
+    man->CreateNtupleDColumn("EdepBoron");
+    man->CreateNtupleSColumn("VolumeName");
+    man->CreateNtupleDColumn("dose");
+    man->CreateNtupleDColumn("dose_boron");
+    man->CreateNtupleDColumn("X");
+    man->CreateNtupleDColumn("Y");
+    man->CreateNtupleDColumn("Z");
+    man->FinishNtuple(2);
+
+    man->CreateNtuple("Hits in detector", "Hits in detector");
+    man->CreateNtupleDColumn("Edep");
+    man->CreateNtupleSColumn("VolumeName");
+    man->CreateNtupleDColumn("dose");
+    man->CreateNtupleDColumn("X");
+    man->CreateNtupleDColumn("Y");
+    man->CreateNtupleDColumn("Z");
+    man->FinishNtuple(3);
+  }
+
   fEnergyCube = VectorAccumulable<G4double>();
 
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
@@ -109,14 +131,13 @@ void RunAction::EndOfRunAction(const G4Run*)
     G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
     accumulableManager->Merge();
     if (IsMaster()){
+      G4String output2 = "Run_" + fOutputfile;
+      fRun->SetFileName(output2);
       fRun->EndOfRun();
-
-
       std::vector<G4double> EnCubes = fEnergyCube.GetVector();
       std::vector<G4double> DoseCubes = fDoseCube.GetVector();
-      std::cout << EnCubes.size() << std::endl;
       const DetectorConstruction* detConstruction = static_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
-      G4String output2 = "Run_" + fOutputfile;
+    /*  G4String output2 = "Run_" + fOutputfile;
       TFile *file = new TFile(output2,"recreate");
       G4int VolumeId;
       G4double X, Y, Z;
@@ -138,7 +159,7 @@ void RunAction::EndOfRunAction(const G4Run*)
         treecub->Fill();
       }
       treecub->Write();
-      file->Close();
+      file->Close();*/
       std::cout << "Number of produced neutrons in this run " << fNumberOfNeutrons.GetValue() << std::endl;
     };
 

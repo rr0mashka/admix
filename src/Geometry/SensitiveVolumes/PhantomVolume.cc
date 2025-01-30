@@ -12,9 +12,6 @@ G4VSensitiveDetector(name){
   fHitsCollectionName = "PhantomHitsCollection";
   collectionName.insert("PhantomHitsCollection");
 };
-PhantomVolume::~PhantomVolume(){
-
-}
 
 void PhantomVolume::Initialize(G4HCofThisEvent* hitCollection){
   // Create hits collection
@@ -26,10 +23,12 @@ void PhantomVolume::Initialize(G4HCofThisEvent* hitCollection){
 }
 
 G4bool PhantomVolume::ProcessHits(G4Step* step, G4TouchableHistory* history){
+  std::cout << "here!!!!!!!!!!!!!!!!1" << std::endl;
   G4double edep = step->GetTotalEnergyDeposit();
 
   if (edep == 0.) return false;
 
+  std::cout << "here!!!" << std::endl;
   auto newHit = new PhantomHit();
 
   G4VPhysicalVolume *phv = step->GetPostStepPoint()->GetPhysicalVolume();

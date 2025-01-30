@@ -21,6 +21,7 @@ class Run : public G4Run
     void RecordEvent(const G4Event*) override;
     void Merge(const G4Run*) override;
     void EndOfRun();
+    void SetFileName(G4String);
 
   public:
   //  G4int GetNbGoodEvents() const { return fGoodEvents; }
@@ -30,6 +31,7 @@ class Run : public G4Run
   private:
     std::map<G4String, G4double> fEdepMap;
     std::map<G4String, G4double> fEdepBoronMap;
+    G4String fFileName = " ";
 };
 
 #endif

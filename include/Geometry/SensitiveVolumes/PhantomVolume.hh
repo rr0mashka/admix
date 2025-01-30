@@ -11,7 +11,8 @@ class PhantomVolume : public G4VSensitiveDetector
  {
   public:
     PhantomVolume(G4String);
-    ~PhantomVolume();
+    ~PhantomVolume() override = default;
+
 
 
     // methods from base class

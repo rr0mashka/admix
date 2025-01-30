@@ -9,6 +9,8 @@
 #include "PhantomHit.hh"
 #include "G4AnalysisManager.hh"
 #include "G4PhysicalVolumeStore.hh"
+#include "TFile.h"
+#include "TTree.h"
 
 
 void Run::RecordEvent(const G4Event* event)
@@ -59,29 +61,23 @@ void Run::Merge(const G4Run* run)
 
 void Run::EndOfRun(){
     G4AnalysisManager *man = G4AnalysisManager::Instance();
-    man->CreateNtuple("Doses in phantom", "Doses in phantom");
-    man->CreateNtupleDColumn("Edep");
-    man->CreateNtupleDColumn("EdepBoron");
-    man->CreateNtupleSColumn("VolumeName");
-    man->CreateNtupleDColumn("dose");
-    man->CreateNtupleDColumn("dose_boron");
-    man->CreateNtupleDColumn("X");
-    man->CreateNtupleDColumn("Y");
-    man->CreateNtupleDColumn("Z");
-    man->FinishNtuple(2);
 
-    man->CreateNtuple("Hits in detector", "Hits in detector");
-    man->CreateNtupleDColumn("Edep");
-    man->CreateNtupleSColumn("VolumeName");
-    man->CreateNtupleDColumn("dose");
-    man->CreateNtupleDColumn("X");
-    man->CreateNtupleDColumn("Y");
-    man->CreateNtupleDColumn("Z");
-    man->FinishNtuple(3);
     std::map<G4String, G4double>::const_iterator it;
     G4VPhysicalVolume* volume;
-    G4double mass, Edep, EdepBoron, dose, doseboron;
     G4PhysicalVolumeStore* volumeStore = G4PhysicalVolumeStore::GetInstance();
+    G4String output2 = "Run_" + fFileName;
+    TFile *file = new TFile(output2,"recreate");
+    char VolumeName[25];
+    G4double X, Y, Z;
+    G4double Edep, EdepBoron, dose, mass, doseboron;
+    TTree *treecub = new TTree("Dose_in_volume_N","Dose_in_volume_N");
+    treecub->Branch("Edep", &Edep,"Edep/D");
+    treecub->Branch("EdepBoron", &EdepBoron,"EdepBoron/D");
+    treecub->Branch("VolumeName",&VolumeName, "VolumeName/C");
+    treecub->Branch("dose",&dose,"dose/D");
+    treecub->Branch("X",&X,"X/D");
+    treecub->Branch("Y",&Y,"Y/D");
+    treecub->Branch("Z",&Z,"Z/D");
     for (it = fEdepMap.begin(); it !=fEdepMap.end(); ++it) {
       volume = volumeStore->GetVolume(it->first);
       Edep = it->second;
@@ -89,14 +85,15 @@ void Run::EndOfRun(){
       mass = volume->GetLogicalVolume()->GetMass();
       dose = ((Edep/CLHEP::eV)*e_SI)/(mass/kg);
       doseboron = ((EdepBoron/CLHEP::eV)*e_SI)/(mass/kg);
-      man->FillNtupleDColumn(2,0,Edep);
-      man->FillNtupleDColumn(2,1,EdepBoron);
-      man->FillNtupleSColumn(2,2,it->first);
-      man->FillNtupleDColumn(2,3,dose);
-      man->FillNtupleDColumn(2,4,doseboron);
-      man->FillNtupleDColumn(2,5,volume->GetTranslation().X);
-      man->FillNtupleDColumn(2,6,volume->GetTranslation().Y);
-      man->FillNtupleDColumn(2,7,volume->GetTranslation().Z);
-      man->AddNtupleRow(2);
+      strcpy(VolumeName,it->first.c_str());
+      X = volume->GetTranslation().X; Y=volume->GetTranslation().Y; Z = volume->GetTranslation().Z;
+      treecub->Fill();
     };
+    treecub->Write();
+    file->Close();
 };
+
+
+void Run::SetFileName(G4String str){
+  fFileName = str;
+}

@@ -91,7 +91,7 @@ SphericalPhantom::SphericalPhantom(G4String name, G4double z_pos, G4LogicalVolum
                         0,
                         false);
 
-                    fScoringCubes.push_back(phys_vol);
+//                    fScoringCubes.push_back(phys_vol);
                     // Заполнение векторов позиций
                     vPos_X.push_back(Cell_posX);
                     vPos_Y.push_back(Cell_posY);
@@ -130,7 +130,7 @@ SphericalPhantom::SphericalPhantom(G4String name, G4double z_pos, G4LogicalVolum
                         0,
                         false);
 
-                    fScoringCubes.push_back(phys_vol);
+//                    fScoringCubes.push_back(phys_vol);
                     // Заполнение векторов позиций
                     vPos_X.push_back(Cell_posX);
                     vPos_Y.push_back(Cell_posY);
@@ -170,7 +170,7 @@ SphericalPhantom::SphericalPhantom(G4String name, G4double z_pos, G4LogicalVolum
                         false);
 
 
-                    fScoringCubes.push_back(phys_vol);
+//                    fScoringCubes.push_back(phys_vol);
                     // Заполнение векторов позиций
                     vPos_X.push_back(Cell_posX);
                     vPos_Y.push_back(Cell_posY);

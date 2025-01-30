@@ -138,9 +138,16 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   };
 
   G4VPhysicalVolume* volume  = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
-  if (fScoringVolumes.size() == 0) {
+  /*if (volume) {
+    if (volume->GetLogicalVolume()) {
+      if ((volume->GetLogicalVolume()->GetName() == "template_BrainCell_Log") || (volume->GetLogicalVolume()->GetName() == "template_SkinCell_Log") || (volume->GetLogicalVolume()->GetName() == "template_BoneCell_Log")){
+        std::cout << volume->GetLogicalVolume()->GetName() << std::endl;
+      }
+    }
+  };*/
+  /*if (fScoringVolumes.size() == 0) {
       fScoringVolumes = detConstruction->GetPhantomLVs();
-  };
+  };*/
 
   /*for (uint i = 0; i<fScoringVolumes.size(); i++){
     if (volume->GetLogicalVolume() == fScoringVolumes.at(i)){
