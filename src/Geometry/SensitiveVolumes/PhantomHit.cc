@@ -1,5 +1,5 @@
 
-#include "PhantomHit.hh"
+#include "Geometry/SensitiveVolumes/PhantomHit.hh"
 
 #include "G4Circle.hh"
 #include "G4Colour.hh"

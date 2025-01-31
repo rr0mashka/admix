@@ -73,7 +73,7 @@ RunAction::RunAction()
   man->CreateNtupleDColumn("Distance_fr_pr_vertex");
   man->FinishNtuple(1);
 
-  if (IsMaster()){
+  /*if (IsMaster()){
     man->CreateNtuple("Doses in phantom", "Doses in phantom");
     man->CreateNtupleDColumn("Edep");
     man->CreateNtupleDColumn("EdepBoron");
@@ -93,7 +93,7 @@ RunAction::RunAction()
     man->CreateNtupleDColumn("Y");
     man->CreateNtupleDColumn("Z");
     man->FinishNtuple(3);
-  }
+  }*/
 
   fEnergyCube = VectorAccumulable<G4double>();
 
@@ -145,7 +145,7 @@ void RunAction::EndOfRunAction(const G4Run*)
       TTree *treecub = new TTree("Dose_in_volume_N","Dose_in_volume_N");
       treecub->Branch("Edep", &Edep,"Edep/D");
       treecub->Branch("VolumeId",&VolumeId,"VolumeId/I");
-      treecub->Branch("dose",&dose,"dose/D");
+      treecub->BranDose_in_volume_Nch("dose",&dose,"dose/D");
       treecub->Branch("X",&X,"X/D");
       treecub->Branch("Y",&Y,"Y/D");
       treecub->Branch("Z",&Z,"Z/D");

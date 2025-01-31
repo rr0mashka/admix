@@ -6,7 +6,7 @@
 #include "G4SDManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4THitsMap.hh"
-#include "PhantomHit.hh"
+#include "Geometry/SensitiveVolumes/PhantomHit.hh"
 #include "G4AnalysisManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "TFile.h"
@@ -70,7 +70,7 @@ void Run::EndOfRun(){
     char VolumeName[25];
     G4double X, Y, Z;
     G4double Edep, EdepBoron, dose, mass, doseboron;
-    TTree *treecub = new TTree("Dose_in_volume_N","Dose_in_volume_N");
+    TTree *treecub = new TTree("Doses in phantom","Doses in phantom");
     treecub->Branch("Edep", &Edep,"Edep/D");
     treecub->Branch("EdepBoron", &EdepBoron,"EdepBoron/D");
     treecub->Branch("VolumeName",&VolumeName, "VolumeName/C");

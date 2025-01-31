@@ -5,7 +5,7 @@
 #include "G4VSolid.hh"
 #include "globals.hh"
 #include "G4VSensitiveDetector.hh"
-#include "PhantomHit.hh"
+#include "Geometry/SensitiveVolumes/PhantomHit.hh"
 
 class PhantomVolume : public G4VSensitiveDetector
  {

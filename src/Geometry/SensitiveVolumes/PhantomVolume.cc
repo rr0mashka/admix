@@ -23,7 +23,6 @@ void PhantomVolume::Initialize(G4HCofThisEvent* hitCollection){
 }
 
 G4bool PhantomVolume::ProcessHits(G4Step* step, G4TouchableHistory* history){
-  std::cout << "here!!!!!!!!!!!!!!!!1" << std::endl;
   G4double edep = step->GetTotalEnergyDeposit();
 
   if (edep == 0.) return false;
