@@ -86,7 +86,7 @@ void Run::EndOfRun(){
       dose = ((Edep/CLHEP::eV)*e_SI)/(mass/kg);
       doseboron = ((EdepBoron/CLHEP::eV)*e_SI)/(mass/kg);
       strcpy(VolumeName,it->first.c_str());
-      X = volume->GetTranslation().X; Y=volume->GetTranslation().Y; Z = volume->GetTranslation().Z;
+      X = volume->GetTranslation().x(); Y=volume->GetTranslation().y(); Z = volume->GetTranslation().z();
       treecub->Fill();
     };
     treecub->Write();
