@@ -114,7 +114,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   auto pAcceleratorPipe = new AcceleratorPipe ("AcceleratorPipe", 1.75*mm, logicWorld, 2*mm );
 
-  // auto pCellsPhantom = new CellsPhantom ("CellsPhantom", 120*mm, logicWorld, 2*mm);
+  auto pCellsPhantom = new CellsPhantom ("CellsPhantom", 120*mm, logicWorld, 2*mm);
+  vPos_X = pCellsPhantom->vPos_X;
+  vPos_Y = pCellsPhantom->vPos_Y;
+  vPos_Z = pCellsPhantom->vPos_Z;
 
   //auto pMiceWoodDisk = new MiceWoodDisk ("MiceWoodDisk", 130*mm, logicWorld, 2*mm );
   // will change later, manually for now
@@ -128,7 +131,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   vPos_Z = pCubicPhantom->vPos_Z; */
 
       // Создание и размещение сферического фантома
-  G4double phantomZPosition = 190*mm; // Установите нужное значение для Z позиции
+  /*G4double phantomZPosition = 190*mm; // Установите нужное значение для Z позиции
   G4double maxStep = 1.0 * mm; // Размер максимального шага вокселей, настроить по необходимости
 
   fSphericalPhantom = new SphericalPhantom("SphericalPhantom", phantomZPosition, logicWorld, maxStep, 40*mm,5*mm, 5*mm);
@@ -136,17 +139,17 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //fScoringVolumes = fSphericalPhantom->GetScoringCubes();
   vPos_X = fSphericalPhantom->vPos_X;
   vPos_Y = fSphericalPhantom->vPos_Y;
-  vPos_Z = fSphericalPhantom->vPos_Z;
+  vPos_Z = fSphericalPhantom->vPos_Z;*/
 
   return physWorld; // Вернуть физический объем мира
 }
 
 
 void DetectorConstruction::ConstructSDandField(){
-  if (fSphericalPhantom){
+  if (pCellsPhantom){
     // set sensitivedetecor for spherical phantom
     auto phantomcellSD = new PhantomVolume("phantomcellSD");
-    std::vector<G4LogicalVolume*> logvs = fSphericalPhantom->GetSLVs();
+    std::vector<G4LogicalVolume*> logvs = pCellsPhantom->GetSLVs();
     G4SDManager::GetSDMpointer()->AddNewDetector(phantomcellSD);
     for (int i=0;i<logvs.size(); i++){
       std::cout << logvs.at(i)->GetName() << std::endl;

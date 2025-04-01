@@ -32,7 +32,8 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
-#include "Geometry/SphericalPhantom.hh"
+//#include "Geometry/SphericalPhantom.hh"
+#include "Geometry/CellsPhantom.hh"
 #include <vector>
 
 
@@ -59,8 +60,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4double zpos_phantom;
 
     std::vector<G4LogicalVolume*> GetPhantomLVs() const {
-        if (!fSphericalPhantom) return {};
-        return fSphericalPhantom->GetSLVs();
+        if (!pCellsPhantom) return {};
+        return pCellsPhantom->GetSLVs();
     };
     G4int GetNPhantoms() const {
       return vPos_X.size();
@@ -70,7 +71,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     std::vector<G4VPhysicalVolume*> fScoringVolumes = {};
 
   private:
-    SphericalPhantom* fSphericalPhantom = nullptr;
+    CellsPhantom* pCellsPhantom = nullptr;
 };
 
 
