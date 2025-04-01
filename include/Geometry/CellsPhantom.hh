@@ -26,7 +26,7 @@ G4double PhantomDisk_Diamter = 220.0 * mm;
 G4double PhantomDisk_Width = 50 * mm;
 
 G4double ScoringCell_radius = 8.0 * mm;   // Размер кубического вокселя в XY
-G4double ScoringCell_sizeZ = 2.0 * mm;    // Размер кубического вокселя в Z
+G4double ScoringCell_sizeZ = 10 * mm;    // Размер кубического вокселя в Z
 
 // Добавление векторов для координат
 std::vector<G4double> vPos_X;

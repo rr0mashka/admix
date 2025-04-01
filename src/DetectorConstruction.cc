@@ -114,10 +114,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   auto pAcceleratorPipe = new AcceleratorPipe ("AcceleratorPipe", 1.75*mm, logicWorld, 2*mm );
 
-  auto pCellsPhantom = new CellsPhantom ("CellsPhantom", 120*mm, logicWorld, 2*mm);
-  vPos_X = pCellsPhantom->vPos_X;
-  vPos_Y = pCellsPhantom->vPos_Y;
-  vPos_Z = pCellsPhantom->vPos_Z;
+  pCellsPhantom = new CellsPhantom ("CellsPhantom", 140*mm, logicWorld, 2*mm);
+    vPos_X = pCellsPhantom->vPos_X;
+    vPos_Y = pCellsPhantom->vPos_Y;
+    vPos_Z = pCellsPhantom->vPos_Z;
 
   //auto pMiceWoodDisk = new MiceWoodDisk ("MiceWoodDisk", 130*mm, logicWorld, 2*mm );
   // will change later, manually for now

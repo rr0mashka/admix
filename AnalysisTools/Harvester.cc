@@ -1,6 +1,7 @@
 {
-TFile *f = new TFile("/home/azarkin/MedPhys/V7/BNCT-build/output_10.root");
-TFile* fout = new TFile("./HarverstedHistos_10.root", "RECREATE");
+TFile *f1 = new TFile("/home/yana/Geant4/geant4-projects/devSD/build/output.root");
+//TFile *f2 = new TFile("/home/yana/Geant4/geant4-projects/devSD/build/output.root");
+TFile* fout = new TFile("./HarverstedHistos.root", "RECREATE");
 
 
   gROOT->Reset();
@@ -53,19 +54,21 @@ gStyle->SetLineStyleString(11,"32 18");
 
 //==============================================================================
 
-   TTree *t1 = (TTree*)f->Get("Fluences");
-   double X, Y, Zsurf, Energy;
+   //TTree *t1 = (TTree*)f1->Get("Doses in phantom");
+   TTree *t1 = (TTree*)f1->Get("Fluences");
+   double X, Y, Energy, Zsurf;
    int particle_id;
    char particle_name[50];
    int Event;
 
    t1->SetBranchAddress("X",&X);
    t1->SetBranchAddress("Y",&Y);
-   t1->SetBranchAddress("Zsurf",&Zsurf);
    t1->SetBranchAddress("Energy",&Energy);
+   t1->SetBranchAddress("Zsurf",&Zsurf);
    t1->SetBranchAddress("particle_id",&particle_id);
    t1->SetBranchAddress("particle_name",&particle_name);
-   //t1->SetBranchAddress("Event",&Event);
+   //t1->SetBranchAddress("dose",&dose);
+   t1->SetBranchAddress("Event",&Event);
 
 
    vector<float> Energy1D_Binning;
@@ -83,6 +86,9 @@ gStyle->SetLineStyleString(11,"32 18");
    TH1F *hSpectrum   = new TH1F("hSpectrum ","Neutron Energy Spectrum",(int)Energy1D_Binning.size() - 1 , &Energy1D_Binning[0]);
 
    TH2F  *hFluence2D  = new TH2F("hFluences2d ","Output Neutron Field Spot ",30,-120,+120, 30,-120,+120);
+   TH2F  *hHead2Ds1  = new TH2F("hHead2Ds1","Dose slice 1",20,-50, 50, 20,-50, 50);
+   TH2F  *hHead2Ds2  = new TH2F("hHead2Ds2","Dose slice 2",20,-50, 50, 20,-50, 50);
+   TH2F  *hHead2Ds3  = new TH2F("hHead2Ds3","Dose slice 3",20,-50, 50, 20,-50, 50);
    TH2F  *hNeutronFlux_vs_Z_En1  = new TH2F("NeutronFlux_vs_Z_En1","Neutron Field Profile", 250,-300, 200, 100, 0,+200);
    TH2F  *hNeutronFlux_vs_Z_En2  = new TH2F("NeutronFlux_vs_Z_En2","Neutron Field Profile", 250,-300, 200, 100, 0,+200);
    TH2F  *hNeutronFlux_vs_Z_En3  = new TH2F("NeutronFlux_vs_Z_En3","Neutron Field Profile", 250,-300, 200, 100, 0,+200);
@@ -111,7 +117,7 @@ gStyle->SetLineStyleString(11,"32 18");
      t1 -> GetEntry(i);
 
       // if(particle_id == 2212) {   //protons
-      if(particle_id == 2112) {    //neutrons
+      //if(particle_id == 2112) {    //neutrons
 
         double R = sqrt(pow(X,2)+pow(Y,2));
         int R_int = (int) R/Bin_width;
@@ -148,9 +154,17 @@ gStyle->SetLineStyleString(11,"32 18");
             if(R <  50) hFluence_phi_1 -> Fill(phi);
             if(R >= 50 && R < 75) hFluence_phi_2 -> Fill(phi);
             if(R >= 75 && R < 100) hFluence_phi_3-> Fill(phi);
-           }
 
-         }
+           if (Zsurf>140 && Zsurf<150){
+             hHead2Ds1 -> Fill(X,Y, Energy);
+          }
+          if (Zsurf>185 && Zsurf<195){
+             hHead2Ds2 -> Fill(X,Y, Energy);
+           }
+          if (Zsurf>230 && Zsurf<240){
+             hHead2Ds3 -> Fill(X,Y, Energy);
+           }
+     }
        }
      //if(strcmp(particle_name, "alpha") == 0 ) hFluence[4] -> Fill(Zsurf);
      //if(strcmp(particle_name, "alpha") == 0 ) cout<< particle_name << "   PDG ID = "<< particle_id <<endl;
@@ -158,7 +172,7 @@ gStyle->SetLineStyleString(11,"32 18");
 
 //====================  Making plots   =========================================
 
-c1 = new TCanvas("c1", "c1", 960, 720);
+TCanvas *c1 = new TCanvas("c1", "c1", 960, 720);
 
 hSpectrum->GetYaxis()->SetTickLength(0.02);
 hSpectrum->GetYaxis()->SetNdivisions(505);
@@ -276,6 +290,65 @@ hNeutronFlux_vs_Z_En3->GetYaxis()->SetTitleFont(42);
 hNeutronFlux_vs_Z_En3->GetXaxis()->SetTitleFont(42);
 hNeutronFlux_vs_Z_En3->Draw("colz");
 
+TCanvas *x = new TCanvas("x", "x", 960, 720);
+
+hHead2Ds1->GetYaxis()->SetTickLength(0.02);
+hHead2Ds1->GetYaxis()->SetNdivisions(505);
+hHead2Ds1->GetXaxis()->CenterTitle();
+hHead2Ds1->GetYaxis()->CenterTitle();
+hHead2Ds1->GetYaxis()->SetTitle("y (mm)");
+hHead2Ds1->GetXaxis()->SetTitle("x (mm)");
+hHead2Ds1->GetYaxis()->SetTitleSize(0.045*TextSizeScale);
+hHead2Ds1->GetYaxis()->SetTitleOffset(1.2);
+hHead2Ds1->GetXaxis()->SetTitleSize(0.045*TextSizeScale);
+hHead2Ds1->GetXaxis()->SetTitleOffset(1.0);
+hHead2Ds1->GetYaxis()->SetLabelSize(0.04*TextSizeScale);
+hHead2Ds1->GetXaxis()->SetLabelSize(0.04*TextSizeScale);
+hHead2Ds1->GetYaxis()->SetLabelFont(42);
+hHead2Ds1->GetYaxis()->SetTitleFont(42);
+hHead2Ds1->GetXaxis()->SetTitleFont(42);
+//hHead2Ds1->GetZaxis()->SetRangeUser(0, 12e-9);
+hHead2Ds1->Draw("colz");
+
+TCanvas *y = new TCanvas("y", "y", 960, 720);
+
+hHead2Ds2->GetYaxis()->SetTickLength(0.02);
+hHead2Ds2->GetYaxis()->SetNdivisions(505);
+hHead2Ds2->GetXaxis()->CenterTitle();
+hHead2Ds2->GetYaxis()->CenterTitle();
+hHead2Ds2->GetYaxis()->SetTitle("y (mm)");
+hHead2Ds2->GetXaxis()->SetTitle("x (mm)");
+hHead2Ds2->GetYaxis()->SetTitleSize(0.045*TextSizeScale);
+hHead2Ds2->GetYaxis()->SetTitleOffset(1.2);
+hHead2Ds2->GetXaxis()->SetTitleSize(0.045*TextSizeScale);
+hHead2Ds2->GetXaxis()->SetTitleOffset(1.0);
+hHead2Ds2->GetYaxis()->SetLabelSize(0.04*TextSizeScale);
+hHead2Ds2->GetXaxis()->SetLabelSize(0.04*TextSizeScale);
+hHead2Ds2->GetYaxis()->SetLabelFont(42);
+hHead2Ds2->GetYaxis()->SetTitleFont(42);
+hHead2Ds2->GetXaxis()->SetTitleFont(42);
+//hHead2Ds2->GetZaxis()->SetRangeUser(0, 12e-9);
+hHead2Ds2->Draw("colz");
+
+TCanvas *z = new TCanvas("z", "z", 960, 720);
+
+hHead2Ds3->GetYaxis()->SetTickLength(0.02);
+hHead2Ds3->GetYaxis()->SetNdivisions(505);
+hHead2Ds3->GetXaxis()->CenterTitle();
+hHead2Ds3->GetYaxis()->CenterTitle();
+hHead2Ds3->GetYaxis()->SetTitle("y (mm)");
+hHead2Ds3->GetXaxis()->SetTitle("x (mm)");
+hHead2Ds3->GetYaxis()->SetTitleSize(0.045*TextSizeScale);
+hHead2Ds3->GetYaxis()->SetTitleOffset(1.2);
+hHead2Ds3->GetXaxis()->SetTitleSize(0.045*TextSizeScale);
+hHead2Ds3->GetXaxis()->SetTitleOffset(1.0);
+hHead2Ds3->GetYaxis()->SetLabelSize(0.04*TextSizeScale);
+hHead2Ds3->GetXaxis()->SetLabelSize(0.04*TextSizeScale);
+hHead2Ds3->GetYaxis()->SetLabelFont(42);
+hHead2Ds3->GetYaxis()->SetTitleFont(42);
+hHead2Ds3->GetXaxis()->SetTitleFont(42);
+//hHead2Ds3->GetZaxis()->SetRangeUser(0, 12e-9);
+hHead2Ds3->Draw("colz");
 
 TCanvas *c4 = new TCanvas("c4", "c4", 960, 720);
 hFluence1D_1->GetYaxis()->SetTickLength(0.02);
@@ -319,7 +392,6 @@ hFluence1D_3->SetLineStyle(ModelAttr[2].LineStyle);
 //hFluence1D_1[i]->SetMarkerColor(ModelAttr[0].colour);
 //hFluence1D_1[i]->SetMarkerSize(ModelAttr[0].size);
 hFluence1D_3->Draw(ModelAttr[2].option);
-
 
 TLegend* legend_1 = new TLegend(0.50, 0.70, 0.80, 0.90);//
 legend_1->SetTextSize(0.040);
@@ -402,6 +474,10 @@ fout->WriteObject(hSpectrum, "Spectrum1D");
 
 
 fout->WriteObject(hFluence2D , "Fluence2D");
+fout->WriteObject(hHead2Ds1, "head slice 1");
+fout->WriteObject(hHead2Ds2, "head slice 2");
+fout->WriteObject(hHead2Ds3, "head slice 3");
+
 fout->WriteObject(hNeutronFlux_vs_Z_En1 , "NeutronFlux_vs_Z_En1");
 fout->WriteObject(hNeutronFlux_vs_Z_En2 , "NeutronFlux_vs_Z_En2");
 fout->WriteObject(hNeutronFlux_vs_Z_En3 , "NeutronFlux_vs_Z_En3");
