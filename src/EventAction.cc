@@ -81,7 +81,7 @@ void EventAction::EndOfEventAction(const G4Event*)
   G4AnalysisManager *man = G4AnalysisManager::Instance();
   // accumulate statistics in run action
   std::vector<G4double> doses = {};
-  mass = detConstruction->GetPhantomLVs().at(0)->GetMass();
+  // mass = detConstruction->GetPhantomLVs().at(0)->GetMass();
   /*for (uint i=0;i<fEdepV.size();i++){
   // calculate mass to conver to grays
     //   if (detConstruction->GetScoringVolumes().at(i)->GetLogicalVolume()->GetName()== "template_BrainCell_Log"){
