@@ -171,4 +171,4 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
     pPhantomDisk_Log->SetUserLimits(fStepLimit);
     template_Cells_Log->SetUserLimits(fStepLimit);
 
-    }
+}

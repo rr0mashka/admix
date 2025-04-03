@@ -54,10 +54,23 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void ConstructSDandField() override;
 
     std::vector<G4VPhysicalVolume*> GetScoringVolumes() const { return fScoringVolumes; }
+    G4String GetWorldLogName() const{
+      if (!logicWorld) return "";
+      return logicWorld->GetName();
+    }
     std::vector<G4double> vPos_X;
     std::vector<G4double> vPos_Y;
     std::vector<G4double> vPos_Z;
     G4double zpos_phantom;
+    void SetSensMotherPhys(G4String log, G4String phys){
+      fMotherPhys[log] = phys;
+    }
+
+    G4String GetSensMotherPhys(G4String log) const{
+      std::map<G4String, G4String>::const_iterator it = fMotherPhys.find(log);
+      if (it!=fMotherPhys.end()) return it->second;
+      return "";
+    };
 
     std::vector<G4LogicalVolume*> GetPhantomLVs() const {
         if (!pCellsPhantom) return {};
@@ -67,11 +80,14 @@ class DetectorConstruction : public G4VUserDetectorConstruction
       return vPos_X.size();
     }
 
+    std::map<G4String, G4double> fEdepMap;
   protected:
     std::vector<G4VPhysicalVolume*> fScoringVolumes = {};
 
   private:
     CellsPhantom* pCellsPhantom = nullptr;
+    G4LogicalVolume* logicWorld = nullptr;
+    std::map<G4String, G4String> fMotherPhys;
 };
 
 

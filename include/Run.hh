@@ -32,6 +32,7 @@ class Run : public G4Run
     std::map<G4String, G4double> fEdepMap;
     std::map<G4String, G4double> fEdepBoronMap;
     G4String fFileName = " ";
+    G4String fWorldlogicalName;
 };
 
 #endif

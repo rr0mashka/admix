@@ -45,6 +45,7 @@ class PhantomHit : public G4VHit
     G4double fEdepBoron = 0;
     G4ThreeVector fPos;
     G4String fVolName;
+    G4String fMotherPhys;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

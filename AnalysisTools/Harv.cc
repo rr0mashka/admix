@@ -1,6 +1,6 @@
 {
-TFile *f1 = new TFile("/Users/macbookair/geant4-build/bnct/build/Run_Run_output.root");
-TFile* fout = new TFile("./HarverstHistos.root", "RECREATE");
+TFile *f1 = new TFile("../../BNCT-build/Run_Run_output.root");
+TFile* fout = new TFile("../../BNCT-build/HarverstHistos.root", "RECREATE");
 
 
   gROOT->Reset();

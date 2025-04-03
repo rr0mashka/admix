@@ -11,7 +11,7 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "TFile.h"
 #include "TTree.h"
-
+#include "DetectorConstruction.hh"
 
 void Run::RecordEvent(const G4Event* event)
 {
@@ -21,7 +21,7 @@ void Run::RecordEvent(const G4Event* event)
   //
   G4HCofThisEvent* HCE = event->GetHCofThisEvent();
   if (!HCE) {
-    std::cout << "wtf?" << std::endl;
+    std::cout << "No sensitive detector" << std::endl;
     return;
   }
   G4int hcID = G4SDManager::GetSDMpointer()->GetCollectionID("PhantomHitsCollection");
@@ -61,9 +61,10 @@ void Run::Merge(const G4Run* run)
 
 void Run::EndOfRun(){
     G4AnalysisManager *man = G4AnalysisManager::Instance();
-
+    const DetectorConstruction* detConstruction = static_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+    fWorldlogicalName = detConstruction->GetWorldLogName();
     std::map<G4String, G4double>::const_iterator it;
-    G4VPhysicalVolume* volume;
+    G4VPhysicalVolume* volume, *mothvol;
     G4PhysicalVolumeStore* volumeStore = G4PhysicalVolumeStore::GetInstance();
     G4String output2 = "Run_" + fFileName;
     TFile *file = new TFile(output2,"recreate");
@@ -78,6 +79,8 @@ void Run::EndOfRun(){
     treecub->Branch("X",&X,"X/D");
     treecub->Branch("Y",&Y,"Y/D");
     treecub->Branch("Z",&Z,"Z/D");
+    G4double xpar, ypar, zpar;
+    G4String mothphysvolname;
     for (it = fEdepMap.begin(); it !=fEdepMap.end(); ++it) {
       volume = volumeStore->GetVolume(it->first);
       Edep = it->second;
@@ -86,7 +89,19 @@ void Run::EndOfRun(){
       dose = ((Edep/CLHEP::eV)*e_SI)/(mass/kg);
       doseboron = ((EdepBoron/CLHEP::eV)*e_SI)/(mass/kg);
       strcpy(VolumeName,it->first.c_str());
-      X = volume->GetTranslation().x(); Y=volume->GetTranslation().y(); Z = volume->GetTranslation().z();
+      if (volume->GetMotherLogical()->GetName() == fWorldlogicalName){
+        X = volume->GetTranslation().x(); Y=volume->GetTranslation().y(); Z = volume->GetTranslation().z();
+      } else {
+        mothphysvolname =  detConstruction->GetSensMotherPhys(volume->GetLogicalVolume()->GetName());
+        if (mothphysvolname!=""){
+          mothvol = volumeStore->GetVolume(mothphysvolname);
+          xpar = mothvol->GetTranslation().x(); ypar = mothvol->GetTranslation().y(); zpar = mothvol->GetTranslation().z();
+          X = xpar + volume->GetTranslation().x(); Y=ypar + volume->GetTranslation().y(); Z = zpar + volume->GetTranslation().z();
+        }
+        else {
+          std::cout << "Mother phys volume not found!" << std::endl;
+        }
+      };
       treecub->Fill();
     };
     treecub->Write();

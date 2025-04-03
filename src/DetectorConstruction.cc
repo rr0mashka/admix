@@ -86,7 +86,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   auto solidWorld = new G4Box("World",                           // its name
     0.5 * world_sizeXY, 0.5 * world_sizeXY, 0.5 * world_sizeZ);  // its size
 
-  auto logicWorld = new G4LogicalVolume(solidWorld,  // its solid
+  logicWorld = new G4LogicalVolume(solidWorld,  // its solid
     world_mat,                                       // its material
     "World");                                        // its name
 
@@ -150,6 +150,7 @@ void DetectorConstruction::ConstructSDandField(){
     // set sensitivedetecor for spherical phantom
     auto phantomcellSD = new PhantomVolume("phantomcellSD");
     std::vector<G4LogicalVolume*> logvs = pCellsPhantom->GetSLVs();
+    SetSensMotherPhys("template_Cells_Log","PhantomDisk_Phys");
     G4SDManager::GetSDMpointer()->AddNewDetector(phantomcellSD);
     for (int i=0;i<logvs.size(); i++){
       std::cout << logvs.at(i)->GetName() << std::endl;

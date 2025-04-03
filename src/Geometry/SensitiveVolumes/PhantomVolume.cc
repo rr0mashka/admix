@@ -27,10 +27,9 @@ G4bool PhantomVolume::ProcessHits(G4Step* step, G4TouchableHistory* history){
 
   if (edep == 0.) return false;
 
-  std::cout << "here!!!" << std::endl;
   auto newHit = new PhantomHit();
 
-  G4VPhysicalVolume *phv = step->GetPostStepPoint()->GetPhysicalVolume();
+  G4VPhysicalVolume *phv = step->GetPreStepPoint()->GetPhysicalVolume();
   G4Track* mytrack =  step->GetTrack();
   if (!mytrack) return false;
   if (!phv) return false;
