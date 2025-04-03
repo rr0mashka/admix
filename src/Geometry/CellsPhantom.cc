@@ -73,7 +73,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
     fLogvolumes.push_back(template_Cells_Log);
 
     G4int N = 1;
-    G4int n = capThickness/ScoringCell_sizeZ;
+    G4int n = 1; //capThickness/ScoringCell_sizeZ;
 
     G4String temp_str;
 
@@ -84,7 +84,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
 
     // внешние без крышек
     for (int k = 0; k < numOuterHoles; ++k) {
-    /*  for(G4int i = 0; i<N; i++){
+      for(G4int i = 0; i<N; i++){
         G4double angle = 2 * CLHEP::pi * k / numOuterHoles;
         Cell_posX = outerRadius * std::cos(angle);
         Cell_posY = outerRadius * std::sin(angle);
@@ -98,16 +98,16 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
             pPhantomDisk_Log,
             false,
             0,
-            false);
+            true);
         vPos_X.push_back(Cell_posX);
         vPos_Y.push_back(Cell_posY);
         vPos_Z.push_back(Cell_posZ);
-    }*/
+    }
     for(G4int i = 0; i < n; i++){
       G4double angle = 2 * CLHEP::pi * k / numOuterHoles;
       Cell_posX = outerRadius * std::cos(angle);
       Cell_posY = outerRadius * std::sin(angle);
-      Cell_posZ = z_pos + 0.5*PhantomDisk_Width+0.5*ScoringCell_sizeZ;
+      Cell_posZ = z_pos + 0.5*PhantomDisk_Width+(i+0.5)*ScoringCell_sizeZ + 5.0;
       temp_str = "Voxel2_" + std::to_string(i) + "_"+ std::to_string(k);
       phys_vol = new G4PVPlacement(
           nullptr,
@@ -117,7 +117,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
           mother_volume_log,
           false,
           0,
-          false);
+          true);
       vPos_X.push_back(Cell_posX);
       vPos_Y.push_back(Cell_posY);
       vPos_Z.push_back(Cell_posZ);
@@ -126,7 +126,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
 
     // внутренние без крышек
     for (int k = 0; k < numInnerHoles; ++k) {
-  /*  for(G4int i = 0; i<N; i++){
+    for(G4int i = 0; i<N; i++){
         G4double angle = 2 * CLHEP::pi * k / numInnerHoles;
         Cell_posX = innerRadius * std::cos(angle);
         Cell_posY = innerRadius * std::sin(angle);
@@ -140,16 +140,17 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
             pPhantomDisk_Log,
             false,
             0,
-            false);
+            true);
         vPos_X.push_back(Cell_posX);
         vPos_Y.push_back(Cell_posY);
         vPos_Z.push_back(Cell_posZ);
-   }*/
+   }
+
       for(G4int i = 0; i<n; i++){
       G4double angle = 2 * CLHEP::pi * k / numInnerHoles;
       Cell_posX = innerRadius * std::cos(angle);
       Cell_posY = innerRadius * std::sin(angle);
-      Cell_posZ = z_pos + 0.5*PhantomDisk_Width+0.5*ScoringCell_sizeZ;
+      Cell_posZ = z_pos + 0.5*PhantomDisk_Width+(i+0.5)*ScoringCell_sizeZ+ 5.0;
       temp_str = "Voxel4_" + std::to_string(N+i)+ "_"+ std::to_string(k);
       phys_vol = new G4PVPlacement(
           nullptr,
@@ -159,7 +160,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
           mother_volume_log,
           false,
           0,
-          false);
+          true);
       vPos_X.push_back(Cell_posX);
       vPos_Y.push_back(Cell_posY);
       vPos_Z.push_back(Cell_posZ);
