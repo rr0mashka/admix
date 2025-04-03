@@ -1,5 +1,5 @@
 {
-TFile *f1 = new TFile("/home/yana/Geant4/geant4-projects/devSD/build/Run_Run_output.root");
+TFile *f1 = new TFile("/Users/macbookair/geant4-build/bnct/build/Run_Run_output.root");
 TFile* fout = new TFile("./HarverstHistos.root", "RECREATE");
 
 
@@ -77,7 +77,7 @@ gStyle->SetLineStyleString(11,"32 18");
       // if(particle_id == 2212) {   //protons
       //if(particle_id == 2112) {    //neutrons
       if(abs(X)<100 && abs(Y)<100){
-          if (Z>170){
+          if (Z>150){
              hHead2Ds1 -> Fill(X,Y, dose);
         }
         /*  if (Z>185 && Z<195){
