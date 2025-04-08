@@ -94,7 +94,7 @@ void CustomMaterials::DefineMaterials()
   matH2O->AddElement(elO,1);
   matH2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
-    
+
   // Lipid
   d = 0.900*g/cm3;
   G4Material* lipid = new G4Material("Lipid",d,3);
@@ -233,7 +233,7 @@ void CustomMaterials::DefineMaterials()
   matAMG6->AddMaterial(pCu, frac_Cu);
 
   //============================================================================
-    
+
   //=============================== PolyBiz ====================================
 
   G4double PolyBiz_density =  2.920*g/cm3;
@@ -266,7 +266,7 @@ void CustomMaterials::DefineMaterials()
 
   G4double  rho_tissue= 0.9869*g/cm3; //soft tissue
   G4double  rho_admix = 2.37 *g/cm3; // density of boron with A = 10.8 !!!! i.e. natural boron !!!!!!!!!!!!!!!!
-  G4double admix_c = 40*mg/L; //concetration in  mg per Litre ++
+  G4double admix_c = 400*mg/L; //concetration in  mg per Litre ++
 
   G4double density =  admix_c + (rho_tissue/rho_admix)*(rho_admix - admix_c);
   G4double admix_fr = admix_c /density;// mass fractions

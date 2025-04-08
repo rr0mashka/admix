@@ -1,5 +1,5 @@
 {
-TFile *f1 = new TFile("/home/yana/Geant4/geant4-projects/devSD/build/output.root");
+TFile *f1 = new TFile("/home/yana/Geant4/geant4-projects/CellsPhantom/build/output.root");
 //TFile *f2 = new TFile("/home/yana/Geant4/geant4-projects/devSD/build/output.root");
 TFile* fout = new TFile("./HarverstedHistos.root", "RECREATE");
 
