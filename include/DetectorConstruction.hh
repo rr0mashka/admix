@@ -35,7 +35,7 @@
 //#include "Geometry/SphericalPhantom.hh"
 #include "Geometry/CellsPhantom.hh"
 #include <vector>
-
+#include "Messengers/DetectorMessenger.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -47,8 +47,8 @@ class G4VSensitiveDetector;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-    DetectorConstruction() = default;
-    ~DetectorConstruction() override = default;
+    DetectorConstruction();
+    ~DetectorConstruction();
 
     G4VPhysicalVolume* Construct() override;
     void ConstructSDandField() override;
@@ -65,6 +65,16 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void SetSensMotherPhys(G4String log, G4String phys){
       fMotherPhys[log] = phys;
     }
+    void SetBoronConcentration(G4double);
+    void SetLithiumGammaFlag(G4bool);
+
+    G4double GetBoronConcentration() const{
+      return fBoronConcentration;
+    };
+
+    G4double GetLithiumGammaFlag() const{
+      return fLithiumGammaFlag;
+    };
 
     G4String GetSensMotherPhys(G4String log) const{
       std::map<G4String, G4String>::const_iterator it = fMotherPhys.find(log);
@@ -88,6 +98,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     CellsPhantom* pCellsPhantom = nullptr;
     G4LogicalVolume* logicWorld = nullptr;
     std::map<G4String, G4String> fMotherPhys;
+    G4double fBoronConcentration;
+    G4bool fLithiumGammaFlag;
+    DetectorMessenger *fDetectorMessenger;
 };
 
 

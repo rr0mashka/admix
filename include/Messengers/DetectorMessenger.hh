@@ -23,45 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/dna/range/include/DetectorMessenger.hh
+/// \brief Definition of the DetectorMessenger class
 //
-/// \file B1/src/ActionInitialization.cc
-/// \brief Implementation of the B1::ActionInitialization class
+// $Id: DetectorMessenger.hh 78723 2014-01-20 10:32:17Z gcosmo $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ActionInitialization.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "SteppingAction.hh"
-#include "TrackingAction.hh"
-#include "CustomMaterials.hh"
-#include "StackingAction.hh"
+#ifndef DetectorMessenger_h
+#define DetectorMessenger_h 1
+
+#include "globals.hh"
+#include "G4UImessenger.hh"
+
+class DetectorConstruction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithADouble;
+class G4UIcmdWithABool;
+class G4UIcmdWithAString;
+class G4UIcmdWith3VectorAndUnit;
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ActionInitialization::BuildForMaster() const
+class DetectorMessenger: public G4UImessenger
 {
-  auto runAction = new RunAction;
-  SetUserAction(runAction);
-}
+public:
+  DetectorMessenger(DetectorConstruction*);
+  ~DetectorMessenger();
+
+  virtual void SetNewValue(G4UIcommand*,
+                           G4String);
+
+private:
+  DetectorConstruction* fDetector;
+
+  G4UIdirectory* fDetDir;
+  G4UIcmdWithABool* fLithiumGammaFlagCmd;
+  G4UIcmdWithADoubleAndUnit *fBoronConcentrationCmd;
+
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ActionInitialization::Build() const
-{
-  PrimaryGeneratorAction* generatorAction = new PrimaryGeneratorAction;
-  SetUserAction(generatorAction);
-
-  auto runAction = new RunAction;
-  SetUserAction(runAction);
-
-  auto eventAction = new EventAction(runAction,generatorAction);
-  SetUserAction(eventAction);
-
-  TrackingAction* trackingAction = new TrackingAction(runAction,eventAction);
-  SetUserAction(trackingAction);
-
-  SetUserAction(new SteppingAction(runAction,eventAction));
-  SetUserAction(new StackingAction());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif

@@ -10,6 +10,7 @@
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
 #include "G4NistManager.hh"
+#include "DetectorConstruction.hh"
 
 using namespace std;
 
@@ -266,7 +267,8 @@ void CustomMaterials::DefineMaterials()
 
   G4double  rho_tissue= 0.9869*g/cm3; //soft tissue
   G4double  rho_admix = 2.37 *g/cm3; // density of boron with A = 10.8 !!!! i.e. natural boron !!!!!!!!!!!!!!!!
-  G4double admix_c = 40*mg/L; //concetration in  mg per Litre ++
+  const DetectorConstruction* detConstruction = static_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+  G4double admix_c = detConstruction->GetBoronConcentration(); //concetration in  mg per Litre ++
 
   G4double density =  admix_c + (rho_tissue/rho_admix)*(rho_admix - admix_c);
   G4double admix_fr = admix_c /density;// mass fractions

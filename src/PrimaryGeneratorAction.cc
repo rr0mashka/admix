@@ -51,7 +51,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   G4ParticleDefinition* particle
     = particleTable->FindParticle(particleName="proton");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   fParticleGun->SetParticleEnergy(100.*MeV);
 }
 
@@ -96,14 +95,19 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
      "MyCode0002",JustWarning,msg);
   }
 
+// beam sweep added
   const G4double FieldRadius = 40.0 * mm;
   G4double  phi = 2 * CLHEP::pi * G4UniformRand();
-  G4double x0 =  sin(phi) * FieldRadius * (G4UniformRand()-0.5);//size * envSizeXY * (G4UniformRand()-0.5);
-  G4double y0 =  cos(phi) * FieldRadius * (G4UniformRand()-0.5);//size * envSizeXY * (G4UniformRand()-0.5);
+  G4double rfrac = (G4UniformRand()-0.5);
+  G4double x0 =  sin(phi) * FieldRadius * rfrac;//size * envSizeXY * (G4UniformRand()-0.5);
+  G4double y0 =  cos(phi) * FieldRadius * rfrac;//size * envSizeXY * (G4UniformRand()-0.5);
 
+
+  G4double theta = atan(FieldRadius * rfrac/(1.*m));
   //std::cout << "Rnd:  "<<(G4UniformRand()-0.5)<<"   x0   "<<x0<<"      y0  "<<y0<<std::endl;
   G4double z0 = -0.5 * envSizeZ + 200*mm;
 
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(sin(theta)*sin(phi),sin(theta)*cos(phi),cos(theta)));
   fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

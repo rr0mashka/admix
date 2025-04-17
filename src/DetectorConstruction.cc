@@ -53,6 +53,7 @@
 #include "Geometry/CellsPhantom.hh"
 #include "Geometry/SphericalPhantom.hh"
 #include "Geometry/SensitiveVolumes/PhantomVolume.hh"
+#include "Messengers/DetectorMessenger.hh"
 //Geometry
 
 
@@ -60,6 +61,15 @@
 #include "G4GDMLParser.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+DetectorConstruction::DetectorConstruction()
+ : G4VUserDetectorConstruction(),
+ fDetectorMessenger(0),
+ fBoronConcentration(0),
+ fLithiumGammaFlag(1){
+
+ fDetectorMessenger = new DetectorMessenger(this);
+}
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
@@ -158,6 +168,19 @@ void DetectorConstruction::ConstructSDandField(){
     };
   };
 };
+
+void DetectorConstruction::SetBoronConcentration(G4double borc){
+  fBoronConcentration = borc;
+};
+
+void DetectorConstruction::SetLithiumGammaFlag(G4bool fl){
+  fLithiumGammaFlag = fl;
+}
+
+DetectorConstruction::~DetectorConstruction()
+{
+  delete fDetectorMessenger;
+}
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
