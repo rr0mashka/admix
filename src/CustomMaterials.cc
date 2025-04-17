@@ -266,7 +266,7 @@ void CustomMaterials::DefineMaterials()
 
   G4double  rho_tissue= 0.9869*g/cm3; //soft tissue
   G4double  rho_admix = 2.37 *g/cm3; // density of boron with A = 10.8 !!!! i.e. natural boron !!!!!!!!!!!!!!!!
-  G4double admix_c = 400*mg/L; //concetration in  mg per Litre ++
+  G4double admix_c = 40*mg/L; //concetration in  mg per Litre ++
 
   G4double density =  admix_c + (rho_tissue/rho_admix)*(rho_admix - admix_c);
   G4double admix_fr = admix_c /density;// mass fractions
