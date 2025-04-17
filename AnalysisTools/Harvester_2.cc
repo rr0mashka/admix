@@ -1,6 +1,6 @@
 {
-TFile *f1 = new TFile("/home/yana/Geant4/geant4-projects/CellsPhantom/build/Run_Run_output.root");
-TFile* fout = new TFile("/home/yana/Geant4/geant4-projects/CellsPhantom/BNCT/AnalysisTools/HarverstHistos.root", "RECREATE");
+TFile *f1 = new TFile("/home/petrunya/BNCT-test-protons-build/Run_Run_output.root");
+TFile* fout = new TFile("/home/petrunya/BNCT-test-protons/AnalysisTools/HarverstHistos.root", "RECREATE");
 
 
   gROOT->Reset();
@@ -202,6 +202,8 @@ hBoronDoseProfile_2->Draw();*/
 
 fout->WriteObject(hDoseProfile_1, "hDoseProfile_1");
 fout->WriteObject(hDoseProfile_2, "hDoseProfile_2");
+fout->WriteObject(hBoronDoseProfile_1, "hBoronDoseProfile_1");
+fout->WriteObject(hBoronDoseProfile_2, "hBoronDoseProfile_2");
 //fout->WriteObject(hBoronDoseProfile_1, "hBoronDoseProfile_1");
 
 }

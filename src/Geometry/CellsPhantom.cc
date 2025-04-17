@@ -103,7 +103,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
         vPos_Y.push_back(Cell_posY);
         vPos_Z.push_back(Cell_posZ);
     }
-    for(G4int i = 0; i < n; i++){
+/*    for(G4int i = 0; i < n; i++){
       G4double angle = 2 * CLHEP::pi * k / numOuterHoles;
       Cell_posX = outerRadius * std::cos(angle);
       Cell_posY = outerRadius * std::sin(angle);
@@ -121,7 +121,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
       vPos_X.push_back(Cell_posX);
       vPos_Y.push_back(Cell_posY);
       vPos_Z.push_back(Cell_posZ);
-    }
+    }*/
   }
 
     // внутренние без крышек
@@ -146,7 +146,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
         vPos_Z.push_back(Cell_posZ);
    }
 
-      for(G4int i = 0; i<n; i++){
+     /* for(G4int i = 0; i<n; i++){
       G4double angle = 2 * CLHEP::pi * k / numInnerHoles;
       Cell_posX = innerRadius * std::cos(angle);
       Cell_posY = innerRadius * std::sin(angle);
@@ -164,7 +164,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
       vPos_X.push_back(Cell_posX);
       vPos_Y.push_back(Cell_posY);
       vPos_Z.push_back(Cell_posZ);
-  }
+  }*/
 }
 
     auto fStepLimit = new G4UserLimits(maxStep);
