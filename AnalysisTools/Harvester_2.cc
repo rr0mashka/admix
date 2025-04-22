@@ -1,6 +1,6 @@
 {
-TFile *f1 = new TFile("/home/petrunya/BNCT-test-protons-build/Run_Run_output.root");
-TFile* fout = new TFile("/home/petrunya/BNCT-test-protons/AnalysisTools/HarverstHistos.root", "RECREATE");
+TFile *f1 = new TFile("/home/yana/Geant4/geant4-projects/BNCT/build/Run_Run_output.root");
+TFile* fout = new TFile("./HarverstHistos.root", "RECREATE");
 
 
   gROOT->Reset();
@@ -56,11 +56,11 @@ gStyle->SetLineStyleString(11,"32 18");
    t1->SetBranchAddress("Edep",&Edep);
    t1->SetBranchAddress("EdepBoron",&EdepBoron);
 
-   TH1F  *hDoseProfile_1 = new TH1F("hDoseProfile_1","Edep Outer Tubes",5,140,190);
-   TH1F  *hDoseProfile_2 = new TH1F("hDoseProfile_2","Edep Inner Tubes",5,140,190);
+   TH1F  *hDoseProfile_1 = new TH1F("hDoseProfile_1","Edep Outer Tubes",5,160,170);
+   TH1F  *hDoseProfile_2 = new TH1F("hDoseProfile_2","Edep Inner Tubes",5,160,170);
 
-   TH1F  *hBoronDoseProfile_1 = new TH1F("hBoronDoseProfile_1","Edep Boron Profile 1",5,140,190);
-   TH1F  *hBoronDoseProfile_2 = new TH1F("hBoronDoseProfile_2","Edep Boron Profile 2",5,140,190);
+   TH1F  *hBoronDoseProfile_1 = new TH1F("hBoronDoseProfile_1","Edep Boron Profile 1",5,160,170);
+   TH1F  *hBoronDoseProfile_2 = new TH1F("hBoronDoseProfile_2","Edep Boron Profile 2",5,160,170);
 
    int nentries = (int)t1->GetEntries();
    for (int i=0; i<nentries; i++) {
@@ -87,7 +87,7 @@ hDoseProfile_1->GetYaxis()->SetNdivisions(505);
 hDoseProfile_1->GetXaxis()->CenterTitle();
 hDoseProfile_1->GetYaxis()->CenterTitle();
 hDoseProfile_1->GetXaxis()->SetTitle("z (mm)");
-hDoseProfile_1->GetYaxis()->SetTitle("Edep, eV");
+hDoseProfile_1->GetYaxis()->SetTitle("Edep, MeV");
 hDoseProfile_1->GetYaxis()->SetTitleSize(0.045*TextSizeScale);
 hDoseProfile_1->GetYaxis()->SetTitleOffset(1.2);
 hDoseProfile_1->GetXaxis()->SetTitleSize(0.045*TextSizeScale);
@@ -127,7 +127,7 @@ hDoseProfile_2->GetYaxis()->SetNdivisions(505);
 hDoseProfile_2->GetXaxis()->CenterTitle();
 hDoseProfile_2->GetYaxis()->CenterTitle();
 hDoseProfile_2->GetXaxis()->SetTitle("z (mm)");
-hDoseProfile_2->GetYaxis()->SetTitle("Edep, eV");
+hDoseProfile_2->GetYaxis()->SetTitle("Edep, MeV");
 hDoseProfile_2->GetYaxis()->SetTitleSize(0.045*TextSizeScale);
 hDoseProfile_2->GetYaxis()->SetTitleOffset(1.2);
 hDoseProfile_2->GetXaxis()->SetTitleSize(0.045*TextSizeScale);

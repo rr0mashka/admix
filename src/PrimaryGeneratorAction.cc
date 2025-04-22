@@ -98,7 +98,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 // beam sweep added
   const G4double FieldRadius = 40.0 * mm;
   G4double  phi = 2 * CLHEP::pi * G4UniformRand();
-  G4double rfrac = (G4UniformRand()-0.5);
+  G4double rfrac = G4UniformRand();
   G4double x0 =  sin(phi) * FieldRadius * rfrac;//size * envSizeXY * (G4UniformRand()-0.5);
   G4double y0 =  cos(phi) * FieldRadius * rfrac;//size * envSizeXY * (G4UniformRand()-0.5);
 

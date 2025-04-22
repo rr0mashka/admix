@@ -1,5 +1,5 @@
 {
-TFile *f1 = new TFile("/home/petrunya/BNCT-test-protons-build/output.root");
+TFile *f1 = new TFile("/home/yana/Geant4/geant4-projects/BNCT/build/output.root");
 TFile* fout = new TFile("./HarverstedHistos.root", "RECREATE");
 
 
@@ -87,7 +87,7 @@ gStyle->SetLineStyleString(11,"32 18");
    TH1F  *hFluence1D_1_1  = new TH1F("hFluences1d_1_1 ","Output Neutron Field Density 1 ", 30, &Fluence1D_Binning[0]);
    TH1F  *hFluence1D_2_1  = new TH1F("hFluences1d_2_1 ","Output Neutron Field Density 1 ", 30, &Fluence1D_Binning[0]);
    TH1F  *hFluence1D_3_1  = new TH1F("hFluences1d_3_1 ","Output Neutron Field Density 1 ", 30, &Fluence1D_Binning[0]);
-   
+
    TH1F  *hFluence1D_1_2  = new TH1F("hFluences1d_1_2 ","Output Neutron Field Density 2 ", 30, &Fluence1D_Binning[0]);
    TH1F  *hFluence1D_2_2  = new TH1F("hFluences1d_2_2 ","Output Neutron Field Density 2 ", 30, &Fluence1D_Binning[0]);
    TH1F  *hFluence1D_3_2  = new TH1F("hFluences1d_3_2 ","Output Neutron Field Density 2 ", 30, &Fluence1D_Binning[0]);
@@ -107,7 +107,7 @@ gStyle->SetLineStyleString(11,"32 18");
    TH1F  *hFluence1D_1_6  = new TH1F("hFluences1d_1_5 ","Output Neutron Field Density Before Cells ", 30, &Fluence1D_Binning[0]);
    TH1F  *hFluence1D_2_6  = new TH1F("hFluences1d_2_5 ","Output Neutron Field Density Before Cells ", 30, &Fluence1D_Binning[0]);
    TH1F  *hFluence1D_3_6  = new TH1F("hFluences1d_3_5 ","Output Neutron Field Density Before Cells ", 30, &Fluence1D_Binning[0]);
-   
+
    TH1F  *hFluence1D_1_7  = new TH1F("hFluences1d_1_5 ","Output Neutron Field Density After Moderator ", 30, &Fluence1D_Binning[0]);
    TH1F  *hFluence1D_2_7  = new TH1F("hFluences1d_2_5 ","Output Neutron Field Density After Moderator ", 30, &Fluence1D_Binning[0]);
    TH1F  *hFluence1D_3_7  = new TH1F("hFluences1d_3_5 ","Output Neutron Field Density After Moderator ", 30, &Fluence1D_Binning[0]);
@@ -122,10 +122,8 @@ gStyle->SetLineStyleString(11,"32 18");
 
    TH2F  *hSpectrum2D = new TH2F("hSpectrum2d ","Neutron Energy Spectrum",150,-150,+150, 300, 0, +0.6);
 
-
-
    int nentries = (int)t1->GetEntries();
-  for (int i=0; i<nentries; i++) {
+   for (int i=0; i<nentries; i++) {
      t1 -> GetEntry(i);
 
         double R = sqrt(pow(X,2)+pow(Y,2));
@@ -146,7 +144,7 @@ gStyle->SetLineStyleString(11,"32 18");
              if( EnergyEV < 0.5 )hFluence1D_1_7 -> Fill(R, 1.0/BinArea);
              if( EnergyEV > 0.5 && EnergyEV < 1000 ) hFluence1D_2_7 -> Fill(R, 1.0/BinArea);
              if( EnergyEV > 1000 ) hFluence1D_3_7 -> Fill(R, 1.0/BinArea);
-	  hFluence2D -> Fill(X,Y);
+	           hFluence2D -> Fill(X,Y);
 
             float NeutonTan;
             if(X!=0) NeutonTan = Y/fabs(X);

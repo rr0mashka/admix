@@ -13,6 +13,9 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
 
     G4NistManager* nist = G4NistManager::Instance();
     G4Material* CellsPhantomMaterial= nist->FindOrBuildMaterial("G4_PLEXIGLASS");
+    G4Material* TubeMaterial= nist->FindOrBuildMaterial("G4_POLYPROPYLENE");
+    G4Material* AirMaterial= nist->FindOrBuildMaterial("G4_AIR");
+
 
     CustomMaterials* pCustomMaterials = CustomMaterials::Instance();
     G4Material* CellsMaterial = pCustomMaterials->GetMaterial("SoftTissueWithBoron");
@@ -27,7 +30,6 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
     G4double innerRadius = 25 * mm;
     int numOuterHoles = 16;
     int numInnerHoles = 8;
-    int slices = 5;
 
     G4Tubs *pPhantomGlassDisk_sol = new G4Tubs
     (
@@ -46,7 +48,6 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
         "PhantomDisk_Log"
       );
 
-
      G4VPhysicalVolume  *pPhantomDisk_Phys = new G4PVPlacement
      (
        nullptr,  // no rotation
@@ -61,7 +62,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
 
     G4Tubs* template_ScoringCell_Sol = new G4Tubs("Tub",
          0,
-         ScoringCell_radius,
+         ScoringCell_radius - Tube_Thickness,
          0.5 *  ScoringCell_sizeZ,
          0,
          Phi_seg_frac*CLHEP::pi
@@ -72,8 +73,82 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
 
     fLogvolumes.push_back(template_Cells_Log);
 
-    G4int N = 5;
-    G4int n = 1; //capThickness/ScoringCell_sizeZ;
+    G4Tubs* Air_Sol = new G4Tubs("Air",
+        0,
+        ScoringCell_radius - Tube_Thickness,
+        ScoringCell_sizeZ,
+        0,
+        Phi_seg_frac*CLHEP::pi
+         );
+
+    G4LogicalVolume *Air_Log = new G4LogicalVolume(
+         Air_Sol, AirMaterial, "Air_Log");
+
+    G4Tubs* Air_Sol_1 = new G4Tubs("Air_1",
+         0,
+         ScoringCell_radius - Tube_Thickness,
+         ScoringCell_sizeZ*0.5,
+         0,
+         Phi_seg_frac*CLHEP::pi
+      );
+
+    G4LogicalVolume *Air_Log_1 = new G4LogicalVolume(
+        Air_Sol_1, AirMaterial, "Air_Log_1");
+
+    G4Tubs* Tube_Sol_1 = new G4Tubs("Tub_sol_1",
+         ScoringCell_radius - Tube_Thickness,
+         ScoringCell_radius,
+         0.5 *  Tube_Length_1,
+         0,
+         Phi_seg_frac*CLHEP::pi
+    );
+
+    G4LogicalVolume *Tube_Log_1 = new G4LogicalVolume(
+         Tube_Sol_1, TubeMaterial, "Tube_Log_1");
+
+    G4Tubs* Tube_Sol_2 = new G4Tubs("Tub_sol_2",
+         ScoringCell_radius - Tube_Thickness,
+         ScoringCell_radius + 1*mm,
+         0.5 *  Tube_Length_2,
+         0,
+         Phi_seg_frac*CLHEP::pi
+    );
+
+    G4LogicalVolume *Tube_Log_2 = new G4LogicalVolume(
+         Tube_Sol_2, TubeMaterial, "Tube_Log_2");
+
+    G4Tubs* Tube_Sol_3 = new G4Tubs("Tub_sol_3",
+              ScoringCell_radius - Tube_Thickness,
+              ScoringCell_radius,
+              0.5 * Tube_Length_1 / 3.,
+              0,
+              Phi_seg_frac*CLHEP::pi
+         );
+
+    G4LogicalVolume *Tube_Log_3 = new G4LogicalVolume(
+              Tube_Sol_3, TubeMaterial, "Tube_Log_1");
+
+    G4Tubs* Tube_Disk_1= new G4Tubs("Tubе_disk_1",
+          0,
+          ScoringCell_radius,
+          0.5 *  3*mm,
+          0,
+          Phi_seg_frac*CLHEP::pi
+    );
+
+    G4LogicalVolume *Tube_Disk_Log_1 = new G4LogicalVolume(
+          Tube_Disk_1, TubeMaterial, "Tube_Disk_Log_1");
+
+    G4Tubs* Tube_Disk_2= new G4Tubs("Tubе_disk_2",
+                0,
+                ScoringCell_radius + 1*mm,
+                0.5 *  3*mm,
+                0,
+                Phi_seg_frac*CLHEP::pi
+          );
+
+    G4LogicalVolume *Tube_Disk_Log_2 = new G4LogicalVolume(
+          Tube_Disk_2, TubeMaterial, "Tube_Disk_Log_2");
 
     G4String temp_str;
 
@@ -81,15 +156,177 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
     G4VPhysicalVolume* phys_vol;
 
     G4double Cell_posX, Cell_posY, Cell_posZ;
+    G4double PosX, PosY, PosZ_1, PosZ_2, PosZ_3, PosZ_4;
 
-    // внешние без крышек
     for (int k = 0; k < numOuterHoles; ++k) {
-      for(G4int i = 0; i<N; i++){
+        G4double angle = 2 * CLHEP::pi * k / numOuterHoles;
+        PosX = outerRadius * std::cos(angle);
+        PosY = outerRadius * std::sin(angle);
+        PosZ_1 = - 0.5*PhantomDisk_Width + 0.5*Tube_Length_1;
+        PosZ_3 = - 0.5*PhantomDisk_Width + Tube_Length_1 + 0.5*3*mm;
+        PosZ_2 = z_pos - 0.5*PhantomDisk_Width - 0.5*Tube_Length_2;
+        PosZ_4 = z_pos - 0.5*PhantomDisk_Width - Tube_Length_2 - 0.5*3*mm;
+        temp_str = "Voxel1_" +  std::to_string(k);
+        phys_vol = new G4PVPlacement(
+            nullptr,
+            G4ThreeVector(PosX, PosY, PosZ_1),
+            Tube_Log_1,
+            temp_str,
+            pPhantomDisk_Log,
+            false,
+            0,
+            true);
+        temp_str = "Voxel2_" + std::to_string(k);
+        phys_vol = new G4PVPlacement(
+            nullptr,
+            G4ThreeVector(PosX, PosY, PosZ_2),
+            Tube_Log_2,
+            temp_str,
+            mother_volume_log,
+            false,
+            0,
+            true);
+       temp_str = "Voxel3_" +  std::to_string(k);
+        phys_vol = new G4PVPlacement(
+            nullptr,
+            G4ThreeVector(PosX, PosY, PosZ_3),
+            Tube_Disk_Log_1,
+            temp_str,
+            pPhantomDisk_Log,
+            false,
+            0,
+            true);
+        temp_str = "Voxel4_" + std::to_string(k);
+        phys_vol = new G4PVPlacement(
+            nullptr,
+            G4ThreeVector(PosX, PosY, PosZ_4),
+            Tube_Disk_Log_2,
+            temp_str,
+            mother_volume_log,
+            false,
+            0,
+            true);
+        temp_str = "Voxel11_" +  std::to_string(k);
+        phys_vol = new G4PVPlacement(
+            nullptr,
+            G4ThreeVector(PosX, PosY, -15*mm),
+            Air_Log,
+            temp_str,
+            pPhantomDisk_Log,
+            false,
+            0,
+            true);
+        temp_str = "Voxel12_" +  std::to_string(k);
+        phys_vol = new G4PVPlacement(
+            nullptr,
+            G4ThreeVector(PosX, PosY, PosZ_2),
+            Air_Log_1,
+            temp_str,
+            mother_volume_log,
+            false,
+            0,
+            true);
+        temp_str = "Voxel14_" +  std::to_string(k);
+        phys_vol = new G4PVPlacement(
+            nullptr,
+            G4ThreeVector(PosX, PosY, Tube_Length_1 - 0.5*PhantomDisk_Width + 2.5*mm),
+            Tube_Log_3,
+            temp_str,
+            pPhantomDisk_Log,
+            false,
+            0,
+            true);
+    }
+
+    G4int N=5;
+
+    for (int k = 0; k < numInnerHoles; ++k) {
+        G4double angle = 2 * CLHEP::pi * k / numInnerHoles;
+        PosX = innerRadius * std::cos(angle);
+        PosY = innerRadius * std::sin(angle);
+        PosZ_1 = - 0.5*PhantomDisk_Width + 0.5*Tube_Length_1;
+        PosZ_3 = - 0.5*PhantomDisk_Width + Tube_Length_1 + 0.5*3*mm;
+        PosZ_2 = z_pos - 0.5*PhantomDisk_Width - 0.5*Tube_Length_2;
+        PosZ_4 = z_pos - 0.5*PhantomDisk_Width - Tube_Length_2 - 0.5*3*mm;
+        temp_str = "Voxel9_" +  std::to_string(k);
+        phys_vol = new G4PVPlacement(
+            nullptr,
+            G4ThreeVector(PosX, PosY, PosZ_1),
+            Tube_Log_1,
+            temp_str,
+            pPhantomDisk_Log,
+            false,
+            0,
+            true);
+        temp_str = "Voxel5_" + std::to_string(k);
+        phys_vol = new G4PVPlacement(
+            nullptr,
+            G4ThreeVector(PosX, PosY, PosZ_2),
+            Tube_Log_2,
+            temp_str,
+            mother_volume_log,
+            false,
+            0,
+            true);
+       temp_str = "Voxel6_" +  std::to_string(k);
+        phys_vol = new G4PVPlacement(
+            nullptr,
+            G4ThreeVector(PosX, PosY, PosZ_3),
+            Tube_Disk_Log_1,
+            temp_str,
+            pPhantomDisk_Log,
+            false,
+            0,
+            true);
+        temp_str = "Voxel7_" + std::to_string(k);
+        phys_vol = new G4PVPlacement(
+            nullptr,
+            G4ThreeVector(PosX, PosY, PosZ_4),
+            Tube_Disk_Log_2,
+            temp_str,
+            mother_volume_log,
+            false,
+            0,
+            true);
+        temp_str = "Voxel8_" + std::to_string(k);
+        phys_vol = new G4PVPlacement(
+            nullptr,
+            G4ThreeVector(PosX, PosY, -15*mm),
+            Air_Log,
+            temp_str,
+            pPhantomDisk_Log,
+            false,
+            0,
+            true);
+      temp_str = "Voxel13_" +  std::to_string(k);
+      phys_vol = new G4PVPlacement(
+            nullptr,
+            G4ThreeVector(PosX, PosY, PosZ_2),
+            Air_Log_1,
+            temp_str,
+            mother_volume_log,
+            false,
+            0,
+            true);
+      temp_str = "Voxel15_" +  std::to_string(k);
+      phys_vol = new G4PVPlacement(
+            nullptr,
+            G4ThreeVector(PosX, PosY, Tube_Length_1 - 0.5*PhantomDisk_Width + 2.5*mm),
+            Tube_Log_3,
+            temp_str,
+            pPhantomDisk_Log,
+            false,
+            0,
+            true);
+    }
+
+    for (int k = 0; k < numOuterHoles; ++k) {
+    for(int i=0; i<N; ++i){
         G4double angle = 2 * CLHEP::pi * k / numOuterHoles;
         Cell_posX = outerRadius * std::cos(angle);
         Cell_posY = outerRadius * std::sin(angle);
-        Cell_posZ = 0.5*PhantomDisk_Width - (0.5+i)*ScoringCell_sizeZ;
-        temp_str = "Voxel1_" + std::to_string(i)+ "_"+ std::to_string(k);
+        Cell_posZ = Tube_Length_1  - 0.5*PhantomDisk_Width - (0.5+i)*ScoringCell_sizeZ;
+        temp_str = "Voxel20_" + std::to_string(k) +"_"+ std::to_string(i);
         phys_vol = new G4PVPlacement(
             nullptr,
             G4ThreeVector(Cell_posX, Cell_posY, Cell_posZ),
@@ -103,35 +340,15 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
         vPos_Y.push_back(Cell_posY);
         vPos_Z.push_back(Cell_posZ);
     }
-/*    for(G4int i = 0; i < n; i++){
-      G4double angle = 2 * CLHEP::pi * k / numOuterHoles;
-      Cell_posX = outerRadius * std::cos(angle);
-      Cell_posY = outerRadius * std::sin(angle);
-      Cell_posZ = z_pos - 0.5*PhantomDisk_Width - (i+0.5)*ScoringCell_sizeZ;
-      temp_str = "Voxel2_" + std::to_string(i) + "_"+ std::to_string(k);
-      phys_vol = new G4PVPlacement(
-          nullptr,
-          G4ThreeVector(Cell_posX, Cell_posY, Cell_posZ),
-          template_Cells_Log,
-          temp_str,
-          mother_volume_log,
-          false,
-          0,
-          true);
-      vPos_X.push_back(Cell_posX);
-      vPos_Y.push_back(Cell_posY);
-      vPos_Z.push_back(Cell_posZ);
-    }*/
   }
 
-    // внутренние без крышек
     for (int k = 0; k < numInnerHoles; ++k) {
-    for(G4int i = 0; i<N; i++){
+    for(int i=0; i<N; ++i){
         G4double angle = 2 * CLHEP::pi * k / numInnerHoles;
         Cell_posX = innerRadius * std::cos(angle);
         Cell_posY = innerRadius * std::sin(angle);
-        Cell_posZ = 0.5*PhantomDisk_Width - (0.5+i)*ScoringCell_sizeZ;
-        temp_str = "Voxel3_" + std::to_string(N+i)+ "_"+ std::to_string(k);
+        Cell_posZ = Tube_Length_1 -0.5*PhantomDisk_Width - (0.5+i)*ScoringCell_sizeZ;
+        temp_str = "Voxel10_" + std::to_string(k) +"_"+ std::to_string(i);
         phys_vol = new G4PVPlacement(
             nullptr,
             G4ThreeVector(Cell_posX, Cell_posY, Cell_posZ),
@@ -144,31 +361,14 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
         vPos_X.push_back(Cell_posX);
         vPos_Y.push_back(Cell_posY);
         vPos_Z.push_back(Cell_posZ);
-   }
-
-     /* for(G4int i = 0; i<n; i++){
-      G4double angle = 2 * CLHEP::pi * k / numInnerHoles;
-      Cell_posX = innerRadius * std::cos(angle);
-      Cell_posY = innerRadius * std::sin(angle);
-      Cell_posZ = z_pos - 0.5*PhantomDisk_Width - (i+0.5)*ScoringCell_sizeZ;
-      temp_str = "Voxel4_" + std::to_string(N+i)+ "_"+ std::to_string(k);
-      phys_vol = new G4PVPlacement(
-          nullptr,
-          G4ThreeVector(Cell_posX, Cell_posY, Cell_posZ),
-          template_Cells_Log,
-          temp_str,
-          mother_volume_log,
-          false,
-          0,
-          true);
-      vPos_X.push_back(Cell_posX);
-      vPos_Y.push_back(Cell_posY);
-      vPos_Z.push_back(Cell_posZ);
-  }*/
 }
-
+}
     auto fStepLimit = new G4UserLimits(maxStep);
     pPhantomDisk_Log->SetUserLimits(fStepLimit);
+    Tube_Log_1->SetUserLimits(fStepLimit);
+    Tube_Log_2->SetUserLimits(fStepLimit);
+    Tube_Disk_Log_1->SetUserLimits(fStepLimit);
+    Tube_Disk_Log_2->SetUserLimits(fStepLimit);
     template_Cells_Log->SetUserLimits(fStepLimit);
 
 }

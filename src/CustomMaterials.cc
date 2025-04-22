@@ -8,6 +8,7 @@
 #include "Randomize.hh"
 #include "G4RunManager.hh"
 #include "G4Element.hh"
+#include "G4Isotope.hh"
 #include "G4ElementTable.hh"
 #include "G4NistManager.hh"
 #include "DetectorConstruction.hh"
@@ -263,21 +264,25 @@ void CustomMaterials::DefineMaterials()
   //============================================================================
 
   //======== soft tissue with boron mixture ==================================
-
-
   G4double  rho_tissue= 0.9869*g/cm3; //soft tissue
-  G4double  rho_admix = 2.37 *g/cm3; // density of boron with A = 10.8 !!!! i.e. natural boron !!!!!!!!!!!!!!!!
+  G4double  rho_admix = 2.34 *g/cm3; // density of boron with A = 10.8 !!!! i.e. natural boron !!!!!!!!!!!!!!!!
   const DetectorConstruction* detConstruction = static_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
   G4double admix_c = detConstruction->GetBoronConcentration(); //concetration in  mg per Litre ++
+
+  G4double a_boron10 = 10.0129370*g/mole;
+  G4Isotope* Boron10 = new G4Isotope ("Boron10", 5, 10, a_boron10);
+  G4Element* elementB10 = new G4Element ("Enriched Boron", "B10", 1);
+  elementB10->AddIsotope(Boron10, 1);
+  G4Material*B10Material=new G4Material("B10Material", rho_admix, 1);
+  B10Material->AddElement(elementB10, 1);
 
   G4double density =  admix_c + (rho_tissue/rho_admix)*(rho_admix - admix_c);
   G4double admix_fr = admix_c /density;// mass fractions
 
-  G4Material* TissueWithAdmixture = new G4Material("SoftTissueWithBoron", density, 2);
-  G4Material* Admixture = nist->FindOrBuildMaterial("G4_B");
-  TissueWithAdmixture->AddMaterial(soft, 1 - admix_fr);
-  TissueWithAdmixture->AddMaterial(Admixture, admix_fr);
-
+  G4Material* TissueWithAdmixture = new G4Material("SoftTissueWithBoron", density, 3);
+  TissueWithAdmixture->AddMaterial(soft, 0.004);
+  TissueWithAdmixture->AddMaterial(B10Material, admix_fr);
+  TissueWithAdmixture->AddMaterial(matH2O, 1-admix_fr-0.004);
 
 // oak wood
 
