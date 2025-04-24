@@ -2,7 +2,7 @@
 
 # detector parameters
 /BNCT/det/setBoronConcentration 80 mg/L
-/BNCT/det/setLithiumGammaFlag false
+/BNCT/det/setLithiumGammaFlag true
 
 /run/initialize
 
