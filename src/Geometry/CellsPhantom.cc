@@ -229,7 +229,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
         temp_str = "Voxel14_" +  std::to_string(k);
         phys_vol = new G4PVPlacement(
             nullptr,
-            G4ThreeVector(PosX, PosY, Tube_Length_1 - 0.5*PhantomDisk_Width + 2.5*mm),
+            G4ThreeVector(PosX, PosY, Tube_Length_1 - 0.5*PhantomDisk_Width + 5.5*mm),
             Tube_Log_3,
             temp_str,
             pPhantomDisk_Log,
@@ -311,7 +311,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
       temp_str = "Voxel15_" +  std::to_string(k);
       phys_vol = new G4PVPlacement(
             nullptr,
-            G4ThreeVector(PosX, PosY, Tube_Length_1 - 0.5*PhantomDisk_Width + 2.5*mm),
+            G4ThreeVector(PosX, PosY, Tube_Length_1 - 0.5*PhantomDisk_Width + 5.5*mm),
             Tube_Log_3,
             temp_str,
             pPhantomDisk_Log,
@@ -367,8 +367,11 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
     pPhantomDisk_Log->SetUserLimits(fStepLimit);
     Tube_Log_1->SetUserLimits(fStepLimit);
     Tube_Log_2->SetUserLimits(fStepLimit);
+    Tube_Log_3->SetUserLimits(fStepLimit);
     Tube_Disk_Log_1->SetUserLimits(fStepLimit);
     Tube_Disk_Log_2->SetUserLimits(fStepLimit);
+    Air_Log_1->SetUserLimits(fStepLimit);
+    Air_Log_2->SetUserLimits(fStepLimit);
     template_Cells_Log->SetUserLimits(fStepLimit);
 
 }
