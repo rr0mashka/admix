@@ -73,21 +73,21 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
 
     fLogvolumes.push_back(template_Cells_Log);
 
-    G4Tubs* Air_Sol = new G4Tubs("Air",
+    G4Tubs* Air_Sol_2 = new G4Tubs("Air_2",
         0,
         ScoringCell_radius - Tube_Thickness,
-        ScoringCell_sizeZ,
+        0.5*10*mm,
         0,
         Phi_seg_frac*CLHEP::pi
          );
 
-    G4LogicalVolume *Air_Log = new G4LogicalVolume(
-         Air_Sol, AirMaterial, "Air_Log");
+    G4LogicalVolume *Air_Log_2 = new G4LogicalVolume(
+         Air_Sol_2, AirMaterial, "Air_Log_2");
 
     G4Tubs* Air_Sol_1 = new G4Tubs("Air_1",
          0,
          ScoringCell_radius - Tube_Thickness,
-         ScoringCell_sizeZ*0.5,
+         0.5*20*mm,
          0,
          Phi_seg_frac*CLHEP::pi
       );
@@ -120,7 +120,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
     G4Tubs* Tube_Sol_3 = new G4Tubs("Tub_sol_3",
               ScoringCell_radius - Tube_Thickness,
               ScoringCell_radius,
-              0.5 * Tube_Length_1 / 3.,
+              0.5 * Tube_Length_1 / 6.,
               0,
               Phi_seg_frac*CLHEP::pi
          );
@@ -210,7 +210,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
         phys_vol = new G4PVPlacement(
             nullptr,
             G4ThreeVector(PosX, PosY, -15*mm),
-            Air_Log,
+            Air_Log_1,
             temp_str,
             pPhantomDisk_Log,
             false,
@@ -220,7 +220,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
         phys_vol = new G4PVPlacement(
             nullptr,
             G4ThreeVector(PosX, PosY, PosZ_2),
-            Air_Log_1,
+            Air_Log_2,
             temp_str,
             mother_volume_log,
             false,
@@ -292,7 +292,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
         phys_vol = new G4PVPlacement(
             nullptr,
             G4ThreeVector(PosX, PosY, -15*mm),
-            Air_Log,
+            Air_Log_1,
             temp_str,
             pPhantomDisk_Log,
             false,
@@ -302,7 +302,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
       phys_vol = new G4PVPlacement(
             nullptr,
             G4ThreeVector(PosX, PosY, PosZ_2),
-            Air_Log_1,
+            Air_Log_2,
             temp_str,
             mother_volume_log,
             false,

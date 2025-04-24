@@ -1,14 +1,14 @@
 # Macro file for example B1 test
 
 # detector parameters
-/BNCT/det/setBoronConcentration 400 mg/L
+/BNCT/det/setBoronConcentration 80 mg/L
 /BNCT/det/setLithiumGammaFlag false
 
 /run/initialize
 
-/gun/particle neutron
-/gun/energy 500 keV
+/gun/particle proton
+/gun/energy 2.055 MeV
 
 #
-/run/printProgress 100
-/run/beamOn 100000
+/run/printProgress 10000
+/run/beamOn 2000000000
