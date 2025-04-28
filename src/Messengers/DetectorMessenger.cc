@@ -56,7 +56,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fBoronConcentrationCmd = new G4UIcmdWithADoubleAndUnit("/BNCT/det/setBoronConcentration",this);
   fBoronConcentrationCmd->SetGuidance("Set concentration of the natural boron in ppm");
   fBoronConcentrationCmd->SetParameterName("BoronConcentration",false);
-  fBoronConcentrationCmd->SetRange("BoronConcentration>0.");
+  fBoronConcentrationCmd->SetRange("BoronConcentration>=0.");
   fBoronConcentrationCmd->SetUnitCategory("mg/L");
   fBoronConcentrationCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   fBoronConcentrationCmd->SetToBeBroadcasted(false);
