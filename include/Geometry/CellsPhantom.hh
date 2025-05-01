@@ -26,7 +26,7 @@ G4double PhantomDisk_Diamter = 220.0 * mm;
 G4double PhantomDisk_Width = 50 * mm;
 
 G4double ScoringCell_radius = 8.0 * mm;   // Размер кубического вокселя в XY
-G4double ScoringCell_sizeZ = 2 * mm;    // Размер кубического вокселя в Z
+G4double ScoringCell_sizeZ = 10.0 * mm;    // Размер кубического вокселя в Z
 
 G4double Tube_Thickness = 1.0 * mm;
 G4double Tube_Length_1 = 30 * mm;
