@@ -67,7 +67,8 @@ void Run::EndOfRun(){
     G4VPhysicalVolume* volume, *mothvol;
     G4PhysicalVolumeStore* volumeStore = G4PhysicalVolumeStore::GetInstance();
     G4String output2 = "Run_" + fFileName;
-    TFile *file = new TFile(output2,"recreate");
+    G4String output3 = Run::splitString(output2,'.')[0] + "_" + Run::GetCurrentDateTime()+ ".root";
+    TFile *file = new TFile(output3,"recreate");
     char VolumeName[25];
     G4double X, Y, Z;
     G4double Edep, EdepBoron, dose, mass, doseboron;

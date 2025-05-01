@@ -6,6 +6,8 @@
 #include "G4StatAnalysis.hh"
 #include "globals.hh"
 
+#include <chrono>
+#include <ctime>
 
 /// Run class
 ///
@@ -23,7 +25,35 @@ class Run : public G4Run
     void EndOfRun();
     void SetFileName(G4String);
 
-  public:
+    static std::vector<std::string> splitString(std::string str, char splitter){
+        std::vector<std::string> result;
+        std::string current = "";
+        for(int i = 0; i < str.size(); i++){
+            if(str[i] == splitter){
+                if(current != ""){
+                    result.push_back(current);
+                    current = "";
+                }
+                continue;
+            }
+            current += str[i];
+        }
+        if(current.size() != 0)
+            result.push_back(current);
+        return result;
+    };
+
+    static std::string GetCurrentDateTime(){
+      time_t rawtime;
+      struct tm * timeinfo;
+      char buffer[80];
+      time (&rawtime);
+      timeinfo = localtime(&rawtime);
+      strftime(buffer,sizeof(buffer),"%d%m%Y_%H%M%S",timeinfo);
+      std::string str(buffer);
+      return str;
+    }
+
   //  G4int GetNbGoodEvents() const { return fGoodEvents; }
   //  G4double GetSumDose() const { return fSumDose; }
   //  G4StatAnalysis GetStatDose() const { return fStatDose; }
