@@ -238,16 +238,14 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
             true);
     }
 
-    G4int N=5;
-
     for (int k = 0; k < numInnerHoles; ++k) {
         G4double angle = 2 * CLHEP::pi * k / numInnerHoles;
         PosX = innerRadius * std::cos(angle);
         PosY = innerRadius * std::sin(angle);
         PosZ_1 = - 0.5*PhantomDisk_Width + 0.5*Tube_Length_1;
-        PosZ_3 = - 0.5*PhantomDisk_Width + Tube_Length_1 + 0.5*3*mm;
+        PosZ_3 = - 0.5*PhantomDisk_Width + Tube_Length_1 + 0.5*mm;
         PosZ_2 = z_pos - 0.5*PhantomDisk_Width - 0.5*Tube_Length_2;
-        PosZ_4 = z_pos - 0.5*PhantomDisk_Width - Tube_Length_2 - 0.5*3*mm;
+        PosZ_4 = z_pos - 0.5*PhantomDisk_Width - Tube_Length_2 - 0.5*mm;
         temp_str = "Voxel9_" +  std::to_string(k);
         phys_vol = new G4PVPlacement(
             nullptr,
