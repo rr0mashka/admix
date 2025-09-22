@@ -1,7 +1,7 @@
 # Macro file for example B1 test
 
 # detector parameters
-/BNCT/det/setBoronConcentration 80 mg/L
+/BNCT/det/setBoronConcentration 100 mg/L
 /BNCT/det/setLithiumGammaFlag true
 
 /run/initialize

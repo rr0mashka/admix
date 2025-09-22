@@ -40,9 +40,9 @@ RunAction::RunAction()
 {
   auto man = G4AnalysisManager::Instance();
 
-  CLHEP::HepRandom::setTheEngine(new CLHEP::MTwistEngine);
+ // CLHEP::HepRandom::setTheEngine(new CLHEP::MTwistEngine);
   //CLHEP::HepRandom::setTheSeed(time(NULL));
-  CLHEP::HepRandom::setTheSeed((unsigned)clock());
+ // CLHEP::HepRandom::setTheSeed((unsigned)clock());
 
   G4RunManager::GetRunManager()->SetPrintProgress(0);
 
