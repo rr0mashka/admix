@@ -2,13 +2,13 @@
 
 # detector parameters
 /BNCT/det/setBoronConcentration 100 mg/L
-/BNCT/det/setLithiumGammaFlag true
+/BNCT/det/setLithiumGammaFlag false
 
 /run/initialize
 
-/gun/particle proton
-/gun/energy 2.055 MeV
+/gun/particle neutron
+/gun/energy 0.7 MeV
 
 #
 /run/printProgress 10000
-/run/beamOn 2000000000
+/run/beamOn 200000

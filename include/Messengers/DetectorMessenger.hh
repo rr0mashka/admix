@@ -63,7 +63,7 @@ private:
   DetectorConstruction* fDetector;
 
   G4UIdirectory* fDetDir;
-  G4UIcmdWithABool* fLithiumGammaFlagCmd;
+  G4UIcmdWithABool* fLithiumGammaFlagCmd, *fCellsGammaFlagCmd, *fCellsFastNeutronsFlagCmd;
   G4UIcmdWithADoubleAndUnit *fBoronConcentrationCmd;
 
 };

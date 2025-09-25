@@ -66,8 +66,19 @@ void Run::EndOfRun(){
     std::map<G4String, G4double>::const_iterator it;
     G4VPhysicalVolume* volume, *mothvol;
     G4PhysicalVolumeStore* volumeStore = G4PhysicalVolumeStore::GetInstance();
-    G4String output2 = "Run_" + fFileName;
-    G4String output3 = Run::splitString(output2,'.')[0] + "_" + Run::GetCurrentDateTime()+ ".root";
+    G4String output2 = fFileName;
+    G4String output3;
+    if (detConstruction->GetLithiumGammaFlag()) {
+      output3= Run::splitString(output2,'.')[0] + "_all_" + Run::GetCurrentDateTime()+ ".root";
+    } else {
+      output3 =  Run::splitString(output2,'.')[0] + "_nogammalith_" + Run::GetCurrentDateTime()+ ".root";
+    };
+    if (!detConstruction->GetCellsGammaFlag()){
+        output3= Run::splitString(output2,'.')[0] + "_nogammacells_" + Run::GetCurrentDateTime()+ ".root";
+    };
+    if (!detConstruction->GetCellsFastNeutronsFlag()){
+        output3= Run::splitString(output2,'.')[0] + "_nofastneutrons_" + Run::GetCurrentDateTime()+ ".root";
+    };
     TFile *file = new TFile(output3,"recreate");
     char VolumeName[25];
     G4double X, Y, Z;

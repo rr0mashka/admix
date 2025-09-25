@@ -46,6 +46,8 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 :G4UImessenger(),fDetector(Det),
  fDetDir(0),
  fLithiumGammaFlagCmd(0),
+ fCellsGammaFlagCmd(0),
+ fCellsFastNeutronsFlagCmd(0),
  fBoronConcentrationCmd(0)
 {
   fDetDir = new G4UIdirectory("/BNCT/det/");
@@ -67,6 +69,17 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fLithiumGammaFlagCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   fLithiumGammaFlagCmd->SetToBeBroadcasted(false);
 
+  fCellsGammaFlagCmd = new G4UIcmdWithABool("/BNCT/det/setCellsGammaFlag",this);
+  fCellsGammaFlagCmd ->SetGuidance("set whether gamma rays in cells will be accounted for");
+  fCellsGammaFlagCmd->SetParameterName("CellsGammaFlag",false);
+  fCellsGammaFlagCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fCellsGammaFlagCmd->SetToBeBroadcasted(false);
+
+  fCellsFastNeutronsFlagCmd = new G4UIcmdWithABool("/BNCT/det/setFastNeutronsFlag",this);
+  fCellsFastNeutronsFlagCmd ->SetGuidance("set whether fast neutrons in cells will be accounted for");
+  fCellsFastNeutronsFlagCmd->SetParameterName("CellsFastNeutronsFlag",false);
+  fCellsFastNeutronsFlagCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fCellsFastNeutronsFlagCmd->SetToBeBroadcasted(false);
 
 
 }
@@ -77,6 +90,8 @@ DetectorMessenger::~DetectorMessenger()
 {
   delete fBoronConcentrationCmd;
   delete fLithiumGammaFlagCmd;
+  delete fCellsGammaFlagCmd;
+  delete fCellsFastNeutronsFlagCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,6 +103,14 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   }
   if( command == fLithiumGammaFlagCmd ){
      fDetector->SetLithiumGammaFlag(fLithiumGammaFlagCmd->GetNewBoolValue(newValue));
+  }
+
+  if( command == fCellsGammaFlagCmd ){
+     fDetector->SetCellsGammaFlag(fCellsGammaFlagCmd->GetNewBoolValue(newValue));
+  }
+
+  if( command == fCellsFastNeutronsFlagCmd ){
+     fDetector->SetCellsFastNeutronsFlag(fCellsFastNeutronsFlagCmd->GetNewBoolValue(newValue));
   }
 
 }

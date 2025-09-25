@@ -51,8 +51,8 @@ int main(int argc,char** argv)
   if ( argc == 1 ) { ui = new G4UIExecutive(argc, argv); }
 
   //=========== new random  engine and  random seed====
-/*  CLHEP::HepRandom::setTheEngine(new CLHEP::MTwistEngine);
-  CLHEP::HepRandom::setTheSeed((unsigned)clock());*/
+  CLHEP::HepRandom::setTheEngine(new CLHEP::MTwistEngine);
+  CLHEP::HepRandom::setTheSeed((unsigned)clock());
  //====================================================
 
 

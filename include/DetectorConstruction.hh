@@ -67,13 +67,22 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     }
     void SetBoronConcentration(G4double);
     void SetLithiumGammaFlag(G4bool);
-
+    void SetCellsGammaFlag(G4bool);
+    void SetCellsFastNeutronsFlag(G4bool);
     G4double GetBoronConcentration() const{
       return fBoronConcentration;
     };
 
     G4double GetLithiumGammaFlag() const{
       return fLithiumGammaFlag;
+    };
+
+    G4double GetCellsGammaFlag() const{
+      return fCellsGammaFlag;
+    };
+
+    G4double GetCellsFastNeutronsFlag() const{
+      return fCellsFastNeutronsFlag;
     };
 
     G4String GetSensMotherPhys(G4String log) const{
@@ -99,7 +108,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* logicWorld = nullptr;
     std::map<G4String, G4String> fMotherPhys;
     G4double fBoronConcentration;
-    G4bool fLithiumGammaFlag;
+    G4bool fLithiumGammaFlag, fCellsFastNeutronsFlag, fCellsGammaFlag;
     DetectorMessenger *fDetectorMessenger;
 };
 

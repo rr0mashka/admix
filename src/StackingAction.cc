@@ -10,9 +10,8 @@ G4ClassificationOfNewTrack StackingAction::ClassifyNewTrack(const G4Track* track
   if (!track) return fUrgent;
   if (!track->GetVolume()) return fUrgent;
   if (track->GetVolume()->GetLogicalVolume()->GetName()!="LLitiumdisc") return fUrgent;
-  if (track->GetDefinition()->GetParticleName() == "gamme"){
+  if (track->GetDefinition()->GetParticleName() == "gamma"){
     return fKill;
   }
-  else
-    return fUrgent;
+  else return fUrgent;
 }

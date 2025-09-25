@@ -6,6 +6,7 @@
 #include "G4ThreeVector.hh"
 #include "G4Track.hh"
 #include "G4ios.hh"
+#include "DetectorConstruction.hh"
 
 PhantomVolume::PhantomVolume(const G4String name):
 G4VSensitiveDetector(name){
@@ -30,9 +31,20 @@ G4bool PhantomVolume::ProcessHits(G4Step* step, G4TouchableHistory* history){
   auto newHit = new PhantomHit();
 
   G4VPhysicalVolume *phv = step->GetPreStepPoint()->GetPhysicalVolume();
+  const DetectorConstruction* detConstruction = static_cast<const DetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
   G4Track* mytrack =  step->GetTrack();
   if (!mytrack) return false;
   if (!phv) return false;
+  if (!detConstruction->GetCellsGammaFlag()) {
+    if (mytrack->GetDefinition()->GetParticleName() == "gamma"){
+      mytrack->SetTrackStatus(fStopAndKill);
+    };
+  };
+  if (!detConstruction->GetCellsFastNeutronsFlag()) {
+    if (mytrack->GetDefinition()->GetParticleName() == "neutron"){
+      if (step->GetPreStepPoint()->GetKineticEnergy()>10*CLHEP::keV) mytrack->SetTrackStatus(fStopAndKill);
+    };
+  };
   G4String partname = mytrack->GetDefinition()->GetParticleName();
 
   if ((partname == "alpha") || (partname == "Li7")) {

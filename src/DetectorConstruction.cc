@@ -66,7 +66,10 @@ DetectorConstruction::DetectorConstruction()
  : G4VUserDetectorConstruction(),
  fDetectorMessenger(0),
  fBoronConcentration(0),
- fLithiumGammaFlag(1){
+ fLithiumGammaFlag(1),
+ fCellsGammaFlag(1),
+ fCellsFastNeutronsFlag(1)
+ {
 
  fDetectorMessenger = new DetectorMessenger(this);
 }
@@ -174,7 +177,27 @@ void DetectorConstruction::SetBoronConcentration(G4double borc){
 };
 
 void DetectorConstruction::SetLithiumGammaFlag(G4bool fl){
+  if (fl == false){
+      fCellsFastNeutronsFlag = true;
+      fCellsGammaFlag = true;
+  };
   fLithiumGammaFlag = fl;
+}
+
+void DetectorConstruction::SetCellsGammaFlag(G4bool fl){
+  if (fl == false){
+      fLithiumGammaFlag = true;
+      fCellsFastNeutronsFlag = true;
+  };
+  fCellsGammaFlag = fl;
+}
+
+void DetectorConstruction::SetCellsFastNeutronsFlag(G4bool fl){
+  if (fl == false) {
+    fCellsGammaFlag = true;
+    fLithiumGammaFlag = true;
+  };
+  fCellsFastNeutronsFlag = fl;
 }
 
 DetectorConstruction::~DetectorConstruction()
