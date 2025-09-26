@@ -18,7 +18,7 @@ double GetError(vector<double> vect){
 }
 
 vector<string> splitString(string str, char splitter){
-    vector<std::string> result = {};
+    vector<string> result = {};
     string current = "";
     for(int i = 0; i < str.size(); i++){
         if(str[i] == splitter){
@@ -64,6 +64,7 @@ vector<string> LastFiles(string path){
   for (int i=0; i<2; i++){
       for (const auto & entry : fs::directory_iterator(path)){
         filesplit = splitString(entry.path(), '.');
+        if (filesplit.size()<2) continue;
         if (filesplit[1] == "root") {
           strtemp = filesplit[0];
           file2split = splitString(strtemp, '_');

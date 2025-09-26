@@ -37,12 +37,12 @@ G4bool PhantomVolume::ProcessHits(G4Step* step, G4TouchableHistory* history){
   if (!phv) return false;
   if (!detConstruction->GetCellsGammaFlag()) {
     if (mytrack->GetDefinition()->GetParticleName() == "gamma"){
-      mytrack->SetTrackStatus(fStopAndKill);
+      mytrack->SetTrackStatus(fKillTrackAndSecondaries);
     };
   };
   if (!detConstruction->GetCellsFastNeutronsFlag()) {
     if (mytrack->GetDefinition()->GetParticleName() == "neutron"){
-      if (step->GetPreStepPoint()->GetKineticEnergy()>10*CLHEP::keV) mytrack->SetTrackStatus(fStopAndKill);
+      if (step->GetPreStepPoint()->GetKineticEnergy()>10*CLHEP::keV) mytrack->SetTrackStatus(fKillTrackAndSecondaries);
     };
   };
   G4String partname = mytrack->GetDefinition()->GetParticleName();
