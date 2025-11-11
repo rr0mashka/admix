@@ -79,8 +79,12 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 // calculate distance from primary vertex
   dist = sqrt( (xpos-xpr)*(xpos-xpr) + (ypos-ypr)*(ypos-ypr) + (zpos-zpr)*(zpos-zpr));
 
-  if(PDG_Id == 2112 ||PDG_Id == 2212){//keeping particles with energy> 100keV
+  if(PDG_Id == 2112){//keeping particles with energy> 100keV
 //if(particle_id==22){//keeping electrons only
+      G4ThreeVector mom = track->GetMomentum();
+      G4double px = mom.x()/CLHEP::MeV;  // если хочешь в МэВ/c
+      G4double py = mom.y()/CLHEP::MeV;
+      G4double pz = mom.z()/CLHEP::MeV;
     man->FillNtupleDColumn(1,0,En);
     //man->FillNtupleSColumn(3,1,particle_name);
     man->FillNtupleIColumn(1,2,PDG_Id);
@@ -88,6 +92,9 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
     man->FillNtupleDColumn(1,4,ypos);
     man->FillNtupleDColumn(1,5,zpos);
     //man->FillNtupleDColumn(3,6,dist);
+      man->FillNtupleDColumn(1,7,px);
+      man->FillNtupleDColumn(1,8,py);
+      man->FillNtupleDColumn(1,9,pz);
     man->AddNtupleRow(1);
   }
   G4VPhysicalVolume* phvolume  = track->GetVolume();

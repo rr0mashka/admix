@@ -23,7 +23,7 @@ FrontPlate::FrontPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_v
       "LM0disc");
 
 
-  G4VPhysicalVolume *phydisk = new G4PVPlacement(0,                    //no rotation
+ /* G4VPhysicalVolume *phydisk = new G4PVPlacement(0,                    //no rotation
        G4ThreeVector(0, 0, z_pos),
        M0discLog,                //its logical volume
        "M0discPhys",                     //its name
@@ -31,7 +31,6 @@ FrontPlate::FrontPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_v
        false,                        //no boolean operation
        0,                            //copy number
        checkOverlaps);                      //overlaps checking*/
-
 
    auto spiral1 = new ArchimedSpiral("firstspiral",50,FrontPlateSpiralDrain_InnerR,FrontPlateSpiralDrain_OuterR, FrontPlateSpiralWinding,
    0.*mm,FrontPlateSpiralDrain_Depth,3*pi/2,2*pi/2);
@@ -50,48 +49,48 @@ FrontPlate::FrontPlate (G4String name, G4double z_pos, G4LogicalVolume* mother_v
    G4Transform3D rot1_2 =  G4Rotate3D(0*deg, axis3);
    G4Transform3D rm1 =tr*rot1*rot1_2;
 
-   G4VPhysicalVolume *physp1 = new G4PVPlacement(rm1,                    //no rotation
+  /* G4VPhysicalVolume *physp1 = new G4PVPlacement(rm1,                    //no rotation
           lsp1,                //its logical volume
           "PhSp1",                     //its name
           M0discLog,                     //its mother  volume
           false,                        //no boolean operation
           0,                            //copy number
           false);                      //overlaps checking
-
+*/
 
    G4Transform3D rot2_2 =  G4Rotate3D(90*deg, axis3);
    G4Transform3D rm2 = tr*rot1*rot2_2;
 
-  G4VPhysicalVolume *physp2 = new G4PVPlacement(rm2,                    //no rotation
+ /* G4VPhysicalVolume *physp2 = new G4PVPlacement(rm2,                    //no rotation
          lsp1,                //its logical volume
          "PhSp2",                     //its name
          M0discLog,                     //its mother  volume
          false,                        //no boolean operation
          0,                            //copy number
          false);
-
+*/
    G4Transform3D rot3_2 =  G4Rotate3D(180*deg, axis3);
    G4Transform3D rm3 = tr*rot1*rot3_2;
 
-  G4VPhysicalVolume *physp3 = new G4PVPlacement(rm3,                    //no rotation
+ /* G4VPhysicalVolume *physp3 = new G4PVPlacement(rm3,                    //no rotation
          lsp1,                //its logical volume
          "PhSp3",                     //its name
          M0discLog,                     //its mother  volume
          false,                        //no boolean operation
          0,                            //copy number
-         false);
+         false);*/
 //
 
    G4Transform3D rot4_2 =  G4Rotate3D(270*deg, axis3);
    G4Transform3D rm4 = tr*rot1*rot4_2;
 
-   G4VPhysicalVolume *physp4 = new G4PVPlacement(rm4,                    //no rotation
+ /*  G4VPhysicalVolume *physp4 = new G4PVPlacement(rm4,                    //no rotation
           lsp1,                //its logical volume
           "PhSp4",                     //its name
           M0discLog,                     //its mother  volume
           false,                        //no boolean operation
           0,                            //copy number
-          false);
+          false);*/
 
 
    G4Tubs *litplate = new G4Tubs("SolLitDisc", 0, LitiumDisc_Radius,LitiumDisc_Width,0,2*pi);

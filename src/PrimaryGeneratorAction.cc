@@ -38,6 +38,17 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
+#include "G4GeneralParticleSource.hh"
+#include "G4Event.hh"
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+#include <numeric>
+#include <cmath>
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
@@ -45,13 +56,15 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);
 
-  // default particle kinematic
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
   G4ParticleDefinition* particle
-    = particleTable->FindParticle(particleName="proton");
+    = particleTable->FindParticle(particleName="neutron");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleEnergy(100.*MeV);
+    
+    if (!sampler.loadFromFile("/Users/yana/geant4-projects/gps/src/GPS.txt")) {
+            G4Exception("PrimaryGeneratorAction", "FileError", FatalException, "Cannot open GPS.txt");
+        }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,13 +78,6 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begining of ecah event
-  //
-
-  // In order to avoid dependence of PrimaryGeneratorAction
-  // on DetectorConstruction class we get Envelope volume
-  // from G4LogicalVolumeStore.
-
   G4double envSizeXY = 0;
   G4double envSizeZ = 0;
 
@@ -94,20 +100,28 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4Exception("PrimaryGeneratorAction::GeneratePrimaries()",
      "MyCode0002",JustWarning,msg);
   }
+    
+    std::vector<double> Ew(sampler.NE, 0.0);
+    for (int k = 0; k < sampler.NE; ++k){
+        Ew[k] = std::accumulate(sampler.I[k].begin(), sampler.I[k].end(), 0.0);
+    }
+        int iE = sampler.chooseWeightedIndex(Ew);
+        G4double En = sampler.E[iE] * MeV;
+        int iA = sampler.chooseWeightedIndex(sampler.I[iE]);
+        G4double theta = sampler.Th[iA];
+        G4double phi = 2.*CLHEP::pi*G4UniformRand();
+    
+        const G4double FieldRadius = 40.0 * mm;
+        G4double rfrac = G4UniformRand();
+        G4double phi0 = 2.*CLHEP::pi*G4UniformRand();
+        G4double x0 =  sin(phi0) * FieldRadius * rfrac;
+        G4double y0 =  cos(phi0) * FieldRadius * rfrac;
+        G4double z = 1.69*mm;
+        G4double zstep = 0.02*mm;
+        G4double z0 = z + zstep*rfrac;
 
-// beam sweep added
-  const G4double FieldRadius = 40.0 * mm;
-  G4double  phi = 2 * CLHEP::pi * G4UniformRand();
-  G4double rfrac = G4UniformRand();
-  G4double x0 =  sin(phi) * FieldRadius * rfrac;//size * envSizeXY * (G4UniformRand()-0.5);
-  G4double y0 =  cos(phi) * FieldRadius * rfrac;//size * envSizeXY * (G4UniformRand()-0.5);
-
-
-  G4double theta = atan(FieldRadius * rfrac/(1.*m));
-  //std::cout << "Rnd:  "<<(G4UniformRand()-0.5)<<"   x0   "<<x0<<"      y0  "<<y0<<std::endl;
-  G4double z0 = -0.5 * envSizeZ + 200*mm;
-
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(sin(theta)*sin(phi),sin(theta)*cos(phi),cos(theta)));
-  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
-  fParticleGun->GeneratePrimaryVertex(anEvent);
+    fParticleGun->SetParticleEnergy(En);
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(sin(theta)*cos(phi),sin(theta)*sin(phi),cos(theta)));
+    fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+    fParticleGun->GeneratePrimaryVertex(anEvent);
 }

@@ -33,31 +33,79 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
 #include "globals.hh"
+#include "G4GeneralParticleSource.hh"
+#include "G4Event.hh"
+#include "G4ParticleTable.hh"
+#include "Randomize.hh"
+
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+#include <numeric>
 
 class G4Event;
 class G4Box;
-
-/// The primary generator action class with particle gun.
-///
-/// The default kinematic is a 6 MeV gamma, randomly distribued
-/// in front of the phantom across 80% of the (X,Y) phantom size.
-
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     PrimaryGeneratorAction();
     ~PrimaryGeneratorAction() override;
-
-    // method from the base class
     void GeneratePrimaries(G4Event*) override;
-
-    // method to access particle gun
     G4ParticleGun* GetParticleGun() { return fParticleGun; }
 
   private:
-    G4ParticleGun* fParticleGun; // pointer a to G4 gun class
+    G4ParticleGun* fParticleGun;
     G4Box* fEnvelopeBox = nullptr;
+    struct MatrixSampler {
+            int NE = 0, NTh = 0;
+            double Emin = 0, Emax = 0, Thmin = 0, Thmax = 0;
+            std::vector<std::vector<double>> I;
+            std::vector<double> E, Th;
+
+        bool loadFromFile(const std::string& filename) {
+            std::ifstream file(filename);
+            if (!file.is_open()) return false;
+            
+            file >> NE >> Emin >> Emax;
+            file >> NTh >> Thmin >> Thmax;
+            
+            I.clear();
+            E.clear();
+            Th.clear();
+            
+            I.resize(NE, std::vector<double>(NTh));
+            E.resize(NE);
+            Th.resize(NTh);
+            
+            double dE  = (Emax - Emin) / NE;
+            double dTh = (Thmax - Thmin) / NTh;
+            
+            for (int i = 0; i < NE; ++i)   E[i]  = (i + 0.5) * dE + Emin;
+            for (int j = 0; j < NTh; ++j) Th[j] = (j + 0.5) * dTh + Thmin;
+            
+            for (int i = 0; i < NE; ++i){
+                for (int j = 0; j < NTh; ++j){
+                    file >> I[i][j];}}
+
+                file.close();
+                return true;
+            }
+
+            int chooseWeightedIndex(const std::vector<double>& w) const {
+                double total = std::accumulate(w.begin(), w.end(), 0.0);
+                double x = G4UniformRand() * total;
+                double acc = 0.0;
+                for (size_t i = 0; i < w.size(); ++i) {
+                    acc += w[i];
+                    if (x < acc) return static_cast<int>(i);
+                }
+                return static_cast<int>(w.size() - 1);
+            }
+        };
+
+        MatrixSampler sampler;
 };
 
 

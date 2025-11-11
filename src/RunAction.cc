@@ -71,6 +71,9 @@ RunAction::RunAction()
   man->CreateNtupleDColumn("Y");
   man->CreateNtupleDColumn("Z");
   man->CreateNtupleDColumn("Distance_fr_pr_vertex");
+    man->CreateNtupleDColumn("p_x");
+    man->CreateNtupleDColumn("p_y");
+    man->CreateNtupleDColumn("p_z");
   man->FinishNtuple(1);
 
   /*if (IsMaster()){

@@ -48,7 +48,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
         "PhantomDisk_Log"
       );
 
-     G4VPhysicalVolume  *pPhantomDisk_Phys = new G4PVPlacement
+    G4VPhysicalVolume  *pPhantomDisk_Phys = new G4PVPlacement
      (
        nullptr,  // no rotation
        G4ThreeVector(0, 0, z_pos),                          // at (0,0,0)
@@ -61,12 +61,12 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
      );
 
     G4Tubs* template_ScoringCell_Sol = new G4Tubs("Tub",
-         0,
-         ScoringCell_radius - Tube_Thickness,
-         0.5 *  ScoringCell_sizeZ,
-         0,
-         Phi_seg_frac*CLHEP::pi
-    );
+             0,
+             ScoringCell_radius - Tube_Thickness,
+             0.5 *  ScoringCell_sizeZ,
+             0,
+             Phi_seg_frac*CLHEP::pi
+        );
 
     template_Cells_Log = new G4LogicalVolume(
          template_ScoringCell_Sol, CellsMaterial, "template_Cells_Log");
@@ -337,7 +337,7 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
         vPos_Y.push_back(Cell_posY);
         vPos_Z.push_back(Cell_posZ);
   }
-
+    
     for (int k = 0; k < numInnerHoles; ++k) {
         G4double angle = 2 * CLHEP::pi * k / numInnerHoles;
         Cell_posX = innerRadius * std::cos(angle);
@@ -345,18 +345,18 @@ CellsPhantom::CellsPhantom (G4String name, G4double z_pos, G4LogicalVolume* moth
         Cell_posZ = Tube_Length_1 - 0.5*PhantomDisk_Width - 0.5*ScoringCell_sizeZ;
         temp_str = "Voxel10_" + std::to_string(k);
         phys_vol = new G4PVPlacement(
-            nullptr,
-            G4ThreeVector(Cell_posX, Cell_posY, Cell_posZ),
-            template_Cells_Log,
-            temp_str,
-            pPhantomDisk_Log,
-            false,
-            0,
-            true);
+                                     nullptr,
+                                     G4ThreeVector(Cell_posX, Cell_posY, Cell_posZ),
+                                     template_Cells_Log,
+                                     temp_str,
+                                     pPhantomDisk_Log,
+                                     false,
+                                     0,
+                                     true);
         vPos_X.push_back(Cell_posX);
         vPos_Y.push_back(Cell_posY);
         vPos_Z.push_back(Cell_posZ);
-}
+    }
     auto fStepLimit = new G4UserLimits(maxStep);
     pPhantomDisk_Log->SetUserLimits(fStepLimit);
     Tube_Log_1->SetUserLimits(fStepLimit);
