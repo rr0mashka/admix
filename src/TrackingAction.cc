@@ -79,10 +79,10 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 // calculate distance from primary vertex
   dist = sqrt( (xpos-xpr)*(xpos-xpr) + (ypos-ypr)*(ypos-ypr) + (zpos-zpr)*(zpos-zpr));
 
-  if(PDG_Id == 2112){//keeping particles with energy> 100keV
+  if(PDG_Id == 22){//keeping particles with energy> 100keV
 //if(particle_id==22){//keeping electrons only
       G4ThreeVector mom = track->GetMomentum();
-      G4double px = mom.x()/CLHEP::MeV;  // если хочешь в МэВ/c
+      G4double px = mom.x()/CLHEP::MeV;  
       G4double py = mom.y()/CLHEP::MeV;
       G4double pz = mom.z()/CLHEP::MeV;
     man->FillNtupleDColumn(1,0,En);
