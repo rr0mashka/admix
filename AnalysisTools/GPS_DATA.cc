@@ -75,8 +75,8 @@ gStyle->SetLineStyleString(11,"32 18");
    float Azmizth_Bin_width = 3.14159/N_az_bin;
    for(int i =0; i<=N_az_bin; i++ ) Fluence1D_AzimuBinning.push_back(i*Azmizth_Bin_width);
     
-   TH2F  *hFluence  = new TH2F("hFluence","Output Neutron Field Density", (int)Energy1D_Binning.size() - 1 , &Energy1D_Binning>
-
+   TH2F  *hFluence  = new TH2F("hFluence","Output Neutron Field Density",(int)Energy1D_Binning.size() - 1 , &Energy1D_Binning[0], 100, &Fluence1D_AzimuBinning[0]);
+    
    int nentries = (int)t1->GetEntries();
    for (int i=0; i<nentries; i++) {
      t1 -> GetEntry(i);
